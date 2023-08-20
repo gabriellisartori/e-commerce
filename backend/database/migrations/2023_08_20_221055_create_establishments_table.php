@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('establishments', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->boolean('is_admin')->default(false);
-            $table->unsignedInteger('establishment_id')->nullable();
-            $table->foreign('establishment_id')->references('id')->on('establishments');
+            $table->string('name');
+            $table->string('cnoj', 18);
+            $table->string('description');
+            $table->unsignedInteger('address_id');
+            $table->foreign('address_id')->references('id')->on('addresses');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('establishment');
     }
 };

@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id()->autoIncrement();
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->boolean('is_admin')->default(false);
+        Schema::create('business_hours', function (Blueprint $table) {
+            $table->id();
+            $table->string('day_week');
+            $table->time('starts_at');
+            $table->time('end_at');
             $table->unsignedInteger('establishment_id')->nullable();
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('business_hours');
     }
 };
