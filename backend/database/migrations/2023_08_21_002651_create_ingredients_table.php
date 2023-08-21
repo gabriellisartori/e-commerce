@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('name');
-            $table->unsignedInteger('establishment_id')->nullable();
+            $table->unsignedInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();
         });

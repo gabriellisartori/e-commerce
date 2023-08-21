@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('product_promotions', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->double('promotion_value')->nullable();
-            $table->unsignedInteger('product_id')->nullable();
+            $table->unsignedInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
-            $table->unsignedInteger('promotion_id')->nullable();
+            $table->unsignedInteger('promotion_id');
             $table->foreign('promotion_id')->references('id')->on('promotions');
             $table->timestamps();
         });

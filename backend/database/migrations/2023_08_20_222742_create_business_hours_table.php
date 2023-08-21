@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('business_hours', function (Blueprint $table) {
-            $table->id();
+            $table->id()->autoIncrement();
             $table->string('day_week');
             $table->time('starts_at');
             $table->time('end_at');

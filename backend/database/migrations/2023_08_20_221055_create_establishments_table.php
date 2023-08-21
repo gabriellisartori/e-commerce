@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('establishments', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('name');
-            $table->string('cnoj', 18);
+            $table->string('cnpj', 18);
             $table->string('description');
             $table->unsignedInteger('address_id');
             $table->foreign('address_id')->references('id')->on('addresses');
