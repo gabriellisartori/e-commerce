@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Establishment extends Model
@@ -27,5 +28,35 @@ class Establishment extends Model
     public function address(): HasOne
     {
         return $this->hasOne(Address::class);
+    }
+
+    public function businessHour(): HasMany
+    {
+        return $this->hasMany(BusinessHour::class);
+    }
+
+    public function category(): HasOne
+    {
+        return $this->hasOne(Category::class);
+    }
+
+    public function ingredient(): HasMany
+    {
+        return $this->hasMany(Ingredient::class);
+    }
+
+    public function order(): HasOne
+    {
+        return $this->hasOne(Order::class);
+    }
+
+    public function product(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function promotion(): HasOne
+    {
+        return $this->hasOne(Promotion::class);
     }
 }

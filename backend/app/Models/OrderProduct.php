@@ -26,4 +26,9 @@ class OrderProduct extends Model
     {
         return $this->hasOne(Product::class);
     }
+
+    public function orderProductAdditional(): HasOne
+    {
+        return $this->hasOne(OrderProductAdditional::class);
+    }
 }

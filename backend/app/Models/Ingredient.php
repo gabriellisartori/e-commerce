@@ -20,4 +20,14 @@ class Ingredient extends Model
     {
         return $this->hasOne(Establishment::class);
     }
+
+    public function additional(): HasOne
+    {
+        return $this->hasOne(Additional::class);
+    }
+
+    public function productIngredient(): HasOne
+    {
+        return $this->hasOne(productIngredient::class);
+    }
 }

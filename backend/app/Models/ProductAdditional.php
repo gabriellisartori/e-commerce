@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ProductAdditional extends Model
@@ -24,5 +25,10 @@ class ProductAdditional extends Model
     public function additional(): HasOne
     {
         return $this->hasOne(Additional::class);
+    }
+
+    public function orderProductAdditional(): HasMany
+    {
+        return $this->hasMany(OrderProductAdditional::class);
     }
 }

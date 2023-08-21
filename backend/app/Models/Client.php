@@ -28,4 +28,9 @@ class Client extends Model
     {
         return $this->hasOne(Address::class);
     }
+
+    public function order(): HasOne
+    {
+        return $this->hasOne(Order::class);
+    }
 }

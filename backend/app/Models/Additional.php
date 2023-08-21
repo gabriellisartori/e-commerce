@@ -20,4 +20,9 @@ class Additional extends Model
     {
         return $this->hasOne(Ingredient::class);
     }
+
+    public function productAdditional(): HasOne
+    {
+        return $this->hasOne(ProductAdditional::class);
+    }
 }

@@ -22,4 +22,9 @@ class Promotion extends Model
     {
         return $this->hasOne(Establishment::class);
     }
+
+    public function productPromotion(): HasOne
+    {
+        return $this->hasOne(ProductPromotion::class);
+    }
 }
