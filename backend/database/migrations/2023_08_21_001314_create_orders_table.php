@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('orders', function (Blueprint $table) {
+            $table->id()->autoIncrement();
+            $table->string('observation')->nullable();
+            $table->double('total_value');
+            $table->unsignedInteger('establishment_id')->nullable();
+            $table->foreign('establishment_id')->references('id')->on('establishments');
+            $table->unsignedInteger('client_id')->nullable();
+            $table->foreign('client_id')->references('id')->on('clients');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('orders');
+    }
+};
