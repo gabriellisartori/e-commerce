@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -17,7 +18,8 @@ class Establishment extends Model
     protected $fillable = [
         'name',
         'cnpj',
-        'description',
+        'phone_number',
+        'description'
     ];
 
     public function user(): HasOne
@@ -25,9 +27,9 @@ class Establishment extends Model
         return $this->hasOne(User::class);
     }
 
-    public function address(): HasOne
+    public function address(): BelongsTo
     {
-        return $this->hasOne(Address::class);
+        return $this->belongsTo(Address::class);
     }
 
     public function businessHour(): HasMany
