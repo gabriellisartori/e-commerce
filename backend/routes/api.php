@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BusinessHourController;
 use App\Http\Controllers\EstablishmentController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,10 +28,11 @@ use Illuminate\Support\Facades\Route;
         Route::delete('{id}', [ClientController::class, 'destroy']);
     });
     
+    // quando tiver autenticação funcionando, colocar a middleware para apenas estabelecimento conseguir fazer alguns request
+    // ->middleware('verify.establishment.user')
     Route::prefix('business-hour')->group(function () {
         Route::post('', [BusinessHourController::class, 'store']);
-        Route::put('{id}', [BusinessHourController::class, 'update']);
-        Route::delete('{id}', [BusinessHourController::class, 'destroy']);
+        Route::put('', [BusinessHourController::class, 'update']);
     });
 
     Route::prefix('category')->group(function () {
