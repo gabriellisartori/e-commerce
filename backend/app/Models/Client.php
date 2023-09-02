@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Client extends Model
 {
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -22,11 +24,6 @@ class Client extends Model
     public function user(): HasOne
     {
         return $this->hasOne(User::class);
-    }
-
-    public function address(): HasOne
-    {
-        return $this->hasOne(Address::class);
     }
 
     public function order(): HasOne

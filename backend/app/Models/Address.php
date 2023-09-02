@@ -25,9 +25,4 @@ class Address extends Model
     {
         return $this->hasOne(Establishment::class);
     }
-
-    public function client(): HasOne
-    {
-        return $this->hasOne(Client::class);
-    }
 }
