@@ -15,6 +15,7 @@ class OrderProduct extends Model
     protected $fillable = [
         'quantity',
         'value',
+        'half_pizza'
     ];
 
     public function order(): HasOne
