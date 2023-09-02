@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('quantity');    
             $table->dateTime('starts_at');
             $table->dateTime('end_at');
-            $table->unsignedBigInteger('establishment_id')->nullable();
+            $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();
         });
