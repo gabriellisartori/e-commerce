@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('day_week');
             $table->time('starts_at');
             $table->time('end_at');
-            $table->unsignedInteger('establishment_id')->nullable();
+            $table->unsignedBigInteger('establishment_id')->nullable();
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();
         });

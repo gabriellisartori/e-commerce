@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->boolean('is_admin')->default(false);
-            $table->unsignedInteger('establishment_id')->nullable();
+            $table->unsignedBigInteger('establishment_id')->nullable();
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();
         });

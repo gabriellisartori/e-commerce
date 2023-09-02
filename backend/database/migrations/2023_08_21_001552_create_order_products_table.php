@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->integer('quantity');
             $table->double('value');
-            $table->unsignedInteger('order_id')->nullable();
+            $table->unsignedBigInteger('order_id')->nullable();
             $table->foreign('order_id')->references('id')->on('orders');
-            $table->unsignedInteger('product_id')->nullable();
+            $table->unsignedBigInteger('product_id')->nullable();
             $table->foreign('product_id')->references('id')->on('products');
             $table->timestamps();
         });

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->string('observation')->nullable();
             $table->double('total_value');
-            $table->unsignedInteger('establishment_id')->nullable();
+            $table->unsignedBigInteger('establishment_id')->nullable();
             $table->foreign('establishment_id')->references('id')->on('establishments');
-            $table->unsignedInteger('client_id')->nullable();
+            $table->unsignedBigInteger('client_id')->nullable();
             $table->foreign('client_id')->references('id')->on('clients');
             $table->timestamps();
         });

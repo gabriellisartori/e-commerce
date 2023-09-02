@@ -17,10 +17,11 @@ return new class extends Migration
             $table->string('cpf', 14);
             $table->date('date_birth');
             $table->string('phone_number', 15);
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedInteger('address_id');
+            $table->unsignedBigInteger('address_id');
             $table->foreign('address_id')->references('id')->on('addresses');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

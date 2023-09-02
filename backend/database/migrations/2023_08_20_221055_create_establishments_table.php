@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->string('name');
             $table->string('cnpj', 18);
-            $table->string('description');
-            $table->unsignedInteger('address_id');
+            $table->string('phone_number', 15);
+            $table->string('description')->nullable();
+            $table->unsignedBigInteger('address_id');
             $table->foreign('address_id')->references('id')->on('addresses');
             $table->timestamps();
         });

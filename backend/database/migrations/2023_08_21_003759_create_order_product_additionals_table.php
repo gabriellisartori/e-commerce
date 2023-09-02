@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('order_product_additionals', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->double('additional_value');
-            $table->unsignedInteger('product_additional_id');
+            $table->unsignedBigInteger('product_additional_id');
             $table->foreign('product_additional_id')->references('id')->on('product_additionals');
-            $table->unsignedInteger('order_product_id');
+            $table->unsignedBigInteger('order_product_id');
             $table->foreign('order_product_id')->references('id')->on('order_products');
             $table->timestamps();
         });
