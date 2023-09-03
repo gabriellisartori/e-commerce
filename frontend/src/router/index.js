@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '../pages/LoginForm.vue'; 
 import RegisterEstablishment from '../pages/establishment/RegisterEstablishment.vue'; 
+import HomePage from '../pages/establishment/HomePage.vue'; 
+
 
 const routes = [
   {
@@ -12,6 +14,11 @@ const routes = [
     path: '/registrar',
     name: 'RegisterEstablishment',
     component: RegisterEstablishment,
+  },
+  {
+    path: '/home',
+    name: 'HomePage',
+    component: HomePage,
   },
 ];
 
