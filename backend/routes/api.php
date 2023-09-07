@@ -43,6 +43,7 @@ use Illuminate\Support\Facades\Route;
     });
 
     Route::prefix('daily-pizza-sale-limit')->group(function () {
+        Route::get('', [DailyPizzaSaleLimitController::class, 'index']);
         Route::post('', [DailyPizzaSaleLimitController::class, 'store']);
         Route::put('{id}', [DailyPizzaSaleLimitController::class, 'update']);
         Route::delete('{id}', [DailyPizzaSaleLimitController::class, 'destroy']);
@@ -86,7 +87,7 @@ Route::prefix('establishment')->group(function () {
     Route::get('', [EstablishmentController::class, 'index']);
 });
 
-Route::get('daily-pizza-sale-limit', [DailyPizzaSaleLimitController::class, 'index']);
+Route::get('daily-pizza-sale-limit/{id}', [DailyPizzaSaleLimitController::class, 'show']);
 
 Route::get('business-hour', [BusinessHourController::class, 'index']);
 
