@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BusinessHourController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DailyPizzaSaleLimitController;
 use App\Http\Controllers\EstablishmentController;
 use Illuminate\Support\Facades\Route;
@@ -37,10 +38,11 @@ use Illuminate\Support\Facades\Route;
     });
 
     Route::prefix('category')->group(function () {
-        Route::get('', [CategoryController::class, 'index']);
+        Route::get('all', [CategoryController::class, 'index']);
+        Route::get('', [CategoryController::class, 'show']);
         Route::post('', [CategoryController::class, 'store']);
-        Route::put('{id}', [CategoryController::class, 'update']);
-        Route::delete('{id}', [CategoryController::class, 'destroy']);
+        Route::put('', [CategoryController::class, 'update']);
+        Route::delete('', [CategoryController::class, 'destroy']);
     });
 
     Route::prefix('daily-pizza-sale-limit')->group(function () {
