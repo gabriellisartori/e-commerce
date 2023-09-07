@@ -15,6 +15,7 @@ class DailyPizzaSaleLimit extends Model
      */
     protected $fillable = [
         'quantity',
+        'date',
         'starts_at',
         'end_at',
     ];

@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('daily_pizza_sale_limits', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->integer('quantity');    
-            $table->dateTime('starts_at');
-            $table->dateTime('end_at');
+            $table->date('date');
+            $table->time('starts_at');
+            $table->time('end_at');
             $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();
