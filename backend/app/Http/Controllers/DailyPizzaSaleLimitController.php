@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Establishment\CreateDailyPizzaSaleLimitRequest;
-use App\Http\Requests\Establishment\ShowDailyPizzaSaleLimitRequest;
-use App\Http\Requests\Establishment\UpdateDailyPizzaSaleLimitRequest;
+use App\Http\Requests\DailyPizzaSaleLimit\CreateDailyPizzaSaleLimitRequest;
+use App\Http\Requests\DailyPizzaSaleLimit\DailyPizzaSaleLimitRequest;
+use App\Http\Requests\DailyPizzaSaleLimit\UpdateDailyPizzaSaleLimitRequest;
 use App\Http\Resources\DailyPizzaSaleLimitResource;
 use App\Models\DailyPizzaSaleLimit;
-use App\Services\Establishment\CreateDailyPizzaSaleLimitService;
-use App\Services\Establishment\UpdateDailyPizzaSaleLimitService;
+use App\Services\DailyPizzaSaleLimit\CreateDailyPizzaSaleLimitService;
+use App\Services\DailyPizzaSaleLimit\UpdateDailyPizzaSaleLimitService;
 
-class BusinessHourController extends Controller
+class DailyPizzaSaleLimitController extends Controller
 {
     public function __construct(
         private CreateDailyPizzaSaleLimitService $createDailyPizzaSaleLimitService,
@@ -24,13 +24,11 @@ class BusinessHourController extends Controller
         //get all daily limit
         $dailyPizzaSaleLimit = DailyPizzaSaleLimit::all();
 
-        return response()->json(new DailyPizzaSaleLimitResource($dailyPizzaSaleLimit));
+        return response()->json(DailyPizzaSaleLimitResource::collection($dailyPizzaSaleLimit));
     }
 
-    public function show(ShowDailyPizzaSaleLimitRequest $request)
+    public function show($id)
     {
-        $id = $request->validated();
-
         //get one daily limit
         $dailyPizzaSaleLimit = DailyPizzaSaleLimit::findOrFail($id);
 
@@ -55,11 +53,11 @@ class BusinessHourController extends Controller
         return response()->json(new DailyPizzaSaleLimitResource($dailyPizzaSaleLimit));
     }
 
-    public function destroy(ShowDailyPizzaSaleLimitRequest $request)
+    public function destroy(DailyPizzaSaleLimitRequest $request)
     {
-        $id = $request->validated();
+        $data = $request->validated();
 
-        DailyPizzaSaleLimit::find($id)->delete();
+        DailyPizzaSaleLimit::find($data['id'])->delete();
 
         return response()->json([], 200);
     }

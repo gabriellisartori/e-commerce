@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BusinessHourController;
+use App\Http\Controllers\DailyPizzaSaleLimitController;
 use App\Http\Controllers\EstablishmentController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 //Route::group(['middleware' => ['auth:sanctum']], function () {
     
     //update establishment data and relations (user e address)
-    Route::put('establishment/{id}', [EstablishmentController::class, 'update']);
+    Route::put('establishment', [EstablishmentController::class, 'update']);
     
     Route::prefix('client')->group(function () {
         Route::get('', [ClientController::class, 'index']);
@@ -43,10 +44,10 @@ use Illuminate\Support\Facades\Route;
     });
 
     Route::prefix('daily-pizza-sale-limit')->group(function () {
-        Route::get('', [DailyPizzaSaleLimitController::class, 'index']);
+        Route::get('all', [DailyPizzaSaleLimitController::class, 'index']);
         Route::post('', [DailyPizzaSaleLimitController::class, 'store']);
-        Route::put('{id}', [DailyPizzaSaleLimitController::class, 'update']);
-        Route::delete('{id}', [DailyPizzaSaleLimitController::class, 'destroy']);
+        Route::put('', [DailyPizzaSaleLimitController::class, 'update']);
+        Route::delete('', [DailyPizzaSaleLimitController::class, 'destroy']);
     });
 
     Route::prefix('ingredient')->group(function () {

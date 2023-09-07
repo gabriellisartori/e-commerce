@@ -61,4 +61,9 @@ class Establishment extends Model
     {
         return $this->hasOne(Promotion::class);
     }
+
+    public function dailyPizzaSaleLimit(): HasMany
+    {
+        return $this->hasMany(DailyPizzaSaleLimit::class);
+    }
 }

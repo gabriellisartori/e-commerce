@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Establishment;
+namespace App\Http\Requests\DailyPizzaSaleLimit;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,8 +25,8 @@ class UpdateDailyPizzaSaleLimitRequest extends FormRequest
             'id' => 'required|exists:daily_pizza_sale_limits,id',
             'quantity' => 'required|integer',
             'date' => 'required|date',
-            'starts_at' => 'required|time',
-            'end_at' => 'required|time'
+            'starts_at' => 'required',
+            'end_at' => 'required'
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Establishment;
+namespace App\Services\DailyPizzaSaleLimit;
 
 use App\Models\DailyPizzaSaleLimit;
 

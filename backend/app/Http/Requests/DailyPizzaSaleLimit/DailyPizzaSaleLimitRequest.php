@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Establishment;
+namespace App\Http\Requests\DailyPizzaSaleLimit;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ShowDailyPizzaSaleLimitRequest extends FormRequest
+class DailyPizzaSaleLimitRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
