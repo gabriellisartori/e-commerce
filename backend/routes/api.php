@@ -5,6 +5,7 @@ use App\Http\Controllers\BusinessHourController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DailyPizzaSaleLimitController;
 use App\Http\Controllers\EstablishmentController;
+use App\Http\Controllers\PromotionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,7 +54,8 @@ use Illuminate\Support\Facades\Route;
     });
 
     Route::prefix('ingredient')->group(function () {
-        Route::get('', [IngredientController::class, 'index']);
+        Route::get('all', [IngredientController::class, 'index']);
+        Route::get('', [IngredientController::class, 'show']);
         Route::post('', [IngredientController::class, 'store']);
         Route::put('{id}', [IngredientController::class, 'update']);
         Route::delete('{id}', [IngredientController::class, 'destroy']);
@@ -65,10 +67,11 @@ use Illuminate\Support\Facades\Route;
     });
 
     Route::prefix('promotion')->group(function () {
-        Route::get('', [PromotionController::class, 'index']);
+        Route::get('all', [PromotionController::class, 'index']);
+        Route::get('', [PromotionController::class, 'show']);
         Route::post('', [PromotionController::class, 'store']);
-        Route::put('{id}', [PromotionController::class, 'update']);
-        Route::delete('{id}', [PromotionController::class, 'destroy']);
+        Route::put('', [PromotionController::class, 'update']);
+        Route::delete('', [PromotionController::class, 'destroy']);
     });
 
     Route::prefix('order')->group(function () {

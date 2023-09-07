@@ -21,7 +21,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        //get all daily pizza sale limit
+        //get all category
         $categories = Category::all();
 
         return response()->json(CategoryResource::collection($categories));
@@ -29,7 +29,7 @@ class CategoryController extends Controller
 
     public function show(CategoryRequest $request)
     {
-        //get one daily pizza sale limit
+        //get one category
         $data = $request->validated();
 
         $category = Category::findOrFail($data['id']);
