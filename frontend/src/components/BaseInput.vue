@@ -4,21 +4,22 @@ import { ref, defineProps, defineEmits } from 'vue';
 const props = defineProps(['modelValue', 'label', 'placeholder']);
 const emits = defineEmits(['update:modelValue']);
 
-// Variável reativa para o valor do input
 const inputValue = ref(props.modelValue);
 
-const updateValue = (newValue) => {
+const updateValue = (event) => {
+  const newValue = event.target.value;
   inputValue.value = newValue;
-  emits('update:modelValue', inputValue.value);
+  emits('update:modelValue', newValue);
 };
 </script>
 
 <template>
-    <div>
-      <label>{{ label }}</label>
-      <input :value="modelValue" @input="updateValue" :placeholder="placeholder" />
-    </div>
-  </template>
+  <div>
+    <label>{{ label }}</label>
+    <input :value="inputValue" @input="updateValue" :placeholder="placeholder" />
+  </div>
+</template>
+
 
 <style lang="scss">
   div {
@@ -37,6 +38,7 @@ const updateValue = (newValue) => {
         border: 1px solid #5F8A17;
         border-radius: 16px;
         margin-top: 10px;
+        margin-bottom: 50px;
         outline: none; 
     }
   }

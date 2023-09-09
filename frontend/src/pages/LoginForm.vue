@@ -1,11 +1,33 @@
-/* eslint-disable */
-
 <script setup>
-import BaseInput from '@/components/BaseInput.vue'
-import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
+  import { ref } from 'vue';
+  import BaseInput from '@/components/BaseInput.vue';
+  import BasePassword from '@/components/BasePassword.vue';
 
-const username = ref('');
+  const username = ref('');
+  const password = ref('');
+
+  const handleSubmit = async () => {
+    try {
+      const response = await fetch('http://api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username.value,
+          password: password.value,
+        }),
+      });
+
+      const data = await response.json();
+
+      // teste apenas
+      localStorage.setItem('token', data.token);
+
+    } catch (error) {
+      console.error('Erro ao efetuar login:', error);
+    }
+  };
 </script>
 
 <template>
@@ -32,10 +54,18 @@ const username = ref('');
         <div class="column right">
             <div class="vertical-top-line"></div>
             <hr class="horizontal-top-line">
-            <form class="form-login">
+            <form class="form-login" @submit.prevent="handleSubmit">
                 <h2>FAÇA SEU LOGIN</h2>
-                <BaseInput v-model="username" label="E-mail" class="input" />
-                <BaseInput label="Senha" class="input"/>
+                <BaseInput 
+                    label="E-mail" 
+                    class="input" 
+                />
+                <label>Senha</label>
+                <BasePassword
+                    v-model="password"
+                    :label="'Senha'"
+                    :placeholder="'Digite sua senha'"
+                />
 
                 <div class="buttons">
                     <button type="submit" class="button login">
@@ -180,7 +210,7 @@ const username = ref('');
                     height: 45px;
                     border: 1px solid transparent;
                     border-radius: 16px;
-                    margin-top: 65px;
+                    margin-top: 35px;
                     color: #FFFFFF;
                     font-weight: 700;
                 }
