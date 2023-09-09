@@ -21,7 +21,7 @@ class Ingredient extends Model
         return $this->hasOne(Establishment::class);
     }
 
-    public function additional(): HasOne
+    public function ingredientAdditional(): HasOne
     {
         return $this->hasOne(Additional::class);
     }

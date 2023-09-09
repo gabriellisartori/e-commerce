@@ -5,6 +5,7 @@ use App\Http\Controllers\BusinessHourController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DailyPizzaSaleLimitController;
 use App\Http\Controllers\EstablishmentController;
+use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\PromotionController;
 use Illuminate\Support\Facades\Route;
 
@@ -57,8 +58,8 @@ use Illuminate\Support\Facades\Route;
         Route::get('all', [IngredientController::class, 'index']);
         Route::get('', [IngredientController::class, 'show']);
         Route::post('', [IngredientController::class, 'store']);
-        Route::put('{id}', [IngredientController::class, 'update']);
-        Route::delete('{id}', [IngredientController::class, 'destroy']);
+        Route::put('', [IngredientController::class, 'update']);
+        Route::delete('', [IngredientController::class, 'destroy']);
     });
 
     Route::prefix('product')->group(function () {
