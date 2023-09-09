@@ -1,12 +1,19 @@
-<script setup>
-import { ref } from 'vue';
-//import SvgIcon from './SvgIcon.vue';
+<script>
+// import SvgIcon from './SvgIcon.vue';
 
-const password = ref('');
-const showPassword = ref(false);
-
-const togglePasswordVisibility = () => {
-  showPassword.value = !showPassword.value;
+export default {
+  props: ['label', 'placeholder'],
+  data() {
+    return {
+      password: '',
+      showPassword: false
+    };
+  },
+  methods: {
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    }
+  }
 };
 </script>
 
@@ -30,7 +37,7 @@ const togglePasswordVisibility = () => {
     position: relative;
 
     button{
-        top: 48%;
+        top: 60%;
         position: absolute;
         right: 8px;
         transform: translateY(-50%);

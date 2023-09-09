@@ -1,15 +1,23 @@
-<script setup>
-import { ref, defineProps, defineEmits } from 'vue';
+<script>
+import { ref } from 'vue';
 
-const props = defineProps(['modelValue', 'label', 'placeholder']);
-const emits = defineEmits(['update:modelValue']);
+export default {
+  props: ['modelValue', 'label', 'placeholder'],
 
-const inputValue = ref(props.modelValue);
+  setup(props, { emit }) {
+    const inputValue = ref(props.modelValue);
 
-const updateValue = (event) => {
-  const newValue = event.target.value;
-  inputValue.value = newValue;
-  emits('update:modelValue', newValue);
+    const updateValue = (event) => {
+      const newValue = event.target.value;
+      inputValue.value = newValue;
+      emit('update:modelValue', newValue);
+    };
+
+    return {
+      inputValue,
+      updateValue
+    };
+  }
 };
 </script>
 
@@ -19,7 +27,6 @@ const updateValue = (event) => {
     <input :value="inputValue" @input="updateValue" :placeholder="placeholder" />
   </div>
 </template>
-
 
 <style lang="scss">
   div {

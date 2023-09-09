@@ -1,33 +1,39 @@
-<script setup>
-  import { ref } from 'vue';
-  import BaseInput from '@/components/BaseInput.vue';
-  import BasePassword from '@/components/BasePassword.vue';
+<script>
+import axios from 'axios'
+import BaseInput from '@/components/BaseInput.vue';
+import BasePassword from '@/components/BasePassword.vue';
 
-  const username = ref('');
-  const password = ref('');
+export default {
+    components: {
+        BaseInput,
+        BasePassword
+    },
+    data() {
+        return {
+            email: '',
+            password: ''
+        }
+    },
+    methods: {
+        async handleSubmit() {
+            console.log('E-mail chegando:', this.email);
+            console.log('Senha chegando:', this.password);
+            try {
+                const response = await axios.post('/auth/login', {
+                    email: this.email,
+                    password: this.password
+                });
 
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch('http://api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: username.value,
-          password: password.value,
-        }),
-      });
+                //teste apenas
+                localStorage.setItem('token', response.data.token);
 
-      const data = await response.json();
-
-      // apenas teste
-      localStorage.setItem('token', data.token);
-
-    } catch (error) {
-      console.error('Erro ao efetuar login:', error);
+                this.$router.push('/home'); 
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
-  };
+}
 </script>
 
 <template>
@@ -57,18 +63,20 @@
             <form class="form-login" @submit.prevent="handleSubmit">
                 <h2>FAÇA SEU LOGIN</h2>
                 <BaseInput 
+                    v-model="email"
                     label="E-mail" 
                     class="input" 
+                    :placeholder="'Digite seu email'"
                 />
-                <label>Senha</label>
                 <BasePassword
                     v-model="password"
-                    :label="'Senha'"
+                    label="Senha"
+                    class="input" 
                     :placeholder="'Digite sua senha'"
                 />
 
                 <div class="buttons">
-                    <button type="submit" class="button login">
+                    <button type="submit" class="button">
                         ENTRAR
                     </button>
                     <RouterLink to="/registrar">Criar conta</RouterLink>
@@ -203,16 +211,7 @@
                 flex-direction: column;
                 align-items: center;
 
-                .login{
-                    background-color: #5F8A17;
-                    width: 80%;
-                    height: 45px;
-                    border: 1px solid transparent;
-                    border-radius: 16px;
-                    margin-top: 35px;
-                    color: #FFFFFF;
-                    font-weight: 700;
-                }
+                
 
                 a{
                     width: 80%;
