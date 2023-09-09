@@ -26,14 +26,14 @@ import BaseInput from '@/components/BaseInput.vue'
                         <BaseInput label="Número" class="input"></BaseInput>
                         <BaseInput label="Complemento" class="input"></BaseInput>
                     </div>
-                    <button type="submit" class="button">ENTRAR</button>
+                    <button type="submit" class="button login">ENTRAR</button>
                 </div>
             </div>
         </form>
     </div>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .content-page{
 
     .title{
@@ -61,15 +61,8 @@ import BaseInput from '@/components/BaseInput.vue'
                 gap: 30px; 
             }
 
-            .button{
+            .login{
                 width: 100%;
-                height: 45px;
-                margin-top: 50px;
-                background-color: #5F8A17;
-                color: #FFFFFF;
-                font-weight: 700;
-                border: 1px solid transparent;
-                border-radius: 16px;
             }
         }
     }
