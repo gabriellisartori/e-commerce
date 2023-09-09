@@ -12,6 +12,7 @@ const svg = computed(() => defineAsyncComponent(() => import(`@/assets/svg/${pro
 </script>
 
 <template>
+    <!-- nao ta funcionando, vou ajustar -->
     <component :is="svg"></component>
 </template>
   

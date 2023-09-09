@@ -21,7 +21,7 @@
 
       const data = await response.json();
 
-      // teste apenas
+      // apenas teste
       localStorage.setItem('token', data.token);
 
     } catch (error) {

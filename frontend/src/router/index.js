@@ -3,7 +3,6 @@ import Login from '../pages/LoginForm.vue';
 import RegisterEstablishment from '../pages/establishment/RegisterEstablishment.vue'; 
 import HomePage from '../pages/establishment/HomePage.vue'; 
 
-
 const routes = [
   {
     path: '/',

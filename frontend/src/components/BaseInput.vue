@@ -11,6 +11,7 @@ const updateValue = (event) => {
   inputValue.value = newValue;
   emits('update:modelValue', newValue);
 };
+
 </script>
 
 <template>

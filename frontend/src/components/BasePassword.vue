@@ -30,8 +30,8 @@ const togglePasswordVisibility = () => {
     position: relative;
 
     button{
-        position: absolute;
         top: 28%;
+        position: absolute;
         right: 8px;
         transform: translateY(-50%);
         background: none;
