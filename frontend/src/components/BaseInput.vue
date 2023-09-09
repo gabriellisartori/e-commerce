@@ -11,7 +11,6 @@ const updateValue = (event) => {
   inputValue.value = newValue;
   emits('update:modelValue', newValue);
 };
-
 </script>
 
 <template>
@@ -38,8 +37,7 @@ const updateValue = (event) => {
         padding: 10px;
         border: 1px solid #5F8A17;
         border-radius: 16px;
-        margin-top: 10px;
-        margin-bottom: 50px;
+        margin-top: 10px; 
         outline: none; 
     }
   }

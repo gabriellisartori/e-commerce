@@ -184,10 +184,8 @@
         }
 
         .form-login{
-            /* height: 80%; */
             width: 50%;
             margin: 0 auto;
-            /* margin-top: 90px; */
             padding: 30px;
 
             h2{
@@ -197,6 +195,7 @@
 
             .input{
                 margin-top: 60px;
+                margin-bottom: 50px;
             }
 
             .buttons{
