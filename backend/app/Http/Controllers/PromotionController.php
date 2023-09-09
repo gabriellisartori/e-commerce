@@ -7,6 +7,7 @@ use App\Http\Requests\Promotion\CreatePromotionRequest;
 use App\Http\Requests\Promotion\PromotionRequest;
 use App\Http\Requests\Promotion\UpdatePromotionRequest;
 use App\Http\Resources\PromotionResource;
+use App\Models\Product;
 use App\Models\Promotion;
 use App\Services\Promotion\CreatePromotionService;
 use App\Services\Promotion\UpdatePromotionService;
@@ -58,6 +59,11 @@ class PromotionController extends Controller
     public function destroy(PromotionRequest $request)
     {
         $data = $request->validated();
+
+        $product = Product::where('promotion_id', $data['id'])->first();
+        if ($product) {
+            return response()->json(['message' => 'Promoção não pode ser deletada, pois está sendo usada em um produto'], 400);
+        }
 
         Promotion::find($data['id'])->delete();
 
