@@ -14,6 +14,7 @@ use App\Services\Establishment\CreateEstablishmentService;
 use App\Services\Establishment\UpdateEstablishmentService;
 use App\Services\User\CreateUserService;
 use App\Services\User\UpdateUserService;
+use Illuminate\Validation\ValidationException;
 
 class EstablishmentController extends Controller
 {
@@ -24,52 +25,71 @@ class EstablishmentController extends Controller
         private UpdateAddressService $updateAddressService,
         private UpdateUserService $updateUserService,
         private UpdateEstablishmentService $updateEstablishmentService
-    ) { }
+    ) {
+    }
 
     public function index()
     {
-        // pegar pelo usuário autenticado qual o estabelecimento ou pegar pelo estabelecimento ativo só terá um
-        $establishment = Establishment::find(1);
+        try {
+            // pegar pelo usuário autenticado qual o estabelecimento ou pegar pelo estabelecimento ativo só terá um
+            $establishment = Establishment::find(1);
 
-        $establishment->load(['address', 'user']);
+            $establishment->load(['address', 'user']);
 
-        return response()->json(new EstablishmentResource($establishment));
+            return response()->json(new EstablishmentResource($establishment), 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao listar estabelecimento',
+            ], 401);
+        }
     }
 
     public function store(CreateEstablishmentRequest $request)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        $address = $this->createAddressService->handle($data);
+            $address = $this->createAddressService->handle($data);
 
-        $establishment = $this->createEstablishmentService->handle($data, $address);
+            $establishment = $this->createEstablishmentService->handle($data, $address);
 
-        $this->createUserService->handle($data, $establishment);
+            $this->createUserService->handle($data, $establishment);
 
-        $establishment->load(['address', 'user']);
+            $establishment->load(['address', 'user']);
 
-        return response()->json(new EstablishmentResource($establishment));
+            return response()->json(new EstablishmentResource($establishment), 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao criar estabelecimento',
+            ], 401);
+        }
     }
 
     public function update(UpdateEstablishmentRequest $request)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        //update address
-        $this->updateAddressService->handle($data);
+            //update address
+            $this->updateAddressService->handle($data);
 
-        $user = User::findOrFail($data['user_id']);
+            $user = User::findOrFail($data['user_id']);
 
-        if (isset($data['password']) || $user->email !== $data['email'] ) {
-            //update user
-            $this->updateUserService->handle($data, $user);
+            if (isset($data['password']) || $user->email !== $data['email']) {
+                //update user
+                $this->updateUserService->handle($data, $user);
+            }
+
+            //update establishment
+            $establishment = $this->updateEstablishmentService->handle($data);
+
+            $establishment->load(['address', 'user']);
+
+            return response()->json(new EstablishmentResource($establishment), 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao atualizar estabelecimento',
+            ], 401);
         }
-
-        //update establishment
-        $establishment = $this->updateEstablishmentService->handle($data);
-
-        $establishment->load(['address', 'user']);
-
-        return response()->json(new EstablishmentResource($establishment));
     }
 }

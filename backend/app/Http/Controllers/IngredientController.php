@@ -14,6 +14,7 @@ use App\Services\Additional\CreateAdditionalService;
 use App\Services\Additional\UpdateAdditionalService;
 use App\Services\Ingredient\CreateIngredientService;
 use App\Services\Ingredient\UpdateIngredientService;
+use Illuminate\Validation\ValidationException;
 
 class IngredientController extends Controller
 {
@@ -27,78 +28,107 @@ class IngredientController extends Controller
 
     public function index()
     {
-        //get all promotion
-        $ingredients = Ingredient::all();
+        try {
+            //get all promotion
+            $ingredients = Ingredient::all();
 
-        $ingredients->load(['ingredientAdditional']);
+            $ingredients->load(['ingredientAdditional']);
 
-        return response()->json(IngredientResource::collection($ingredients));
+            return response()->json(IngredientResource::collection($ingredients), 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao listar ingredientes',
+            ], 401);
+        }
     }
 
     public function show(IngredientRequest $request)
     {
-        //get one promotion
-        $data = $request->validated();
+        try {
+            //get one promotion
+            $data = $request->validated();
 
-        $ingredient = Ingredient::findOrFail($data['id']);
+            $ingredient = Ingredient::findOrFail($data['id']);
 
-        $ingredient->load(['ingredientAdditional']);
+            $ingredient->load(['ingredientAdditional']);
 
-        return response()->json(new IngredientResource($ingredient));
+            return response()->json(new IngredientResource($ingredient), 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao listar ingrediente',
+            ], 401);
+        }
     }
 
     public function store(CreateIngredientRequest $request)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        $ingredient = $this->createIngredientService->handle($data);
+            $ingredient = $this->createIngredientService->handle($data);
 
-        if ($data['hasAdditional']) {
-            // create additional
-            $this->createAdditionalService->handle($data, $ingredient);
+            if ($data['hasAdditional']) {
+                // create additional
+                $this->createAdditionalService->handle($data, $ingredient);
 
-            $ingredient->load(['ingredientAdditional']);
+                $ingredient->load(['ingredientAdditional']);
+            }
+
+            return response()->json(new IngredientResource($ingredient), 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao criar ingrediente',
+            ], 401);
         }
-
-        return response()->json(new IngredientResource($ingredient));
     }
 
     public function update(UpdateIngredientRequest $request)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        $ingredient = $this->updateIngredientService->handle($data);
+            $ingredient = $this->updateIngredientService->handle($data);
 
-        if ($data['hasAdditional']) {
-            //update additional
-            $additional = $this->updateAdditionalService->handle($data);
+            if ($data['hasAdditional']) {
+                //update additional
+                $additional = $this->updateAdditionalService->handle($data);
 
-            if ($additional === null) {
-                //create additional
-                $this->createAdditionalService->handle($data, $ingredient);
+                if ($additional === null) {
+                    //create additional
+                    $this->createAdditionalService->handle($data, $ingredient);
+                }
 
+                $ingredient->load(['ingredientAdditional']);
             }
 
-            $ingredient->load(['ingredientAdditional']);
+            return response()->json(new IngredientResource($ingredient), 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao atualizar ingrediente',
+            ], 401);
         }
-        
-        return response()->json(new IngredientResource($ingredient));
     }
 
     public function destroy(IngredientRequest $request)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        $product = ProductIngredients::where('ingredient_id', $data['id'])->first();
+            $product = ProductIngredients::where('ingredient_id', $data['id'])->first();
 
-        if ($product) {
-            return response()->json(['message' => 'O ingrediente está em uso.'], 400);
+            if ($product) {
+                return response()->json(['message' => 'O ingrediente está em uso.'], 400);
+            }
+
+            Additional::where('ingredient_id', $data['id'])->delete();
+
+            Ingredient::find($data['id'])->delete();
+
+            return response()->json([], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao deletar ingrediente',
+            ], 401);
         }
-
-        Additional::where('ingredient_id', $data['id'])->delete();
-
-        Ingredient::find($data['id'])->delete();
-
-        return response()->json([], 200);
     }
 }
