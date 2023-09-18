@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DailyPizzaSaleLimitController;
 use App\Http\Controllers\EstablishmentController;
 use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PromotionController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,8 +29,8 @@ use Illuminate\Support\Facades\Route;
     
     Route::prefix('client')->group(function () {
         Route::get('', [ClientController::class, 'index']);
-        Route::put('{id}', [ClientController::class, 'update']);
-        Route::delete('{id}', [ClientController::class, 'destroy']);
+        Route::put('', [ClientController::class, 'update']);
+        Route::delete('', [ClientController::class, 'destroy']);
     });
     
     // quando tiver autenticação funcionando, colocar a middleware para apenas estabelecimento conseguir fazer alguns request
@@ -64,7 +65,7 @@ use Illuminate\Support\Facades\Route;
 
     Route::prefix('product')->group(function () {
         Route::post('', [ProductController::class, 'store']);
-        Route::put('{id}', [ProductController::class, 'update']);
+        Route::put('', [ProductController::class, 'update']);
     });
 
     Route::prefix('promotion')->group(function () {
@@ -77,8 +78,9 @@ use Illuminate\Support\Facades\Route;
 
     Route::prefix('order')->group(function () {
         Route::get('', [OrderController::class, 'index']);
+        Route::get('', [OrderController::class, 'show']);
         Route::post('', [OrderController::class, 'store']);
-        Route::put('{id}', [OrderController::class, 'update']);
+        Route::put('', [OrderController::class, 'update']);
     });
 
 //});
@@ -94,11 +96,14 @@ Route::prefix('establishment')->group(function () {
     Route::get('', [EstablishmentController::class, 'index']);
 });
 
-Route::get('daily-pizza-sale-limit/{id}', [DailyPizzaSaleLimitController::class, 'show']);
+Route::get('daily-pizza-sale-limit/', [DailyPizzaSaleLimitController::class, 'show']);
 
 Route::get('business-hour', [BusinessHourController::class, 'index']);
 
 //create client
 Route::post('client', [ClientController::class, 'store']);
 
-Route::get('product', [ProductController::class, 'index']);
+Route::prefix('product')->group(function () {
+    Route::get('all', [ProductController::class, 'index']);
+    Route::get('', [ProductController::class, 'show']);
+});

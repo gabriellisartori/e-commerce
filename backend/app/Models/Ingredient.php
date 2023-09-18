@@ -28,6 +28,6 @@ class Ingredient extends Model
 
     public function productIngredient(): HasOne
     {
-        return $this->hasOne(productIngredient::class);
+        return $this->hasOne(ProductIngredient::class);
     }
 }

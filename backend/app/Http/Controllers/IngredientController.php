@@ -9,7 +9,7 @@ use App\Http\Requests\Ingredient\UpdateIngredientRequest;
 use App\Http\Resources\IngredientResource;
 use App\Models\Additional;
 use App\Models\Ingredient;
-use App\Models\ProductIngredients;
+use App\Models\ProductIngredient;
 use App\Services\Additional\CreateAdditionalService;
 use App\Services\Additional\UpdateAdditionalService;
 use App\Services\Ingredient\CreateIngredientService;
@@ -29,7 +29,7 @@ class IngredientController extends Controller
     public function index()
     {
         try {
-            //get all promotion
+            //get all ingredients
             $ingredients = Ingredient::all();
 
             $ingredients->load(['ingredientAdditional']);
@@ -45,7 +45,7 @@ class IngredientController extends Controller
     public function show(IngredientRequest $request)
     {
         try {
-            //get one promotion
+            //get one ingredient
             $data = $request->validated();
 
             $ingredient = Ingredient::findOrFail($data['id']);
@@ -114,7 +114,7 @@ class IngredientController extends Controller
         try {
             $data = $request->validated();
 
-            $product = ProductIngredients::where('ingredient_id', $data['id'])->first();
+            $product = ProductIngredient::where('ingredient_id', $data['id'])->first();
 
             if ($product) {
                 return response()->json(['message' => 'O ingrediente está em uso.'], 400);
