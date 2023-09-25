@@ -16,8 +16,6 @@ export default {
     },
     methods: {
         async handleSubmit() {
-            console.log('E-mail chegando:', this.email);
-            console.log('Senha chegando:', this.password);
             try {
                 const response = await axios.post('/auth/login', {
                     email: this.email,
@@ -39,8 +37,8 @@ export default {
 <template>
     <div class="container">
         <div class="column left">
-            <div class="content">
-                <div class="triangle"></div>
+            <div class="contentLogin">
+                <div class="triangleLogin"></div>
                 <div>
                     <div class="content-img">
                         <img class="img-background" src="../assets/login.jpeg">
@@ -67,16 +65,18 @@ export default {
                     label="E-mail" 
                     class="input" 
                     :placeholder="'Digite seu email'"
+                    @update:modelValue="email = $event"
                 />
                 <BasePassword
                     v-model="password"
                     label="Senha"
                     class="input" 
                     :placeholder="'Digite sua senha'"
+                    @update:modelValue="password = $event"
                 />
 
                 <div class="buttons">
-                    <button type="submit" class="button">
+                    <button type="submit" class="button filled enter">
                         ENTRAR
                     </button>
                     <RouterLink to="/registrar">Criar conta</RouterLink>
@@ -92,21 +92,32 @@ export default {
 .container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    height: 100vh; 
+    height: 100vh;
+    overflow: hidden; 
+
+    @media (max-width: 800px){
+        grid-template-columns: auto;
+    }
 
     .column {
+
+        @media (max-width: 800px) {
+            &.left{
+                display: none !important;
+            }
+        }
 
       &.left{
         display: flex;
         flex-direction: column;
         background-color: #5F8A17;
 
-        .content{
+        .contentLogin{
             /* display: flex;
             flex-direction: row;
             align-items: stretch; */
 
-            .triangle{
+            .triangleLogin{
                 border-top: 50vh solid transparent;
                 border-bottom: 50vh solid transparent;
                 border-left: 100px solid #0D0D0D;
@@ -166,10 +177,7 @@ export default {
                     }
                 }
             }
-        
-            
         }
-        
       }
 
       &.right{
@@ -211,10 +219,12 @@ export default {
                 flex-direction: column;
                 align-items: center;
 
-                
+                .enter{
+                    width: 100%;
+                }
 
                 a{
-                    width: 80%;
+                    width: 90%;
                     text-align: end;
                     color: #7A7373;
                     text-decoration: none;
