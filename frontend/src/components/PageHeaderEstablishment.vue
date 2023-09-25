@@ -1,9 +1,20 @@
 <script>
+import LimitPizzaModal from './LimitPizzaModal.vue';
+import OpeningHoursModal from './OpeningHoursModal.vue';
 import SideBar from './SideBar.vue'
 
 export default {
   components: {
-    SideBar
+    SideBar,
+    LimitPizzaModal,
+    OpeningHoursModal,
+  },
+  data() {
+    return {
+      showSubmenu: false,
+      showModal: false,
+      modalType: null
+    }
   },
   methods: {
     toggleSideBar() {
@@ -14,6 +25,19 @@ export default {
       } else {
         sideBarElement.style.width = "200px";
       }
+    },
+    showSubMenu() {
+      this.showSubmenu = true;
+    },
+    hideSubMenu() {
+      this.showSubmenu = false;
+    },
+    openModal(modalType) {
+      this.modalType = modalType;
+      this.showModal = true;
+    },
+    closeModal() {
+      this.showModal = false;
     }
   }
 }
@@ -29,18 +53,30 @@ export default {
         <div class="menu-bar"></div>
       </div>
       <ul>
-        <li><a href="#">HOME</a></li>
+        <li><a class="home" href="/home">HOME</a></li>
         <li><a href="#">CARDÁPIO</a></li>
-        <li><a href="#">CONFIGURAÇÕES</a></li>
+        <li @mouseover="showSubMenu" @mouseleave="hideSubMenu">
+          <a class="settings" href="#">CONFIGURAÇÕES</a>
+          <ul class="submenu" v-if="showSubmenu">
+            <li @click="openModal('OpeningHours')"><a href="#">HORÁRIO</a></li>
+            <li @click="openModal('LimitPizza')"><a href="#">LIMITE DE PIZZAS</a></li>
+            <li><a class="settings" href="./ingredient">INGREDIENTES</a></li>
+            <li><a href="#">PROMOÇÕES</a></li>
+            <li><a href="/category">CATEGORIAS</a></li>
+          </ul>
+        </li>
       </ul>
     </nav>
     <div class="logo">
       <img src="@/assets/logo-pizza.png" alt="Pizzaria Basileus" />
     </div>
   </header>
-
-  <!-- Use o componente SideBar -->
+  
   <SideBar />
+
+  <OpeningHoursModal v-if="showModal && modalType === 'OpeningHours'" @close="closeModal"></OpeningHoursModal>  
+  <LimitPizzaModal v-if="showModal && modalType === 'LimitPizza'" @close="closeModal"></LimitPizzaModal>
+
 </template>
 
 
@@ -89,10 +125,44 @@ export default {
           transition: color 0.3s;
 
           &:hover{
-            color: #3E5903;
+            color: var(--cor-secundaria);
           }
         }
 
+      }
+    }
+
+    .submenu {
+      display: flex;
+      flex-direction: column;
+      margin-top: 10px;
+      padding: 15px;
+      border-radius: 16px;
+      position: absolute;
+      background-color: var(--cor-primaria);
+      border: none;
+      line-height: 1.8;
+      font-size: 14px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+
+      &:before {
+        content: "▲";
+        position: absolute;
+        top: -30px;
+        left: 3px;
+        font-size: 33px;
+        color: #5f8a17;
+      }
+      
+      li {
+        display: block;
+        
+        a {
+          color: var(--cor-site);
+          padding: 10px 16px;
+          text-decoration: none;
+        }
       }
     }
   }
