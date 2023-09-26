@@ -10,7 +10,7 @@ class CreateUserService
     public function handle(array $attributes, ?Establishment $establishment): User
     {
         $user = new User($attributes);
-        $user->establishment_id = $establishment->id;
+        $user->establishment_id = $establishment->id ?? null;
 
         $user->save();
 
