@@ -31,6 +31,7 @@ export default {
 
         this.name = '';
         this.active = false;
+        this.$emit('close');
       } catch (error) {
         console.error('Erro ao salvar a categoria:', error);
       }
