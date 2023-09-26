@@ -1,5 +1,5 @@
 <script>
-import axios from 'axios'
+import axios from '@/axios'
 import BaseInput from '@/components/BaseInput.vue';
 import BasePassword from '@/components/BasePassword.vue';
 

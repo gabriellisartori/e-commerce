@@ -35,11 +35,11 @@ export default {
         <button class="button-add" @click="openModal">
             Adicionar
         </button>
-    </div>
+      </div>
     
-    <div class="content-category">
+      <div class="content-category">
         <CategoryCard></CategoryCard>
-    </div>
+      </div>
     </div>
    
     <AddCategoryModal v-if="showModal" @close="closeModal"></AddCategoryModal>
@@ -60,5 +60,11 @@ export default {
       cursor: pointer;
     }
   }
+
+  .content-category{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  
 }
 </style>

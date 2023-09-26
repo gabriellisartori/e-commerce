@@ -3,40 +3,50 @@ import axios from '@/axios';
 import BaseInput from './BaseInput.vue';
 
 export default {
+  props: {
+    category: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       showModal: false,
-      name: '',
-      active: false
+      editedCategory: {
+        id: this.category.id,
+        name: this.category.name,
+        active: this.category.active
+
+      }
     };
   },
   components:{
     BaseInput
   },
   methods: {
-    openModal() {
-      this.showModal = true;
-    },
     closeModal() {
       this.$emit('close');
     },
-    async saveCategory() {
-      try {
-        const response = await axios.post('/category', {
-          name: this.name,
-          active: this.active
-        });
+    async updateCategory() {
+        try {
+          const data = {
+            id: this.editedCategory.id,
+            name: this.editedCategory.name,
+            active: this.editedCategory.active // Adicione esta linha
+          };
 
-        console.log('Categoria salva com sucesso:', response.data);
+          const response = await axios.put(`/category`, data);
+          console.log('Categoria atualizada com sucesso:', response.data);
 
-        this.name = '';
-        this.active = false;
-      } catch (error) {
-        console.error('Erro ao salvar a categoria:', error);
-      }
-    }
+          this.$emit('categoria-atualizada', response.data);
+
+          this.$emit('close');
+          } catch (error) {
+            console.error('Erro ao atualizar a categoria:', error);
+          }
+        }
   }
-};
+}
 </script>
 
 <template>
@@ -47,25 +57,25 @@ export default {
                 <img src="../assets/icons/exit.png" @click="closeModal">
             </div>
             <div class="content-modal">
-                <h2 class="title">ADICIONAR CATEGORIA</h2>
+                <h2 class="title">Editar Categoria</h2>
 
                 <BaseInput 
-                  v-model="name"
+                  v-model="editedCategory.name"
                   label="Nome" 
                   class="input name" 
                 />
 
                 <div class="switch">
                   <p>Adicional</p>
-                  <input type="checkbox" id="mySwitch" class="switch-input" v-model="active">
+                  <input type="checkbox" id="mySwitch" class="switch-input" v-model="editedCategory.active">
                   <label for="mySwitch" class="switch-label"></label>
                 </div>
-    
+
                 <div class="content-buttons">
                     <button class="button cancel" @click="closeModal">
                         CANCELAR
                     </button>
-                    <button class="button filled" @click="saveCategory">
+                    <button class="button filled" @click="updateCategory">
                         SALVAR
                     </button>
                 </div>
@@ -140,7 +150,7 @@ export default {
             top: 0;
             height: 20px;
             width: 50px;
-            left: 100px;
+            left: 0;
             right: 0;
             bottom: 0;
             background-color: var(--cor-site)!important;
