@@ -1,43 +1,59 @@
 <script>
+import axios from '@/axios';
+
 export default {
+  props: ['category'],
+  
+
   data() {
     return {
       showModal: false,
+      categoria: null
     };
   },
+  created() {
+    console.log('Valor da propriedade category:', this.categoriaId);
+  },
   methods: {
-    openModal() {
-      this.showModal = true;
-    },
     closeModal() {
       this.$emit('close');
     },
+    async deleteCategory() {
+      try {
+        const response = await axios.delete(`/category/${this.categoriaId}`);
+        console.log('Categoria excluída com sucesso:', response.data);
+        this.$emit('close');
+      } catch (error) {
+        console.error('Erro ao excluir a categoria:', error);
+      }
+    }
   }
 };
+
 </script>
 
 <template>
-     <div>
-        <div v-if="!showModal" class="overlay"></div>
-        <div :class="{ 'modal': true, 'show-modal': showModal }">
-            <div class="exit">
-                <img src="../assets/icons/exit.png" @click="closeModal">
-            </div>
-            <div class="content-modal">
-                <h2 class="title">Você tem certeza que deseja excluir {categoria}?</h2>
-    
-                <div class="content-buttons">
-                    <button class="button cancel" @click="closeModal">
-                        CANCELAR
-                    </button>
-                    <button class="button filled">
-                        CONTINUAR
-                    </button>
-                </div>
-            </div>
+  <div>
+    <div v-if="!showModal" class="overlay"></div>
+    <div :class="{ 'modal': true, 'show-modal': showModal }">
+      <div class="exit">
+        <img src="../assets/icons/exit.png" @click="closeModal">
+      </div>
+      <div class="content-modal">
+        <h2 class="title">Você tem certeza que deseja excluir {{ categoria }}?</h2>
+        <div class="content-buttons">
+          <button class="button cancel" @click="closeModal">
+            CANCELAR
+          </button>
+          <button class="button filled" @click="deleteCategory">
+            CONTINUAR
+          </button>
         </div>
+      </div>
     </div>
+  </div>
 </template>
+
 
 <style lang="scss">
 .overlay {

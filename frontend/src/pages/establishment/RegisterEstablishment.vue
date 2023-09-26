@@ -1,5 +1,5 @@
 <script>
-import axios from 'axios';
+import axios from '@/axios';
 import PageHeaderEstablishment from '@/components/PageHeaderEstablishment.vue';
 import BaseInput from '@/components/BaseInput.vue';
 import BasePassword from '@/components/BasePassword.vue';
@@ -28,14 +28,27 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      axios.post('http://seu-backend.com/establishment', this.form)
-        .then(response => {
-          console.log('Sucesso:', response.data);
-        })
-        .catch(error => {
-          console.error('Erro:', error);
+    async saveEstablishment() {
+      try {
+        const response = await axios.post('/establishment', {
+          nome: this.nome,
+          telefone: this.telefone,
+          cnpj: this.cnpj,
+          email: this.email,
+          password: this.password,
+          cep: this.cep,
+          cidade: this.cidade,
+          bairro: this.bairro,
+          rua: this.rua,
+          numero: this.numero,
+          complemento: this.complemento
         });
+
+        console.log('Estabelecimento salvo com sucesso:', response.data);
+
+      } catch (error) {
+        console.error('Erro ao salvar estabelecimento:', error);
+      }
     }
   }
 }
@@ -60,10 +73,10 @@ export default {
                     <BaseInput v-model="bairro" label="Bairro" class="input"></BaseInput>
                     <BaseInput v-model="rua" label="Rua" class="input"></BaseInput>
                     <div class="grid-2">
-                        <BaseInput v-model="numero" label="Número" class="input"></BaseInput>
-                        <BaseInput v-model="complemento" label="Complemento" class="input"></BaseInput>
+                        <BaseInput v-model="numero" label="Número" class="input grid"></BaseInput>
+                        <BaseInput v-model="complemento" label="Complemento" class="input grid"></BaseInput>
                     </div>
-                    <button type="submit" class="button login">ENTRAR</button>
+                    <button type="submit" class="button login filled" @click="saveEstablishment">ENTRAR</button>
                 </div>
             </div>
         </form>
@@ -90,6 +103,10 @@ export default {
         .column{
             .input{
                 margin-top: 30px;
+
+                &.grid{
+                  margin-top: 10px;
+                }
             }
 
             .grid-2{
