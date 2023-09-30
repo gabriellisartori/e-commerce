@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Services\Category\CreateCategoryService;
 use App\Services\Category\UpdateCategoryService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
@@ -53,13 +54,17 @@ class CategoryController extends Controller
 
     public function store(CreateCategoryRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
             
             $category = $this->createCategoryService->handle($data);
             
+            DB::commit();
             return response()->json(new CategoryResource($category), 201);
         } catch (ValidationException $e) {
+            DB::rollBack();
+
             return response()->json([
                 'message' => 'Erro ao criar categoria',
             ], 401);
@@ -68,13 +73,16 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
             
             $category = $this->updateCategoryService->handle($data);
-            
+
+            DB::commit();
             return response()->json(new CategoryResource($category), 200);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao atualizar categoria',
             ], 401);
@@ -83,6 +91,7 @@ class CategoryController extends Controller
 
     public function destroy(CategoryRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
             $product = Product::where('category_id', $data['id'])->first();
@@ -96,8 +105,10 @@ class CategoryController extends Controller
                 'active' => false
             ]);
             
+            DB::commit();
             return response()->json(new CategoryResource($category), 200);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao excluir categoria',
             ], 401);

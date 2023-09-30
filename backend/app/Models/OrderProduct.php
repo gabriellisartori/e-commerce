@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class OrderProduct extends Model
@@ -15,6 +16,9 @@ class OrderProduct extends Model
     protected $fillable = [
         'quantity',
         'value',
+        'half_pizza',
+        'product_id',
+        'half_pizza_product_id',
         'half_pizza'
     ];
 
@@ -23,9 +27,9 @@ class OrderProduct extends Model
         return $this->hasOne(Order::class);
     }
 
-    public function product(): HasOne
+    public function product(): BelongsTo
     {
-        return $this->hasOne(Product::class);
+        return $this->belongsTo(Product::class);
     }
 
     public function orderProductAdditional(): HasOne

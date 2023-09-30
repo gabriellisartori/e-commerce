@@ -9,6 +9,7 @@ use App\Http\Resources\BusinessHourResource;
 use App\Models\BusinessHour;
 use App\Services\BusinessHour\CreateBusinessHourService;
 use App\Services\BusinessHour\UpdateBusinessHourService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class BusinessHourController extends Controller
@@ -34,6 +35,7 @@ class BusinessHourController extends Controller
 
     public function store(CreateBusinessHourRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
 
@@ -47,8 +49,10 @@ class BusinessHourController extends Controller
                 $businessHour[] = $this->createBusinessHourService->handle($attributes);
             }
 
+            DB::commit();
             return response()->json(BusinessHourResource::collection($businessHour), 201);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao criar horário de funcionamento',
             ], 401);
@@ -57,6 +61,7 @@ class BusinessHourController extends Controller
 
     public function update(UpdateBusinessHourRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
 
@@ -83,8 +88,10 @@ class BusinessHourController extends Controller
                 }
             }
 
+            DB::commit();
             return response()->json(BusinessHourResource::collection(BusinessHour::all()), 200);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao atualizar horário de funcionamento',
             ], 401);

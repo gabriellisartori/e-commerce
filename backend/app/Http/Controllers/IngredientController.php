@@ -14,6 +14,7 @@ use App\Services\Additional\CreateAdditionalService;
 use App\Services\Additional\UpdateAdditionalService;
 use App\Services\Ingredient\CreateIngredientService;
 use App\Services\Ingredient\UpdateIngredientService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class IngredientController extends Controller
@@ -62,6 +63,7 @@ class IngredientController extends Controller
 
     public function store(CreateIngredientRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
 
@@ -74,8 +76,10 @@ class IngredientController extends Controller
                 $ingredient->load(['ingredientAdditional']);
             }
 
+            DB::commit();
             return response()->json(new IngredientResource($ingredient), 201);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao criar ingrediente',
             ], 401);
@@ -84,6 +88,7 @@ class IngredientController extends Controller
 
     public function update(UpdateIngredientRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
 
@@ -101,8 +106,10 @@ class IngredientController extends Controller
                 $ingredient->load(['ingredientAdditional']);
             }
 
+            DB::commit();
             return response()->json(new IngredientResource($ingredient), 200);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao atualizar ingrediente',
             ], 401);
@@ -111,6 +118,7 @@ class IngredientController extends Controller
 
     public function destroy(IngredientRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
 
@@ -124,8 +132,10 @@ class IngredientController extends Controller
 
             Ingredient::find($data['id'])->delete();
 
+            DB::commit();
             return response()->json([], 200);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao deletar ingrediente',
             ], 401);

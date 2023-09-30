@@ -16,6 +16,9 @@ class Order extends Model
     protected $fillable = [
         'observation',
         'total_value',
+        'paid',
+        'client_id',
+        'establishment_id'
     ];
 
     public function establishment(): HasOne

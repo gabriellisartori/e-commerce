@@ -13,6 +13,7 @@ use App\Services\Client\CreateClientService;
 use App\Services\Client\UpdateClientService;
 use App\Services\User\CreateUserService;
 use App\Services\User\UpdateUserService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class ClientController extends Controller
@@ -43,6 +44,7 @@ class ClientController extends Controller
 
     public function store(CreateClientRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
 
@@ -52,8 +54,11 @@ class ClientController extends Controller
             $client = $this->createClientService->handle($data, $user);
 
             $client->load(['user']);
+
+            DB::commit();
             return response()->json(new ClientResource($client), 201);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao criar cliente',
             ], 401);
@@ -62,6 +67,7 @@ class ClientController extends Controller
 
     public function update(UpdateClientRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
 
@@ -76,8 +82,10 @@ class ClientController extends Controller
 
             $client->load(['user']);
 
+            DB::commit();
             return response()->json(new ClientResource($client), 200);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao atualizar cliente',
             ], 401);

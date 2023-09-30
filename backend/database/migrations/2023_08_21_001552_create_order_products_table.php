@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
             $table->boolean('half_pizza')->default(false);
-            $table->unsignedBigInteger('half_pizza_product_id');
+            $table->unsignedBigInteger('half_pizza_product_id')->nullable();
             $table->foreign('half_pizza_product_id')->references('id')->on('products');
             $table->timestamps();
         });
