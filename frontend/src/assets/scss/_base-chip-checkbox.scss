@@ -1,0 +1,63 @@
+@function colors() {
+    @return "green", "basic", "dark-green";
+}
+
+$green: var(--cor-primaria);
+$dark-green: var(--cor-secundaria);
+$basic: var(--cor-icones);
+
+.chip-checkbox {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    display: inline-block;
+    
+    .chip-checkbox-input {
+        display: none;
+    }
+
+    margin: 1rem;
+
+    @each $color in colors() {
+        &.is-#{$color} {
+            &.is-small {
+                .chip-checkbox-input + .chip-checkbox-label {
+                    font-size: 12px;
+                    padding: 0.5rem 1rem;
+                }
+            }
+
+            &.is-medium {
+                .chip-checkbox-input + .chip-checkbox-label {
+                    font-size: 15px;
+                    padding: 0.5rem 1.2rem;
+                }
+            }
+
+            &.is-large {
+                .chip-checkbox-input + .chip-checkbox-label {
+                    font-size: 18px;
+                    padding: 0.5rem 1.5rem;
+                }
+            }
+
+            .chip-checkbox-input + .chip-checkbox-label {
+                background-color: #fff;
+                color: #{$color};
+                border: solid 1px #{$color};
+                -webkit-transition: all 500ms ease;
+                transition: all 500ms ease;
+                cursor: pointer;
+                border-radius: 50px;
+                -moz-user-select: -moz-none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            .chip-checkbox-input:checked + .chip-checkbox-label {
+                background-color: #{$color};
+                color: #fff;
+            }
+        }
+    }
+}

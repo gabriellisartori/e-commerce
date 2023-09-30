@@ -1,0 +1,122 @@
+@function colors() {
+    @return "green", "basic", "dark-green";
+}
+
+$green: var(--cor-primaria);
+$dark-green: var(--cor-secundaria);
+$basic: var(--cor-icones);
+
+.base-button {
+    outline: none;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+
+    &-content {
+        font-weight: 700;
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 0 1rem;
+    }
+
+    &.is-small {
+        min-width: 40px;
+        height: auto;
+        padding: 0.5rem;
+        font-size: 10px;
+        border-radius: 5px;
+
+        &.is-rounded {
+            border-radius: 10px;
+        }
+
+        &.is-icon {
+            min-width: 20px;
+            height: 30px;
+            padding: 0;
+        }
+    }
+
+    &.is-medium {
+        min-width: 60px;
+        height: auto;
+        padding: 0.8rem;
+        font-size: 15px;
+        border-radius: 8px;
+
+        &.is-rounded {
+            border-radius: 20px;
+        }
+
+        &.is-icon {
+            min-width: 40px;
+            height: 40px;
+            padding: 0;
+        }
+    }
+
+    &.is-large {
+        min-width: 70px;
+        height: auto;
+        padding: 1rem;
+        font-size: 18px;
+        border-radius: 1rem;
+
+        &.is-rounded {
+            border-radius: 30px;
+        }
+
+        &.is-icon {
+            min-width: 50px;
+            height: 50px;
+            padding: 0;
+        }
+    }
+
+    @each $color in colors() {
+        &.is-#{$color} {
+            &.is-flat {
+                background-color: #{$color};
+                border: none;
+                color: #fff;
+
+                &:hover {
+                    opacity: 0.6;
+                }
+            }
+
+            &.is-outlined {
+                background-color: transparent;
+                border: 1px solid #{$color};
+                color: #{$color};
+
+                &:hover {
+                    background-color: #{$color};
+                    color: #fff;
+                }
+            }
+
+            &.is-transparent {
+                background-color: transparent;
+                border: none;
+                color: #{$color};
+
+                &:hover {
+                    background-color: #{$color};
+                    color: #fff;
+                }
+            }
+
+            &.is-disabled {
+                background-color: $basic !important;
+                border: none;
+                color: #fff;
+                opacity: 0.6;
+                cursor: not-allowed;
+                // colocar o icone
+            }
+        }
+    }
+}
