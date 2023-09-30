@@ -3,9 +3,11 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BusinessHourController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DailyPizzaSaleLimitController;
 use App\Http\Controllers\EstablishmentController;
 use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PromotionController;
 use Illuminate\Support\Facades\Route;
@@ -28,9 +30,8 @@ use Illuminate\Support\Facades\Route;
     Route::put('establishment', [EstablishmentController::class, 'update']);
     
     Route::prefix('client')->group(function () {
-        Route::get('', [ClientController::class, 'index']);
+        Route::get('', [ClientController::class, 'show']);
         Route::put('', [ClientController::class, 'update']);
-        Route::delete('', [ClientController::class, 'destroy']);
     });
     
     // quando tiver autenticação funcionando, colocar a middleware para apenas estabelecimento conseguir fazer alguns request
@@ -77,7 +78,7 @@ use Illuminate\Support\Facades\Route;
     });
 
     Route::prefix('order')->group(function () {
-        Route::get('', [OrderController::class, 'index']);
+        Route::get('all', [OrderController::class, 'index']);
         Route::get('', [OrderController::class, 'show']);
         Route::post('', [OrderController::class, 'store']);
         Route::put('', [OrderController::class, 'update']);

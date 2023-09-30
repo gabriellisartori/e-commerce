@@ -14,6 +14,7 @@ class OrderProductAdditional extends Model
      */
     protected $fillable = [
         'additional_value',
+        'product_additional_id'
     ];
 
     public function productAdditional(): HasOne

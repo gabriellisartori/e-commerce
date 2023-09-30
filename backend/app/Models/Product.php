@@ -31,9 +31,9 @@ class Product extends Model
         return $this->hasOne(Establishment::class);
     }
 
-    public function orderProduct(): HasMany
+    public function orderProduct(): HasOne
     {
-        return $this->hasMany(OrderProduct::class);
+        return $this->hasOne(OrderProduct::class);
     }
 
     public function productAdditional(): HasOne
