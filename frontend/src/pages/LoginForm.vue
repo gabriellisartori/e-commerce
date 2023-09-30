@@ -1,7 +1,7 @@
 <script>
 import axios from '@/axios'
-import BaseInput from '@/components/BaseInput.vue';
-import BasePassword from '@/components/BasePassword.vue';
+import BaseInput from '@/components/generics/BaseInput.vue';
+import BasePassword from '@/components/generics/BasePassword.vue';
 
 export default {
     components: {

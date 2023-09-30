@@ -1,6 +1,6 @@
 <script>
-import BaseCard from '@/components/BaseCard.vue'
-import IngredientModalDelete from '@/components/IngredientModalDelete.vue'
+import BaseCard from '@/components/generics/BaseCard.vue'
+import IngredientModalDelete from '@/components/ingredients/IngredientModalDelete.vue'
 
 export default {
   components: {
@@ -26,8 +26,8 @@ export default {
 <template>
     <BaseCard>
         <div class="icons">
-            <img src="../assets/icons/edit.png">
-            <img src="../assets/icons/exit.png" @click="openModal">
+            <img src="../../assets/icons/edit.png">
+            <img src="../../assets/icons/exit.png" @click="openModal">
         </div>
         <p class="item">Tomate</p>
     </BaseCard>

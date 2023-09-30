@@ -1,12 +1,11 @@
 <script>
-import BaseInput from './BaseInput.vue';
+import BaseInput from '../generics/BaseInput.vue';
 
 
 export default {
   data() {
     return {
       showModal: false,
-      isActive: false,
     };
   },
   components:{
@@ -19,9 +18,6 @@ export default {
     closeModal() {
       this.$emit('close');
     },
-    toggle() {
-      this.isActive = !this.isActive;
-    }
   }
 };
 </script>
@@ -31,7 +27,7 @@ export default {
         <div v-if="!showModal" class="overlay"></div>
             <div :class="{ 'modal': true, 'show-modal': showModal }">
             <div class="exit">
-              <img src="../assets/icons/exit.png" @click="closeModal">
+              <img src="../../assets/icons/exit.png" @click="closeModal">
             </div>
             <div class="content-modal">
               <h3 class="title">ADICIONAR INGREDIENTE</h3>
@@ -40,9 +36,6 @@ export default {
                 label="Nome" 
                 class="input name" 
               />
-
-              <p>Adicional</p>
-              <v-switch label="Switch"></v-switch>
 
               <div class="content-buttons">
                 <button class="button cancel" @click="closeModal">
@@ -57,7 +50,7 @@ export default {
     </div>
 </template>
       
-<style lang="scss">
+<!-- <style lang="scss">
 .overlay {
     position: fixed;
     top: 0;
@@ -103,4 +96,4 @@ export default {
     }
   }
 }
-</style>
+</style> -->

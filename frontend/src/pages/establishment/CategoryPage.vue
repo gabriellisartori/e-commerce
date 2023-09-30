@@ -1,7 +1,7 @@
 <script>
-import PageHeaderEstablishment from '@/components/PageHeaderEstablishment.vue';
-import AddCategoryModal from '@/components/AddCategoryModal.vue'
-import CategoryCard from '@/components/CategoryCard.vue';
+import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
+import AddCategoryModal from '@/components/category/AddCategoryModal.vue'
+import CategoryCard from '@/components/category/CategoryCard.vue';
 /* import SvgIcon from '@/components/SvgIcon.vue';
  */
 export default {

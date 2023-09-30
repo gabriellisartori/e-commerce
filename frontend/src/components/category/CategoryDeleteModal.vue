@@ -20,7 +20,7 @@ export default {
     },
     async deleteCategory() {
       try {
-        const response = await axios.delete(`/category/${this.categoriaId}`);
+        const response = await axios.delete(`/category`);
         console.log('Categoria excluída com sucesso:', response.data);
         this.$emit('close');
       } catch (error) {
@@ -37,10 +37,10 @@ export default {
     <div v-if="!showModal" class="overlay"></div>
     <div :class="{ 'modal': true, 'show-modal': showModal }">
       <div class="exit">
-        <img src="../assets/icons/exit.png" @click="closeModal">
+        <img src="../../assets/icons/exit.png" @click="closeModal">
       </div>
       <div class="content-modal">
-        <h2 class="title">Você tem certeza que deseja excluir {{ categoria }}?</h2>
+        <h2 class="title">VOCÊ TEM CERTEZA QUE DESEJA EXCLUIR {{ categoria }}?</h2>
         <div class="content-buttons">
           <button class="button cancel" @click="closeModal">
             CANCELAR
@@ -55,7 +55,7 @@ export default {
 </template>
 
 
-<style lang="scss">
+<!-- <style lang="scss">
 .overlay {
     position: fixed;
     top: 0;
@@ -102,4 +102,4 @@ export default {
 
     }
   }
-</style>
+</style> -->

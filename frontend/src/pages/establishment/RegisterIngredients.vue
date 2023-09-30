@@ -1,5 +1,5 @@
 <script setup>
-import PageHeaderEstablishment from '@/components/PageHeaderEstablishment.vue';
+import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
 
 </script>
 

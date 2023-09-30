@@ -1,8 +1,8 @@
 <script>
 import axios from '@/axios';
-import PageHeaderEstablishment from '@/components/PageHeaderEstablishment.vue';
-import BaseInput from '@/components/BaseInput.vue';
-import BasePassword from '@/components/BasePassword.vue';
+import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
+import BaseInput from '@/components/generics/BaseInput.vue';
+import BasePassword from '@/components/generics/BasePassword.vue';
 
 export default {
   components: {

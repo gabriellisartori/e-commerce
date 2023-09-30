@@ -1,5 +1,5 @@
 <script>
-import PageHeaderEstablishment from '@/components/PageHeaderEstablishment.vue';
+import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
 
 export default {
   components: {
@@ -47,6 +47,8 @@ export default {
 .contentHome{
   display: grid;
   grid-template-columns: 1fr 1fr;
+  background-color: var(--cor-site);
+  overflow: hidden;
 
   .infos-content{
     margin-left: 150px;

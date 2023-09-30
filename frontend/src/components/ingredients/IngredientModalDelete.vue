@@ -21,7 +21,7 @@ export default {
         <div v-if="!showModal" class="overlay"></div>
         <div :class="{ 'modal': true, 'show-modal': showModal }">
             <div class="exit">
-                <img src="../assets/icons/exit.png" @click="closeModal">
+                <img src="../../assets/icons/exit.png" @click="closeModal">
             </div>
             <div class="content-modal">
                 <h2 class="title">Você tem certeza que deseja excluir {ingrediente}?</h2>
@@ -39,7 +39,7 @@ export default {
     </div>
 </template>
 
-<style lang="scss">
+<!-- <style lang="scss">
 .overlay {
     position: fixed;
     top: 0;
@@ -86,4 +86,4 @@ export default {
 
     }
   }
-</style>
+</style> -->

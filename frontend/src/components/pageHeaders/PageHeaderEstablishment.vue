@@ -1,7 +1,7 @@
 <script>
-import LimitPizzaModal from './LimitPizzaModal.vue';
-import OpeningHoursModal from './OpeningHoursModal.vue';
-import SideBar from './SideBar.vue'
+import LimitPizzaModal from '../limitPizza/LimitPizzaModal.vue';
+import OpeningHoursModal from '../openingHours/OpeningHoursModal.vue';
+import SideBar from '../generics/SideBar.vue'
 
 export default {
   components: {
@@ -87,7 +87,7 @@ export default {
   justify-content: space-evenly;
   align-items: center;
   padding: 10px 70px;
-  background-color: #FBFBFB;
+  background-color: var(--cor-site);
   color: #000000;
   width: 50%;
 

@@ -1,6 +1,6 @@
 <script>
 import axios from '@/axios';
-import BaseCard from '@/components/BaseCard.vue';
+import BaseCard from '@/components/generics/BaseCard.vue';
 import CategoryDeleteModal from './CategoryDeleteModal.vue';
 import CategoryEditModal from './CategoryEditModal.vue';
 
@@ -22,7 +22,7 @@ export default {
   methods: {
     openModal(category) {
       this.categoriaParaExcluir = category;
-      console.log(this.categoriaParaExcluir.id)
+      console.log(this.categoriaParaExcluir)
       this.showDeleteModal = true;
     },
     openEditModal(category) {
@@ -61,8 +61,8 @@ export default {
 <template>
     <BaseCard v-for="category in categories" :key="category.id">
       <div class="icons">
-        <img src="../assets/icons/edit.png" @click="openEditModal(category)">
-        <img src="../assets/icons/exit.png" @click="openModal(category.id)">
+        <img src="../../assets/icons/edit.png" @click="openEditModal(category)">
+        <img src="../../assets/icons/exit.png" @click="openModal(category.id)">
       </div>
       <p class="item">{{ category.name }}</p>
     </BaseCard>

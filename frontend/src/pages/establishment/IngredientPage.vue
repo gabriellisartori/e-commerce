@@ -1,7 +1,7 @@
 <script>
-import PageHeaderEstablishment from '@/components/PageHeaderEstablishment.vue';
-import AddIngredientModal from '@/components/AddIngredientModal.vue'
-import IngredientCard from '@/components/IngredientCard.vue'
+import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
+import AddIngredientModal from '@/components/ingredients/AddIngredientModal.vue'
+import IngredientCard from '@/components/ingredients/IngredientCard.vue'
 /* import SvgIcon from '@/components/SvgIcon.vue';
  */
 export default {
