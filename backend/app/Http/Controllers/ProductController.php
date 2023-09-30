@@ -17,6 +17,7 @@ use App\Services\ProductAdditional\CreateProductAdditionalService;
 use App\Services\ProductIngredient\CreateProductIngredientService;
 use App\Services\ProductPromotion\CreateProductPromotionService;
 use App\Services\ProductPromotion\UpdateProductPromotionService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\ValidationException;
 
@@ -84,9 +85,11 @@ class ProductController extends Controller
     {
         $data = $request->validated();
 
-        // save image
-        $this->createDirectory('basileus');
+        DB::beginTransaction();
         try {
+            // save image
+            $this->createDirectory('basileus');
+
             $imageName = $data['image']->getClientOriginalName();
 
             $data['image']->move(public_path("images/basileus"), $imageName);
@@ -131,8 +134,10 @@ class ProductController extends Controller
                 'productAdditional.additional'
             ]);
 
+            DB::commit();
             return response()->json(new ProductResource($product), 201);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao criar produto',
             ], 401);
@@ -141,6 +146,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request)
     {
+        DB::beginTransaction();
         $data = $request->validated();
         try {
             if (!is_string($data['image'])) {
@@ -203,8 +209,10 @@ class ProductController extends Controller
                 'productAdditional.additional'
             ]);
 
+            DB::commit();
             return response()->json(new ProductResource($product), 200);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao atualizar produto',
             ], 401);

@@ -14,6 +14,7 @@ use App\Services\Establishment\CreateEstablishmentService;
 use App\Services\Establishment\UpdateEstablishmentService;
 use App\Services\User\CreateUserService;
 use App\Services\User\UpdateUserService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class EstablishmentController extends Controller
@@ -46,6 +47,7 @@ class EstablishmentController extends Controller
 
     public function store(CreateEstablishmentRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
 
@@ -57,8 +59,10 @@ class EstablishmentController extends Controller
 
             $establishment->load(['address', 'user']);
 
+            DB::commit();
             return response()->json(new EstablishmentResource($establishment), 201);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao criar estabelecimento',
             ], 401);
@@ -67,6 +71,7 @@ class EstablishmentController extends Controller
 
     public function update(UpdateEstablishmentRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
 
@@ -85,8 +90,10 @@ class EstablishmentController extends Controller
 
             $establishment->load(['address', 'user']);
 
+            DB::commit();
             return response()->json(new EstablishmentResource($establishment), 200);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao atualizar estabelecimento',
             ], 401);

@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Services\Order\CreateOrderService;
 use App\Services\OrderProductAdditional\CreateOrderProductAdditionalService;
 use App\Services\OrderProduct\CreateOrderProductService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
@@ -70,6 +71,7 @@ class OrderController extends Controller
 
     public function store(CreateOrderRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
 
@@ -99,6 +101,7 @@ class OrderController extends Controller
                 'orderProduct.product.productAdditional'
             ]);
 
+            DB::commit();
             return response()->json(new OrderResource($order), 201);
         } catch (ValidationException $e) {
             return response()->json([
@@ -109,6 +112,7 @@ class OrderController extends Controller
 
     public function update(UpdateOrderRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
 
@@ -128,8 +132,10 @@ class OrderController extends Controller
                 'orderProduct.product.productAdditional'
             ]);
 
+            DB::commit();
             return response()->json(new OrderResource($order), 200);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao atualizar pedido',
             ], 401);

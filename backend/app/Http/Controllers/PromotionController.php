@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Promotion;
 use App\Services\Promotion\CreatePromotionService;
 use App\Services\Promotion\UpdatePromotionService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class PromotionController extends Controller
@@ -53,13 +54,16 @@ class PromotionController extends Controller
 
     public function store(CreatePromotionRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
             
             $promotion = $this->createPromotionService->handle($data);
             
+            DB::commit();
             return response()->json(new PromotionResource($promotion), 201);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao criar promoção',
             ], 401);
@@ -68,13 +72,16 @@ class PromotionController extends Controller
 
     public function update(UpdatePromotionRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
             
             $promotion = $this->updatePromotionService->handle($data);
             
+            DB::commit();
             return response()->json(new PromotionResource($promotion), 200);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao atualizar promoção',
             ], 401);
@@ -83,6 +90,7 @@ class PromotionController extends Controller
 
     public function destroy(PromotionRequest $request)
     {
+        DB::beginTransaction();
         try {
             $data = $request->validated();
             
@@ -93,8 +101,10 @@ class PromotionController extends Controller
             
             Promotion::find($data['id'])->delete();
             
+            DB::commit();
             return response()->json([], 200);
         } catch (ValidationException $e) {
+            DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao deletar promoção',
             ], 401);
