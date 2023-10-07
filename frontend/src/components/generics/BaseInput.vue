@@ -29,7 +29,7 @@ export default {
       :value="inputValue" 
       @input="updateValue" 
       :placeholder="placeholder" 
-      />
+      />      
   </div>
 </template>
 
@@ -37,13 +37,13 @@ export default {
 .base-input-div{
     margin-bottom: 20px;
 
-    .base-label {
+/*     .base-label {
         display: block;
         color: #7A7373;
         font-weight: bold;
-    }
+    } */
     
-    .base-input {
+/*     .base-input {
         width: -webkit-fill-available;
         height: 20px;
         padding: 10px;
@@ -51,7 +51,7 @@ export default {
         border-radius: 16px;
         margin-top: 10px; 
         outline: none; 
-    }
+    } */
   }
   </style>
   

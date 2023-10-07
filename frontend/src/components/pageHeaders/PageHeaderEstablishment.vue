@@ -54,7 +54,7 @@ export default {
       </div>
       <ul>
         <li><a class="home" href="/home">HOME</a></li>
-        <li><a href="#">CARDÁPIO</a></li>
+        <li><a href="cardapio">CARDÁPIO</a></li>
         <li @mouseover="showSubMenu" @mouseleave="hideSubMenu">
           <a class="settings" href="#">CONFIGURAÇÕES</a>
           <ul class="submenu" v-if="showSubmenu">

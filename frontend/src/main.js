@@ -6,6 +6,14 @@ import './assets/css/resset.css';
 
 const app = createApp(App).use(router)
 
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+app.component('VueDatePicker', VueDatePicker);
+
+import VueTimepicker from 'vue3-timepicker'
+import 'vue3-timepicker/dist/VueTimepicker.css'
+app.component('VueTimepicker', VueTimepicker);
+
 import BaseButton from './components/generics/BaseButton.vue';
 app.component('base-button', BaseButton);
 

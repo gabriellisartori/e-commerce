@@ -4,6 +4,7 @@ import RegisterEstablishment from '../pages/establishment/RegisterEstablishment.
 import HomePage from '../pages/establishment/HomePage.vue'; 
 import IngredientPage from '../pages/establishment/IngredientPage.vue'
 import CategoryPage from '../pages/establishment/CategoryPage.vue'
+import MenuPageVue from '@/pages/establishment/MenuPage.vue';
 /* import LimitPizzaModal from '../components/LimitPizzaModal.vue'
  */
 const routes = [
@@ -21,6 +22,11 @@ const routes = [
     path: '/home',
     name: 'HomePage',
     component: HomePage,
+  },
+  {
+    path: '/cardapio',
+    name: 'MenuPage',
+    component: MenuPageVue,
   },
   /* {
     path: '/limit',

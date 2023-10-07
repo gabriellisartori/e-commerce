@@ -19,7 +19,6 @@ export default {
         id: this.category.id,
         name: this.category.name,
         active: this.category.active
-
       }
     };
   },
@@ -27,6 +26,16 @@ export default {
     BaseModal,
     BaseInput,
     BaseSwitch
+  },
+  computed: {
+    switchValue: {
+      get() {
+        return this.editedCategory.active;
+      },
+      set(value) {
+        this.editedCategory.active = value;
+      }
+    }
   },
   methods: {
     closeModal() {
@@ -49,6 +58,10 @@ export default {
       } catch (error) {
         console.error('Erro ao atualizar a categoria:', error);
       }
+    },
+    handleSwitchInput(value) {
+      console.log('Evento input recebido com valor:', value);
+      this.editedCategory.active = value;
     }
   }
 }
@@ -58,7 +71,7 @@ export default {
   <BaseModal :modalTitle="modalTitle">
     <div class="components">
       <BaseInput v-model="editedCategory.name" label="Nome" class="input name" />
-      <BaseSwitch label="Ativo" v-model="editedCategory.active" @input="handleSwitchInput" />
+      <BaseSwitch label="Ativo" v-model="switchValue" @input="handleSwitchInput" />
     </div>
 
     <div class="content-buttons">

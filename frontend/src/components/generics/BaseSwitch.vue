@@ -29,7 +29,7 @@ export default {
     margin-top: 32px;
    /*  margin-left: 50px; */
     justify-content: space-evenly;
-    color: var(--cor-icones);
+    color: var(--cor-fonte);
     font-weight: 700;
 
     .switch-input {
