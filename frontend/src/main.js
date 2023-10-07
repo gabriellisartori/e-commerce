@@ -20,6 +20,8 @@ app.component('base-button', BaseButton);
 import BaseChipCheckbox from './components/generics/BaseChipCheckbox.vue';
 app.component('base-chip-checkbox', BaseChipCheckbox);
 
+import BaseButtonGroup from './components/generics/BaseButtonGroup.vue';
+app.component('base-button-group', BaseButtonGroup);
 
 // Font Awesome
 /* import the fontawesome core */

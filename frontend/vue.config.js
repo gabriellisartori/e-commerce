@@ -4,12 +4,13 @@ module.exports = defineConfig({
   css: {
     loaderOptions: {
       scss: {
-        additionalData: 
-          `@import "@/assets/scss/_variables.scss"; 
+        additionalData: `
+          @import "@/assets/scss/_variables.scss"; 
           @import "@/assets/scss/_padroes.scss";
           @import "@/assets/scss/_base-button.scss";
-          @import "@/assets/scss/_base-chip-checkbox.scss";`,
-          
+          @import "@/assets/scss/_base-chip-checkbox.scss";
+          @import "@/assets/scss/_base-button-group.scss";
+          `,
       },
     },
   },
