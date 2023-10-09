@@ -34,4 +34,10 @@ import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 library.add(faUserSecret)
 app.component('font-awesome-icon', FontAwesomeIcon);
 
+import Vue3Toasity from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+app.use(Vue3Toasity, {
+    autoClose: 3000,
+});
+
 app.mount('#app');

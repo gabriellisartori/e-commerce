@@ -22,3 +22,10 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+# Usar toast
+import { toast } from 'vue3-toastify';
+toast.success("Ingrediente salvo!", {
+      position: toast.POSITION.BOTTOM_LEFT,
+});
