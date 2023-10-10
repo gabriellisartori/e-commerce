@@ -34,10 +34,21 @@ import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
 library.add(faUserSecret)
 app.component('font-awesome-icon', FontAwesomeIcon);
 
+// Vue3 Toastify
 import Vue3Toasity from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 app.use(Vue3Toasity, {
     autoClose: 3000,
 });
+
+// Vue Sweetalert2 Dialog
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+const options = {
+    confirmButtonColor: '#5F8A17',
+    cancelButtonColor: '#7A7373',
+};
+app.use(VueSweetalert2, options);
 
 app.mount('#app');
