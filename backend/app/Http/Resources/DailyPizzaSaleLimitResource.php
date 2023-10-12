@@ -17,9 +17,7 @@ class DailyPizzaSaleLimitResource extends JsonResource
         return [
             'id' => $this->id,
             'quantity' => $this->quantity,
-            'date' => $this->date,
-            'starts_at' => $this->starts_at,
-            'end_at' => $this->end_at,
+            'date' => $this->date
         ];
     }
 }

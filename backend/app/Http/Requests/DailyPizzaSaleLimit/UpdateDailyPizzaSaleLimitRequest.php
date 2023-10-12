@@ -25,8 +25,6 @@ class UpdateDailyPizzaSaleLimitRequest extends FormRequest
             'id' => 'required|exists:daily_pizza_sale_limits,id',
             'quantity' => 'required|integer',
             'date' => 'required|date',
-            'starts_at' => 'required',
-            'end_at' => 'required'
         ];
     }
 }

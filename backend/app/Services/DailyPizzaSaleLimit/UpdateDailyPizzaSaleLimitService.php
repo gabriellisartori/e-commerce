@@ -12,9 +12,7 @@ class UpdateDailyPizzaSaleLimitService
 
         $dailyPizzaSaleLimit->update([
             'quantity' => $attributes['quantity'],
-            'date' => $attributes['date'],
-            'starts_at' => $attributes['starts_at'],
-            'end_at' => $attributes['end_at']
+            'date' => $attributes['date']
         ]);
 
         return $dailyPizzaSaleLimit;

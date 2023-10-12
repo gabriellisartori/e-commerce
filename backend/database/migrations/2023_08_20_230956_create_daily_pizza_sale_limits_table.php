@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->integer('quantity');    
             $table->date('date');
-            $table->time('starts_at');
-            $table->time('end_at');
             $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();
