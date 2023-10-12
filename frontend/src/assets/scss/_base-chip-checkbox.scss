@@ -1,10 +1,14 @@
+@use "sass:map";
+
 @function colors() {
     @return "green", "basic", "dark-green";
 }
 
-$green: var(--cor-primaria);
-$dark-green: var(--cor-secundaria);
-$basic: var(--cor-fonte);
+$button-color: (
+    "green": var(--cor-primaria),
+    "dark-green": var(--cor-secundaria),
+    "basic": var(--cor-fonte)
+);
 
 .chip-checkbox {
     font-family: Arial, Helvetica, sans-serif;
@@ -41,9 +45,9 @@ $basic: var(--cor-fonte);
             }
 
             .chip-checkbox-input + .chip-checkbox-label {
-                background-color: #fff;
-                color: #{$color};
-                border: solid 1px #{$color};
+                background-color: #FFFFFF;
+                color: map.get($button-color, #{$color});
+                border: solid 1px map.get($button-color, #{$color});
                 -webkit-transition: all 500ms ease;
                 transition: all 500ms ease;
                 cursor: pointer;
@@ -55,8 +59,8 @@ $basic: var(--cor-fonte);
             }
 
             .chip-checkbox-input:checked + .chip-checkbox-label {
-                background-color: #{$color};
-                color: #fff;
+                background-color: map.get($button-color, #{$color});
+                color: #FFFFFF;
             }
         }
     }
