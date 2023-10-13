@@ -1,5 +1,6 @@
 <script>
 import axios from '@/axios';
+import { toast } from 'vue3-toastify';
 import BaseInput from '../generics/BaseInput.vue';
 import BaseModal from '../generics/BaseModal.vue'
 import BaseSwitch from '../generics/BaseSwitch.vue'
@@ -36,11 +37,15 @@ export default {
           active: this.active
         });
 
-        console.log('Categoria salva com sucesso:', response.data);
-
         this.name = '';
         this.active = false;
+        this.$emit('categoryAdded', response.data);
         this.$emit('close');
+
+        toast.success("Salvo com sucesso!", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+
       } catch (error) {
         console.error('Erro ao salvar a categoria:', error);
       }
@@ -53,7 +58,7 @@ export default {
   <BaseModal :modalTitle="modalTitle">
     <div class="components">
       <BaseInput v-model="name" label="Nome" class="input name" />
-      <BaseSwitch label="Ativo" v-model="active" @input="handleSwitchInput" />
+      <BaseSwitch label="Ativo" v-model="active" />
     </div>
 
 

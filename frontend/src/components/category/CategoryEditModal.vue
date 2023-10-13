@@ -1,5 +1,6 @@
 <script>
 import axios from '@/axios';
+import { toast } from 'vue3-toastify';
 import BaseModal from '../generics/BaseModal.vue'
 import BaseInput from '../generics/BaseInput.vue';
 import BaseSwitch from '../generics/BaseSwitch.vue';
@@ -30,6 +31,7 @@ export default {
   computed: {
     switchValue: {
       get() {
+        console.log('ativo?', this.editedCategory.active);
         return this.editedCategory.active;
       },
       set(value) {
@@ -55,6 +57,10 @@ export default {
         this.$emit('categoria-atualizada', response.data);
 
         this.$emit('close');
+
+        toast.success("Alterações salvas!", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
       } catch (error) {
         console.error('Erro ao atualizar a categoria:', error);
       }
@@ -71,7 +77,7 @@ export default {
   <BaseModal :modalTitle="modalTitle">
     <div class="components">
       <BaseInput v-model="editedCategory.name" label="Nome" class="input name" />
-      <BaseSwitch label="Ativo" v-model="switchValue" @input="handleSwitchInput" />
+      <BaseSwitch label="Ativo" v-model="editedCategory.active" @input="handleSwitchInput" />
     </div>
 
     <div class="content-buttons">
