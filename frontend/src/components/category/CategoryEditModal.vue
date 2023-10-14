@@ -12,6 +12,11 @@ export default {
       required: true
     }
   },
+  components: {
+    BaseModal,
+    BaseInput,
+    BaseSwitch
+  },
   data() {
     return {
       modalTitle: 'EDITAR CATEGORIA',
@@ -23,15 +28,9 @@ export default {
       }
     };
   },
-  components: {
-    BaseModal,
-    BaseInput,
-    BaseSwitch
-  },
   computed: {
     switchValue: {
       get() {
-        console.log('ativo?', this.editedCategory.active);
         return this.editedCategory.active;
       },
       set(value) {

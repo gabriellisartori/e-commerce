@@ -4,7 +4,6 @@ import BaseCard from '@/components/generics/BaseCard.vue';
 import CategoryEditModal from './CategoryEditModal.vue';
 import Swal from 'sweetalert2';
 
-
 export default {
   components: {
     BaseCard,

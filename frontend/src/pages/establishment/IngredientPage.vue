@@ -2,8 +2,7 @@
 import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
 import AddIngredientModal from '@/components/ingredients/AddIngredientModal.vue'
 import IngredientCard from '@/components/ingredients/IngredientCard.vue'
-/* import SvgIcon from '@/components/SvgIcon.vue';
- */
+
 export default {
   components: {
     IngredientCard,
@@ -12,7 +11,8 @@ export default {
   },
   data() {
     return {
-      showModal: false 
+      showModal: false,
+      ingredients: [],
     };
   },
   methods: {
@@ -21,7 +21,10 @@ export default {
     },
     closeModal() {
       this.showModal = false;
-    }
+    },
+    handleIngredientAdded(newIngredient) {
+      this.$refs.ingredientCard.addIngredient(newIngredient);
+    },
   }
 };
 </script>
@@ -38,11 +41,11 @@ export default {
     </div>
     
     <div class="content-ingredient">
-        <IngredientCard></IngredientCard>
+        <IngredientCard ref="ingredientCard"></IngredientCard>
     </div>
     </div>
    
-    <AddIngredientModal v-if="showModal" @close="closeModal"></AddIngredientModal>
+    <AddIngredientModal v-if="showModal" @close="closeModal" @ingredientAdded="handleIngredientAdded"></AddIngredientModal>
 
 </template>
 
@@ -60,16 +63,13 @@ export default {
     display: flex;
     justify-content: space-between;
 
-    /*.button-add{
-      background: none;
-      border: none;
-      color: var(--cor-primaria);
-    }*/
   }
 
   .content-ingredient{
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
+    width: 90%;
+    margin: 0 auto;
   }
 }
 
