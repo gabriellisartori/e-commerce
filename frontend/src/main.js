@@ -23,15 +23,30 @@ app.component('base-chip-checkbox', BaseChipCheckbox);
 import BaseButtonGroup from './components/generics/BaseButtonGroup.vue';
 app.component('base-button-group', BaseButtonGroup);
 
+import BaseCard from './components/generics/BaseCard.vue';
+app.component('base-card', BaseCard);
+
+import BaseModal from './components/generics/BaseModal.vue';
+app.component('base-modal', BaseModal);
+
+import BaseInput from './components/generics/BaseInput.vue';
+app.component('base-input', BaseInput);
+
+import BaseDate from './components/generics/BaseDatePicker.vue';
+app.component('base-date', BaseDate);
+
+import BaseTime from './components/generics/BaseTimePicker.vue';
+app.component('base-time', BaseTime);
+
 // Font Awesome
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
-import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faXmark, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 /* add icons to the library */
-library.add(faUserSecret)
+library.add(faUserSecret, faXmark, faPenToSquare)
 app.component('font-awesome-icon', FontAwesomeIcon);
 
 // Vue3 Toastify
@@ -50,5 +65,19 @@ const options = {
     cancelButtonColor: '#7A7373',
 };
 app.use(VueSweetalert2, options);
+
+
+// add axios
+import axios from "axios";
+
+const axiosInstance = axios.create({
+  baseURL: 'http://localhost:8000/api',
+  timeout: 10000, 
+  headers: {
+    'Content-Type': 'application/json', 
+  },
+});
+
+app.config.globalProperties.$http = axiosInstance;
 
 app.mount('#app');

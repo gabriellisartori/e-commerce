@@ -1,5 +1,7 @@
 <script>
+import BaseButton from './BaseButton.vue';
 export default {
+  components: { BaseButton },
   props: {
     modalTitle: String,
   },
@@ -24,12 +26,21 @@ export default {
     <div v-if="!showModal" class="overlay"></div>
     <div :class="{ 'modal': true, 'show-modal': showModal }">
       <div class="exit">
-        <img src="../../assets/icons/exit.png" @click="closeModal">
+        <font-awesome-icon class="icon" icon="fa-solid fa-xmark" @click="closeModal"/>
       </div>
 
       <div class="content-modal">
         <h2 class="title">{{ modalTitle }}</h2>
         <slot></slot>
+        
+        <div class="content-buttons">
+          <base-button class="button" color="dark-green" isOutlined @click="$emit('cancel')">
+            Cancelar
+          </base-button>
+          <base-button class="button" color="dark-green" @click="$emit('save')">
+            Salvar
+          </base-button>
+        </div>
       </div>
 
     </div>
@@ -67,10 +78,11 @@ export default {
     display: flex;
     flex-direction: row-reverse;
     opacity: 0.7;
-    cursor: pointer;
-
-    img {
-      width: 15px;
+    
+    .icon {
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--cor-fonte);
     }
   }
 
@@ -79,6 +91,12 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
   }
 }
 </style>

@@ -1,6 +1,4 @@
 <script>
-import axios from '@/axios';
-
 export default {
   props: ['category'],
   
@@ -20,7 +18,7 @@ export default {
     },
     async deleteCategory() {
       try {
-        const response = await axios.delete(`/category`);
+        const response = await this.$http.delete(`/category`);
         console.log('Categoria excluída com sucesso:', response.data);
         this.$emit('close');
       } catch (error) {

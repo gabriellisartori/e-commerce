@@ -1,5 +1,4 @@
 <script>
-import axios from '@/axios'
 import BaseInput from '@/components/generics/BaseInput.vue';
 import BasePassword from '@/components/generics/BasePassword.vue';
 
@@ -17,7 +16,7 @@ export default {
     methods: {
         async handleSubmit() {
             try {
-                const response = await axios.post('/auth/login', {
+                const response = await this.$http.post('/auth/login', {
                     email: this.email,
                     password: this.password
                 });

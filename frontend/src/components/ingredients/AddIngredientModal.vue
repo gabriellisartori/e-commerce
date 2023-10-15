@@ -1,20 +1,6 @@
 <script>
-import BaseInput from '../generics/BaseInput.vue';
-
-
 export default {
-  data() {
-    return {
-      showModal: false,
-    };
-  },
-  components:{
-    BaseInput
-  },
   methods: {
-    openModal() {
-      this.showModal = true;
-    },
     closeModal() {
       this.$emit('close');
     },
@@ -23,31 +9,9 @@ export default {
 </script>
 
 <template>
-    <div>
-        <div v-if="!showModal" class="overlay"></div>
-            <div :class="{ 'modal': true, 'show-modal': showModal }">
-            <div class="exit">
-              <img src="../../assets/icons/exit.png" @click="closeModal">
-            </div>
-            <div class="content-modal">
-              <h3 class="title">ADICIONAR INGREDIENTE</h3>
-
-              <BaseInput 
-                label="Nome" 
-                class="input name" 
-              />
-
-              <div class="content-buttons">
-                <button class="button cancel" @click="closeModal">
-                  CANCELAR
-                </button>
-                <button class="button filled">
-                  SALVAR
-                </button>
-              </div>
-            </div>
-        </div>
-    </div>
+    <base-modal modalTitle="Adicionar ingredientes" @cancel="closeModal">
+      <base-input label="Nome" class="input name" />
+    </base-modal>
 </template>
       
 <!-- <style lang="scss">

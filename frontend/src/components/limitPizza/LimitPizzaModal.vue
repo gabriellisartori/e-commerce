@@ -1,13 +1,7 @@
 <script>
-import BaseModal from '../generics/BaseModal.vue';
-import BaseInput from '../generics/BaseInput.vue';
-import BaseDataPicker from '../generics/BaseDataPicker.vue';
-import BaseTimePicker from '../generics/BaseTimePicker.vue';
-
 export default {
   data() {
     return {
-      showModal: false,
       limit: '',
       modalTitle: 'DEFINIR LIMITE DE PIZZAS',
       date: '',
@@ -15,16 +9,7 @@ export default {
     };
 
   },
-  components: {
-    BaseModal,
-    BaseInput,
-    BaseDataPicker,
-    BaseTimePicker,
-  },
   methods: {
-    openModal() {
-      this.showModal = true;
-    },
     closeModal() {
       this.$emit('close');
     },
@@ -42,24 +27,14 @@ export default {
 </script>
 
 <template>
-  <BaseModal :modalTitle="modalTitle">
-
+  <base-modal :modalTitle="modalTitle" @cancel="closeModal">
     <div class="div-settings">
-      <BaseInput label="Limite" class="input name" v-model="limit" />
-      <BaseDataPicker label="Data" v-model="date" type="date" class="input data" @update:modelValue="updateDate"></BaseDataPicker>
-      <BaseTimePicker label="Início" v-model="selectedTime" class="input" @update:modelValue="updateTime"/>
-      <BaseTimePicker label="Fim" v-model="selectedTime" class="input" @update:modelValue="updateTime"/>
+      <base-input label="Limite" class="input name" v-model="limit" />
+      <base-date label="Data" v-model="date" type="date" class="input data" @update:modelValue="updateDate"></base-date>
+      <base-time label="Início" v-model="selectedTime" class="input" @update:modelValue="updateTime"/>
+      <base-time label="Fim" v-model="selectedTime" class="input" @update:modelValue="updateTime"/>
     </div>
-
-    <div class="content-buttons">
-      <button class="button cancel" @click="closeModal">
-        CANCELAR
-      </button>
-      <button class="button filled">
-        SALVAR
-      </button>
-    </div>
-  </BaseModal>
+  </base-modal>
 </template>
 
 <style lang="scss">

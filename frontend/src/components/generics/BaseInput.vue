@@ -1,22 +1,23 @@
 <script>
-import { ref } from 'vue';
-
 export default {
   props: ['modelValue', 'label', 'placeholder', 'mask'],
-
-  setup(props, { emit }) {
-    const inputValue = ref(props.modelValue);
-
-    const updateValue = (event) => {
-      const newValue = event.target.value;
-      inputValue.value = newValue;
-      emit('update:modelValue', newValue);
-    };
-
+  data() {
     return {
-      inputValue,
-      updateValue
+      inputValue: ''
     };
+  },
+  methods: {
+    updateValue() {
+      this.$emit('update:modelValue', this.inputValue);
+    }
+  },
+  watch: {
+    modelValue: {
+      immediate: true,
+      handler(value) {
+        this.inputValue = value;
+      }
+    }
   }
 };
 </script>

@@ -1,10 +1,8 @@
 <script>
 import BasePizzaCard from '@/components/generics/BasePizzaCard.vue';
-import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
 
 export default {
     components: {
-        PageHeaderEstablishment,
         BasePizzaCard
     },
     data() {
@@ -21,7 +19,6 @@ export default {
 </script>
 
 <template>
-    <PageHeaderEstablishment></PageHeaderEstablishment>
     <div class="content">
         <div class="content-menu">
         <BasePizzaCard :image="pizza.image" :name="pizza.name" :value="pizza.value" :switchValue="pizza.isAvailable" />

@@ -15,18 +15,10 @@
     border-radius: 16px;
     margin-top: 35px;
     font-weight: 700;
-    cursor: pointer;    
-
-    &.cancel{
-        border: 1px solid var(--cor-primaria);
-        color: var( --cor-primaria);
-        margin-right: 20px;
-    }
-
-    &.filled{
-        background-color: var(--cor-primaria);
-        color: #FFFFFF;
-        border: 1px solid transparent;
+    cursor: pointer;
+    
+    &:last-child{
+        margin-left: 20px;
     }
 }
 

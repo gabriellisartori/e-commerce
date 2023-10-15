@@ -61,7 +61,7 @@ export default {
             <li @click="openModal('OpeningHours')"><a href="#">HORÁRIO</a></li>
             <li @click="openModal('LimitPizza')"><a href="#">LIMITE DE PIZZAS</a></li>
             <li><a class="settings" href="./ingredient">INGREDIENTES</a></li>
-            <li><a href="#">PROMOÇÕES</a></li>
+            <li><button @click="$router.push({ name: 'PromotionPage' })">PROMOÇÕES</button></li>
             <li><a href="/category">CATEGORIAS</a></li>
           </ul>
         </li>
@@ -87,7 +87,6 @@ export default {
   justify-content: space-evenly;
   align-items: center;
   padding: 10px 70px;
-  background-color: var(--cor-site);
   color: #000000;
   width: 50%;
 
@@ -118,11 +117,13 @@ export default {
       li{
         margin-right: 20px;
 
-        a{
+        a, button{
           text-decoration: none;
           color: #000000;
           font-weight: bold;
           transition: color 0.3s;
+          background-color: transparent;
+          border: none;
 
           &:hover{
             color: var(--cor-secundaria);
@@ -158,7 +159,7 @@ export default {
       li {
         display: block;
         
-        a {
+        a, button {
           color: var(--cor-site);
           padding: 10px 16px;
           text-decoration: none;

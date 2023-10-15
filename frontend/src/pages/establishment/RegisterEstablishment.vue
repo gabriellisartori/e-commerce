@@ -1,12 +1,9 @@
 <script>
-import axios from '@/axios';
-import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
 import BaseInput from '@/components/generics/BaseInput.vue';
 import BasePassword from '@/components/generics/BasePassword.vue';
 
 export default {
   components: {
-    PageHeaderEstablishment,
     BaseInput,
     BasePassword
   },
@@ -30,7 +27,7 @@ export default {
   methods: {
     async saveEstablishment() {
       try {
-        const response = await axios.post('/establishment', {
+        const response = await this.$http.post('/establishment', {
           nome: this.nome,
           telefone: this.telefone,
           cnpj: this.cnpj,
@@ -56,7 +53,6 @@ export default {
 
 <template>
     <div class="content-page">
-        <PageHeaderEstablishment></PageHeaderEstablishment>
          <h2 class="title">CADASTRO DE ESTABELECIMENTO</h2>
         <form @submit.prevent="handleSubmit">
             <div class="container">

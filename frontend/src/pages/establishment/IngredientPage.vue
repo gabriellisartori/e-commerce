@@ -1,15 +1,13 @@
 <script>
-import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
 import AddIngredientModal from '@/components/ingredients/AddIngredientModal.vue'
-import IngredientCard from '@/components/ingredients/IngredientCard.vue'
+//import IngredientCard from '@/components/ingredients/IngredientCard.vue'
 /* import SvgIcon from '@/components/SvgIcon.vue';
  */
 export default {
   components: {
-    IngredientCard,
-    PageHeaderEstablishment,
-    AddIngredientModal,
-  },
+    //IngredientCard,
+    AddIngredientModal
+},
   data() {
     return {
       showModal: false 
@@ -27,8 +25,7 @@ export default {
 </script>
 
 <template>
-    <PageHeaderEstablishment></PageHeaderEstablishment>
-    <div class="content">
+    <div>
       <div class="page-header-options">
         <h3 class="title">INGREDIENTES</h3>
         <!-- <SvgIcon name="plus"></SvgIcon> -->
@@ -38,7 +35,13 @@ export default {
     </div>
     
     <div class="content-ingredient">
-        <IngredientCard></IngredientCard>
+      <base-card
+        v-for="item in 10"
+        :key="item"
+        title="Tomate"
+        @edit="openModal"
+      >
+      </base-card>
     </div>
     </div>
    

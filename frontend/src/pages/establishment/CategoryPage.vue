@@ -1,12 +1,10 @@
 <script>
-import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
 import AddCategoryModal from '@/components/category/AddCategoryModal.vue'
 import CategoryCard from '@/components/category/CategoryCard.vue';
 /* import SvgIcon from '@/components/SvgIcon.vue';
  */
 export default {
   components: {
-    PageHeaderEstablishment,
     AddCategoryModal,
     CategoryCard
 },
@@ -27,8 +25,7 @@ export default {
 </script>
 
 <template>
-    <PageHeaderEstablishment></PageHeaderEstablishment>
-    <div class="content">
+    <div>
       <div class="page-header-options">
         <h2 class="title">CATEGORIAS</h2>
         <!-- <SvgIcon name="plus"/> -->

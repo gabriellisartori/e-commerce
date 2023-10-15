@@ -1,5 +1,4 @@
 <script>
-import axios from '@/axios';
 import BaseModal from '../generics/BaseModal.vue'
 import BaseInput from '../generics/BaseInput.vue';
 import BaseSwitch from '../generics/BaseSwitch.vue';
@@ -49,7 +48,7 @@ export default {
           active: this.editedCategory.active
         };
 
-        const response = await axios.put(`/category`, data);
+        const response = await this.$http.put(`/category`, data);
         console.log('Categoria atualizada com sucesso:', response.data);
 
         this.$emit('categoria-atualizada', response.data);

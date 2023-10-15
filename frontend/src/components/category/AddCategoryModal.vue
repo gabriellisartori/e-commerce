@@ -1,5 +1,4 @@
 <script>
-import axios from '@/axios';
 import BaseInput from '../generics/BaseInput.vue';
 import BaseModal from '../generics/BaseModal.vue'
 import BaseSwitch from '../generics/BaseSwitch.vue'
@@ -31,7 +30,7 @@ export default {
     },
     async saveCategory() {
       try {
-        const response = await axios.post('/category', {
+        const response = await this.$http.post('/category', {
           name: this.name,
           active: this.active
         });

@@ -5,5 +5,5 @@ import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablis
 
 <template>
     <PageHeaderEstablishment></PageHeaderEstablishment>
-    <h2>INGREDIENTES</h2>
+    <h2>INGREDIENTES QUE TELA É ESSA? AHHAHA</h2>
 </template>

@@ -1,16 +1,12 @@
 <script>
-import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
-
 export default {
   components: {
-    PageHeaderEstablishment,
   }
 };
 
 </script>
 
 <template>
-    <PageHeaderEstablishment class="menu-home"/>
     <div class="contentHome">
       <div class="infos-content">
         <div class="speciale">

@@ -1,5 +1,4 @@
 <script>
-import axios from '@/axios';
 import BaseCard from '@/components/generics/BaseCard.vue';
 import CategoryDeleteModal from './CategoryDeleteModal.vue';
 import CategoryEditModal from './CategoryEditModal.vue';
@@ -42,7 +41,7 @@ export default {
       });
     },
     fetchCategories() {
-      axios.get('/category/all')
+      this.$http.get('/category/all')
         .then(response => {
           this.categories = response.data; 
         })

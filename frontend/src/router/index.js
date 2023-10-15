@@ -5,6 +5,7 @@ import HomePage from '../pages/establishment/HomePage.vue';
 import IngredientPage from '../pages/establishment/IngredientPage.vue'
 import CategoryPage from '../pages/establishment/CategoryPage.vue'
 import MenuPageVue from '@/pages/establishment/MenuPage.vue';
+import PromotionPage from '../pages/establishment/PromotionPage.vue'
 /* import LimitPizzaModal from '../components/LimitPizzaModal.vue'
  */
 const routes = [
@@ -42,6 +43,11 @@ const routes = [
     path: '/category',
     name: 'CategoryPage',
     component: CategoryPage,
+  },
+  {
+    path: '/promotion',
+    name: 'PromotionPage',
+    component: PromotionPage,
   },
 ];
 
