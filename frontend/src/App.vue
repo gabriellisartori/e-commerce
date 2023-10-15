@@ -1,9 +1,21 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <PageHeaderEstablishment></PageHeaderEstablishment>
+    <div class="content">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
-<script setup>
+<script>
+import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
+
+export default {
+  name: 'App',
+  components: {
+    PageHeaderEstablishment,
+    //Todo: verificar se está autenticado
+  }
+}
 
 </script>
