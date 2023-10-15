@@ -2,7 +2,7 @@
   <div class="content">
     <div class="page-header-options">
       <h3 class="title text-uppercase">Promoções</h3>
-      <base-button isTransparent color="dark-green" @click="showModal = true"> Adicionar </base-button>
+      <base-button isTransparent color="dark-green" @onClick="showModal = true"> Adicionar </base-button>
     </div>
   </div>
   <div class="content-ingredient">
@@ -37,7 +37,7 @@ export default {
   methods: {
     async getData () {
       try {
-        const { data } = await this.$http.get('/promotion/all');
+        const { data } = await this.$http.get('/promotions');
         this.promotions = data;
       } catch (error) {
         console.error(error);
@@ -53,6 +53,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-</style>
