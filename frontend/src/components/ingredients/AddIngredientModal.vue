@@ -4,6 +4,29 @@ export default {
     closeModal() {
       this.$emit('close');
     },
+    async saveIngredient() {
+      try {
+        this.value = Number(this.value);
+
+        const response = await axios.post('/ingredient', {
+          name: this.name,
+          value: this.value,
+          hasAdditional: this.hasAdditional,
+        });
+
+        this.name = '';
+        this.hasAdditional = false;
+        this.$emit('ingredientAdded', response.data);
+        this.$emit('close');
+
+        toast.success("Salvo com sucesso!", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+
+      } catch (error) {
+        console.error('Erro ao salvar a categoria:', error);
+      }
+    }
   }
 };
 </script>
@@ -14,50 +37,29 @@ export default {
     </base-modal>
 </template>
       
-<!-- <style lang="scss">
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-}
 
-.modal {
-  position: fixed;
-  z-index: 1;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 70%;
- /*  height: 50%; */
-  max-width: 600px; /* Largura máxima da modal */
-  background-color: #fefefe;
-  padding: 20px;
-  border: 1px solid #888;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+<style scoped lang="scss">
+.components {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 80%;
+  margin: 0 auto;
 
-  .exit{
+  .infos {
     display: flex;
-    flex-direction: row-reverse;
-    opacity: 0.7;
-    cursor: pointer;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
-  .content-modal{
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
+  .value {
+    width: 65%;
+    margin-top: 40px;
+    margin-bottom: 0px;
 
-    .name{
-      width: 65%;
-      margin: 0 auto;
-      margin-top: 40px;
+    &.additional{
+      width: 100%;
     }
   }
 }
-</style> -->
+</style>

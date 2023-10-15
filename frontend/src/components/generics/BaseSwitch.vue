@@ -1,14 +1,21 @@
 <script>
+import { ref } from 'vue';
+
 export default {
-    props: {
-        label: String,
-        value: Boolean,
-    },
-    methods: {
-        toggleSwitch(event) {
-            this.$emit('input', event.target.checked);
-            console.log(event.target.checked)
-        }
+    props: ['modelValue', 'label'],
+    setup(props, { emit }) {
+        const inputValue = ref(props.modelValue);
+
+        const updateValue = (event) => {
+            const newValue = event.target.checked;
+            inputValue.value = newValue;
+            emit('update:modelValue', newValue);
+        };
+
+        return {
+            inputValue,
+            updateValue
+        };
     }
 };
 </script>
@@ -16,10 +23,11 @@ export default {
 <template>
     <div class="switch">
         <p>{{ label }}</p>
-        <input type="checkbox" id="mySwitch" class="switch-input" :checked="value" @change="toggleSwitch">
+        <input type="checkbox" id="mySwitch" class="switch-input" v-model="inputValue" @change="updateValue">
         <label for="mySwitch" class="switch-label"></label>
     </div>
 </template>
+
   
 <style scoped lang="scss">
 .switch {
@@ -27,7 +35,7 @@ export default {
     flex-direction: column;
     /* width: 30%; */
     margin-top: 32px;
-   /*  margin-left: 50px; */
+    /*  margin-left: 50px; */
     justify-content: space-evenly;
     color: var(--cor-fonte);
     font-weight: 700;

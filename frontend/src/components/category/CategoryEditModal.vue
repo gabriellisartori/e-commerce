@@ -10,6 +10,11 @@ export default {
       required: true
     }
   },
+  components: {
+    BaseModal,
+    BaseInput,
+    BaseSwitch
+  },
   data() {
     return {
       modalTitle: 'EDITAR CATEGORIA',
@@ -20,11 +25,6 @@ export default {
         active: this.category.active
       }
     };
-  },
-  components: {
-    BaseModal,
-    BaseInput,
-    BaseSwitch
   },
   computed: {
     switchValue: {
@@ -54,6 +54,10 @@ export default {
         this.$emit('categoria-atualizada', response.data);
 
         this.$emit('close');
+
+        toast.success("Alterações salvas!", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
       } catch (error) {
         console.error('Erro ao atualizar a categoria:', error);
       }
@@ -70,7 +74,7 @@ export default {
   <BaseModal :modalTitle="modalTitle">
     <div class="components">
       <BaseInput v-model="editedCategory.name" label="Nome" class="input name" />
-      <BaseSwitch label="Ativo" v-model="switchValue" @input="handleSwitchInput" />
+      <BaseSwitch label="Ativo" v-model="editedCategory.active" @input="handleSwitchInput" />
     </div>
 
     <div class="content-buttons">

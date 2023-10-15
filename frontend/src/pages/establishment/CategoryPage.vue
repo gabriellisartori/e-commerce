@@ -1,16 +1,16 @@
 <script>
 import AddCategoryModal from '@/components/category/AddCategoryModal.vue'
 import CategoryCard from '@/components/category/CategoryCard.vue';
-/* import SvgIcon from '@/components/SvgIcon.vue';
- */
+
 export default {
   components: {
     AddCategoryModal,
     CategoryCard
-},
+  },
   data() {
     return {
-      showModal: false 
+      showModal: false,
+      categories: [],
     };
   },
   methods: {
@@ -19,36 +19,38 @@ export default {
     },
     closeModal() {
       this.showModal = false;
-    }
+    },
+    handleCategoryAdded(newCategory) {
+      this.$refs.categoryCard.addCategory(newCategory);
+    },
   }
 };
 </script>
 
 <template>
-    <div>
-      <div class="page-header-options">
-        <h2 class="title">CATEGORIAS</h2>
-        <!-- <SvgIcon name="plus"/> -->
-        <button class="button-add" @click="openModal">
-            Adicionar
-        </button>
-      </div>
-    
-      <div class="content-category">
-        <CategoryCard></CategoryCard>
-      </div>
+  <div class="content">
+    <div class="page-header-options">
+      <h2 class="title">CATEGORIAS</h2>
+      <button class="button-add" @click="openModal">
+        Adicionar
+      </button>
     </div>
-   
-    <AddCategoryModal v-if="showModal" @close="closeModal"></AddCategoryModal>
+
+    <div class="content-category">
+      <CategoryCard ref="categoryCard"></CategoryCard>
+    </div>
+  </div>
+
+  <AddCategoryModal v-if="showModal" @close="closeModal" @categoryAdded="handleCategoryAdded"></AddCategoryModal>
 </template>
 
 <style lang="scss">
-.content{
+.content {
 
 
-  .page-header-options{
+  .page-header-options {
 
-    .button-add{
+    .button-add {
       background-color: transparent;
       color: var(--cor-secundaria);
       font-weight: 700;
@@ -58,10 +60,10 @@ export default {
     }
   }
 
-  .content-category{
+  .content-category {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
-  
+
 }
 </style>

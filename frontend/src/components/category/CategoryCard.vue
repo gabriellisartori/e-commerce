@@ -1,12 +1,11 @@
 <script>
 import BaseCard from '@/components/generics/BaseCard.vue';
-import CategoryDeleteModal from './CategoryDeleteModal.vue';
 import CategoryEditModal from './CategoryEditModal.vue';
+import Swal from 'sweetalert2';
 
 export default {
   components: {
     BaseCard,
-    CategoryDeleteModal,
     CategoryEditModal
   },
   data() {
@@ -30,7 +29,7 @@ export default {
     },
     closeModal() {
       this.showDeleteModal = false;
-      this.showEditModal = false; 
+      this.showEditModal = false;
     },
     handleUpdateCategory(updatedCategory) {
       this.categories = this.categories.map(category => {
@@ -43,12 +42,47 @@ export default {
     fetchCategories() {
       this.$http.get('/category/all')
         .then(response => {
-          this.categories = response.data; 
+          this.categories = response.data;
         })
         .catch(error => {
           console.error(error);
         });
-    }
+    },
+    addCategory(newCategory) {
+      this.categories.push(newCategory);
+    },
+    async deleteCategory(categoryId) {
+      const confirmed = await Swal.fire({
+        title: 'Tem certeza que deseja excluir?',
+        showCancelButton: true,
+        confirmButtonColor: 'var(--cor-secundaria)',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, excluir',
+        reverseButtons: true
+      });
+
+      if (confirmed.isConfirmed) {
+        try {
+          const response = await axios.delete(`/category`, { data: { id: categoryId } });
+          if (response.status === 200) {
+            await this.fetchCategories();
+
+            Swal.fire(
+              'Categoria excluída!',
+              'Sua categoria foi excluída com sucesso.',
+              'success'
+            );
+          }
+        } catch (error) {
+          console.error(error);
+          Swal.fire(
+            'Erro!',
+            'Ocorreu um erro ao excluir a categoria.',
+            'error'
+          );
+        }
+      }
+    },
   },
   mounted() {
     this.fetchCategories();
@@ -56,16 +90,14 @@ export default {
 }
 </script>
 
-
 <template>
-    <BaseCard v-for="category in categories" :key="category.id">
-      <div class="icons">
-        <img src="../../assets/icons/edit.png" @click="openEditModal(category)">
-        <img src="../../assets/icons/exit.png" @click="openModal(category.id)">
-      </div>
-      <p class="item">{{ category.name }}</p>
-    </BaseCard>
-
-    <CategoryDeleteModal v-if="showDeleteModal" :categoriaId="categoriaParaExcluir" @close="closeModal"></CategoryDeleteModal>
-    <CategoryEditModal v-if="showEditModal" :category="categoriaParaEditar" @close="closeModal" @categoria-atualizada="handleUpdateCategory"></CategoryEditModal>
+  <BaseCard v-for="category in categories" :key="category.id">
+    <div class="icons">
+      <img src="../../assets/icons/edit.png" @click="openEditModal(category)">
+      <img src="../../assets/icons/exit.png" @click="deleteCategory(category.id)">
+    </div>
+    <p class="item">{{ category.name }}</p>
+  </BaseCard>
+  <CategoryEditModal v-if="showEditModal" :category="categoriaParaEditar" @close="closeModal"
+    @categoria-atualizada="handleUpdateCategory"></CategoryEditModal>
 </template>
