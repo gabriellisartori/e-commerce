@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ingredient\CreateIngredientRequest;
-use App\Http\Requests\Ingredient\IngredientRequest;
 use App\Http\Requests\Ingredient\UpdateIngredientRequest;
 use App\Http\Resources\IngredientResource;
 use App\Models\Additional;
@@ -43,13 +42,11 @@ class IngredientController extends Controller
         }
     }
 
-    public function show(IngredientRequest $request)
+    public function show($id)
     {
         try {
             //get one ingredient
-            $data = $request->validated();
-
-            $ingredient = Ingredient::findOrFail($data['id']);
+            $ingredient = Ingredient::findOrFail($id);
 
             $ingredient->load(['ingredientAdditional']);
 
@@ -116,21 +113,19 @@ class IngredientController extends Controller
         }
     }
 
-    public function destroy(IngredientRequest $request)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
-            $data = $request->validated();
-
-            $product = ProductIngredient::where('ingredient_id', $data['id'])->first();
+            $product = ProductIngredient::where('ingredient_id', $id)->first();
 
             if ($product) {
                 return response()->json(['message' => 'O ingrediente está em uso.'], 400);
             }
 
-            Additional::where('ingredient_id', $data['id'])->delete();
+            Additional::where('ingredient_id', $id)->delete();
 
-            Ingredient::find($data['id'])->delete();
+            Ingredient::find($id)->delete();
 
             DB::commit();
             return response()->json([], 200);

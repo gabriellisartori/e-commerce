@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Client\ClientRequest;
 use App\Http\Requests\Client\CreateClientRequest;
 use App\Http\Requests\Client\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
@@ -26,13 +25,11 @@ class ClientController extends Controller
     ) {
     }
 
-    public function show(ClientRequest $request)
+    public function show($id)
     {
         try {
             //get one client
-            $data = $request->validated();
-
-            $client = Client::findOrFail($data['id'])->load(['user']);
+            $client = Client::findOrFail($id)->load(['user']);
 
             return response()->json(new ClientResource($client), 200);
         } catch (ValidationException $e) {

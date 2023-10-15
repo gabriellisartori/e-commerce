@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
     Route::put('establishment', [EstablishmentController::class, 'update']);
     
     Route::prefix('client')->group(function () {
-        Route::get('', [ClientController::class, 'show']);
+        Route::get('{id}', [ClientController::class, 'show']);
         Route::put('', [ClientController::class, 'update']);
     });
     
@@ -42,26 +42,26 @@ use Illuminate\Support\Facades\Route;
     });
 
     Route::prefix('category')->group(function () {
-        Route::get('all', [CategoryController::class, 'index']);
-        Route::get('', [CategoryController::class, 'show']);
+        Route::get('', [CategoryController::class, 'index']);
+        Route::get('{id}', [CategoryController::class, 'show']);
         Route::post('', [CategoryController::class, 'store']);
         Route::put('', [CategoryController::class, 'update']);
-        Route::delete('', [CategoryController::class, 'destroy']);
+        Route::delete('{id}', [CategoryController::class, 'destroy']);
     });
 
     Route::prefix('daily-pizza-sale-limit')->group(function () {
-        Route::get('all', [DailyPizzaSaleLimitController::class, 'index']);
+        Route::get('', [DailyPizzaSaleLimitController::class, 'index']);
         Route::post('', [DailyPizzaSaleLimitController::class, 'store']);
         Route::put('', [DailyPizzaSaleLimitController::class, 'update']);
-        Route::delete('', [DailyPizzaSaleLimitController::class, 'destroy']);
+        Route::delete('{id}', [DailyPizzaSaleLimitController::class, 'destroy']);
     });
 
     Route::prefix('ingredient')->group(function () {
-        Route::get('all', [IngredientController::class, 'index']);
-        Route::get('', [IngredientController::class, 'show']);
+        Route::get('', [IngredientController::class, 'index']);
+        Route::get('{id}', [IngredientController::class, 'show']);
         Route::post('', [IngredientController::class, 'store']);
         Route::put('', [IngredientController::class, 'update']);
-        Route::delete('', [IngredientController::class, 'destroy']);
+        Route::delete('{id}', [IngredientController::class, 'destroy']);
     });
 
     Route::prefix('product')->group(function () {
@@ -70,16 +70,16 @@ use Illuminate\Support\Facades\Route;
     });
 
     Route::prefix('promotion')->group(function () {
-        Route::get('all', [PromotionController::class, 'index']);
-        Route::get('', [PromotionController::class, 'show']);
+        Route::get('', [PromotionController::class, 'index']);
+        Route::get('{id}', [PromotionController::class, 'show']);
         Route::post('', [PromotionController::class, 'store']);
         Route::put('', [PromotionController::class, 'update']);
-        Route::delete('', [PromotionController::class, 'destroy']);
+        Route::delete('{id}', [PromotionController::class, 'destroy']);
     });
 
     Route::prefix('order')->group(function () {
-        Route::get('all', [OrderController::class, 'index']);
-        Route::get('', [OrderController::class, 'show']);
+        Route::get('', [OrderController::class, 'index']);
+        Route::get('{id}', [OrderController::class, 'show']);
         Route::post('', [OrderController::class, 'store']);
         Route::put('', [OrderController::class, 'update']);
     });
@@ -97,7 +97,7 @@ Route::prefix('establishment')->group(function () {
     Route::get('', [EstablishmentController::class, 'index']);
 });
 
-Route::get('daily-pizza-sale-limit/', [DailyPizzaSaleLimitController::class, 'show']);
+Route::get('daily-pizza-sale-limit/{id}', [DailyPizzaSaleLimitController::class, 'show']);
 
 Route::get('business-hour', [BusinessHourController::class, 'index']);
 
@@ -105,6 +105,6 @@ Route::get('business-hour', [BusinessHourController::class, 'index']);
 Route::post('client', [ClientController::class, 'store']);
 
 Route::prefix('product')->group(function () {
-    Route::get('all', [ProductController::class, 'index']);
-    Route::get('', [ProductController::class, 'show']);
+    Route::get('', [ProductController::class, 'index']);
+    Route::get('{id}', [ProductController::class, 'show']);
 });

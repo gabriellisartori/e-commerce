@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\CreateOrderRequest;
-use App\Http\Requests\Order\OrderRequest;
 use App\Http\Requests\Order\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
@@ -45,13 +44,11 @@ class OrderController extends Controller
         }
     }
 
-    public function show(OrderRequest $request)
+    public function show($id)
     {
         try {
             //get one order
-            $data = $request->validated();
-
-            $order = Order::findOrFail($data['id'])
+            $order = Order::findOrFail($id)
                 ->load([
                     'orderProduct',
                     'orderProduct.orderProductAdditional',
