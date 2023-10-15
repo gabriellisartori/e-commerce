@@ -88,7 +88,7 @@ export default {
     v-if="showModal"
     :id="id"
     @close="closeModal"
-    @categoryAdded="fetchCategories"
+    @categorySave="fetchCategories"
   />
 
 </template>

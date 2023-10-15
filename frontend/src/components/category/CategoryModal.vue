@@ -34,7 +34,7 @@ export default {
           await this.$http.post('/categories', this.form);
         }
 
-        this.$emit('categoryAdded');
+        this.$emit('categorySave');
         this.$emit('close');
 
         toast.success("Salvo com sucesso!", {
