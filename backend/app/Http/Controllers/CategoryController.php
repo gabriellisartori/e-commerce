@@ -95,14 +95,10 @@ class CategoryController extends Controller
                 return response()->json(['message' => 'Não é possível excluir uma categoria que possui produtos.'], 400);
             }
             
-            $category = Category::find($id);
-            
-            $category->update([
-                'active' => false
-            ]);
+            Category::find($id)->delete();
             
             DB::commit();
-            return response()->json(new CategoryResource($category), 200);
+            return response()->json([], 200);
         } catch (ValidationException $e) {
             DB::rollBack();
             return response()->json([
