@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Category\CategoryRequest;
 use App\Http\Requests\Category\CreateCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
@@ -36,13 +35,11 @@ class CategoryController extends Controller
         }
     }
 
-    public function show(CategoryRequest $request)
+    public function show($id)
     {
         try {
             //get one category
-            $data = $request->validated();
-            
-            $category = Category::findOrFail($data['id']);
+            $category = Category::findOrFail($id);
             
             return response()->json(new CategoryResource($category), 200);
         } catch (ValidationException $e) {
@@ -89,17 +86,16 @@ class CategoryController extends Controller
         }
     }
 
-    public function destroy(CategoryRequest $request)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
-            $data = $request->validated();
-            $product = Product::where('category_id', $data['id'])->first();
+            $product = Product::where('category_id', $id)->first();
             if ($product) {
                 return response()->json(['message' => 'Não é possível excluir uma categoria que possui produtos.'], 400);
             }
             
-            $category = Category::find($data['id']);
+            $category = Category::find($id);
             
             $category->update([
                 'active' => false

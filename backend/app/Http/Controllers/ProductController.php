@@ -56,13 +56,11 @@ class ProductController extends Controller
         }
     }
 
-    public function show(ProductRequest $request)
+    public function show($id)
     {
         try {
             //get one product
-            $data = $request->validated();
-
-            $product = Product::findOrFail($data['id']);
+            $product = Product::findOrFail($id);
             $product->load([
                 'productIngredient',
                 'productIngredient.ingredient',

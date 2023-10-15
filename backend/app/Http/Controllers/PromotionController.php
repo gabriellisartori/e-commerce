@@ -36,13 +36,11 @@ class PromotionController extends Controller
         }
     }
 
-    public function show(PromotionRequest $request)
+    public function show($id)
     {
         try {
             //get one promotion
-            $data = $request->validated();
-            
-            $promotion = Promotion::findOrFail($data['id']);
+            $promotion = Promotion::findOrFail($id);
             
             return response()->json(new PromotionResource($promotion), 200);
         } catch (ValidationException $e) {
@@ -88,18 +86,16 @@ class PromotionController extends Controller
         }   
     }
 
-    public function destroy(PromotionRequest $request)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
-            $data = $request->validated();
-            
-            $product = Product::where('promotion_id', $data['id'])->first();
+            $product = Product::where('promotion_id', $id)->first();
             if ($product) {
                 return response()->json(['message' => 'Promoção não pode ser deletada, pois está sendo usada em um produto'], 400);
             }
             
-            Promotion::find($data['id'])->delete();
+            Promotion::find($id)->delete();
             
             DB::commit();
             return response()->json([], 200);

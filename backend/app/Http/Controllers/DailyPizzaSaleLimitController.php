@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DailyPizzaSaleLimit\CreateDailyPizzaSaleLimitRequest;
-use App\Http\Requests\DailyPizzaSaleLimit\DailyPizzaSaleLimitRequest;
 use App\Http\Requests\DailyPizzaSaleLimit\UpdateDailyPizzaSaleLimitRequest;
 use App\Http\Resources\DailyPizzaSaleLimitResource;
 use App\Models\DailyPizzaSaleLimit;
@@ -85,13 +84,11 @@ class DailyPizzaSaleLimitController extends Controller
         }
     }
 
-    public function destroy(DailyPizzaSaleLimitRequest $request)
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
-            $data = $request->validated();
-            
-            DailyPizzaSaleLimit::find($data['id'])->delete();
+            DailyPizzaSaleLimit::find($id)->delete();
             
             DB::commit();
             return response()->json([], 200);
