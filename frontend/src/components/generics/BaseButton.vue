@@ -90,12 +90,11 @@ export default {
     },
   },
   methods: {
-    onClick(event) {
+    onClick() {
       if (this.isDisabled) {
         return;
       }
-
-      this.$emit("click", event);
+      this.$emit("onClick");
     },
   },
 };

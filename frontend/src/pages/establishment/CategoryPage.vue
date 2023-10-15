@@ -1,47 +1,96 @@
 <script>
-import AddCategoryModal from '@/components/category/AddCategoryModal.vue'
-import CategoryCard from '@/components/category/CategoryCard.vue';
+import Swal from 'sweetalert2';
+import { toast } from 'vue3-toastify';
+import CategoryModal from '@/components/category/CategoryModal.vue';
 
 export default {
   components: {
-    AddCategoryModal,
-    CategoryCard
+    CategoryModal
   },
   data() {
     return {
-      showModal: false,
       categories: [],
+      showModal: false,
+      id: null
     };
   },
   methods: {
-    openModal() {
+    openEditModal(categoryId) {
+      this.id = categoryId;
       this.showModal = true;
     },
     closeModal() {
+      this.id = null;
       this.showModal = false;
     },
-    handleCategoryAdded(newCategory) {
-      this.$refs.categoryCard.addCategory(newCategory);
+    async fetchCategories() {
+      try {
+        const { data } = await this.$http.get('/categories');
+        this.categories = data;
+      } catch (error) {
+        console.error(error);
+      }
     },
+    async deleteCategory(categoryId) {
+      const confirmed = await Swal.fire({
+        title: 'Tem certeza que deseja excluir?',
+        showCancelButton: true,
+        confirmButtonColor: 'var(--cor-secundaria)',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, excluir',
+        reverseButtons: true
+      });
+
+      if (confirmed.isConfirmed) {
+        try {
+          await this.$http.delete(`/categories/${categoryId}`);
+          this.fetchCategories();
+
+          toast.success("Categoria excluída!", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+        } catch (error) {
+          console.error(error);
+          Swal.fire(
+            'Erro!',
+            'Ocorreu um erro ao excluir a categoria.',
+            'error'
+          );
+        }
+      }
+    },
+  },
+  mounted() {
+    this.fetchCategories();
   }
-};
+}
 </script>
 
 <template>
   <div class="content">
     <div class="page-header-options">
       <h2 class="title">CATEGORIAS</h2>
-      <button class="button-add" @click="openModal">
-        Adicionar
-      </button>
+      <base-button isTransparent color="dark-green" @onClick="showModal = true"> Adicionar </base-button>
     </div>
 
     <div class="content-category">
-      <CategoryCard ref="categoryCard"></CategoryCard>
+      <base-card
+        v-for="category in categories"
+        :key="category.id"
+        :title="category.name"
+        @edit="openEditModal(category.id)"
+        @delete="deleteCategory(category.id)"
+      />
     </div>
   </div>
 
-  <AddCategoryModal v-if="showModal" @close="closeModal" @categoryAdded="handleCategoryAdded"></AddCategoryModal>
+  <CategoryModal
+    v-if="showModal"
+    :id="id"
+    @close="closeModal"
+    @categoryAdded="fetchCategories"
+  />
+
 </template>
 
 <style lang="scss">

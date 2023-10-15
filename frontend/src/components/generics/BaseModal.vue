@@ -17,6 +17,9 @@ export default {
     closeModal() {
       this.$emit('close');
     },
+    saveModal() {
+      this.$emit('save');
+    }
   },
 };
 </script>
@@ -34,10 +37,10 @@ export default {
         <slot></slot>
         
         <div class="content-buttons">
-          <base-button class="button" color="dark-green" isOutlined @click="$emit('cancel')">
+          <base-button class="button" color="dark-green" isOutlined @onClick="closeModal">
             Cancelar
           </base-button>
-          <base-button class="button" color="dark-green" @click="$emit('save')">
+          <base-button class="button" color="dark-green" @onClick="saveModal">
             Salvar
           </base-button>
         </div>

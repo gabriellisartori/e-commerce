@@ -1,24 +1,6 @@
 <script>
 export default {
   props: ['modelValue', 'label', 'placeholder', 'mask'],
-  data() {
-    return {
-      inputValue: ''
-    };
-  },
-  methods: {
-    updateValue() {
-      this.$emit('update:modelValue', this.inputValue);
-    }
-  },
-  watch: {
-    modelValue: {
-      immediate: true,
-      handler(value) {
-        this.inputValue = value;
-      }
-    }
-  }
 };
 </script>
 
@@ -27,9 +9,9 @@ export default {
     <label class="base-label">{{ label }}</label>
     <input 
       class="base-input"
-      :value="inputValue" 
-      @input="updateValue" 
+      :value="modelValue" 
       :placeholder="placeholder" 
+      @input="$emit('update:modelValue', $event.target.value)" 
       />      
   </div>
 </template>
