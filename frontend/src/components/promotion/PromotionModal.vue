@@ -1,6 +1,6 @@
 <template>
     <div class="promotion-modal">
-        <base-modal modalTitle="Promoção" @cancel="closeModal" @close="closeModal" @save="submit">
+        <base-modal :modalTitle="modalTitle" @cancel="closeModal" @close="closeModal" @save="submit">
             <base-input label="Nome" class="input name" v-model="promotion.name" />
             <div class="content">
                 <base-date label="Dia de início" v-model="promotion.start_date" type="date" class="input date" @update:modelValue="promotion.start_date = $event"></base-date>
@@ -35,6 +35,11 @@ export default {
                 end_time: ''
             }
         };
+    },
+    computed: {
+        modalTitle () {
+            return this.id ? 'Editar promoção' : 'Adicionar promoção';
+        }
     },
     methods: {
         closeModal () {
