@@ -1,5 +1,4 @@
 <script>
-import Swal from 'sweetalert2';
 import { toast } from 'vue3-toastify';
 import CategoryModal from '@/components/category/CategoryModal.vue';
 
@@ -32,7 +31,7 @@ export default {
       }
     },
     async deleteCategory(categoryId) {
-      const confirmed = await Swal.fire({
+      const confirmed = await this.$swal.fire({
         title: 'Tem certeza que deseja excluir?',
         showCancelButton: true,
         confirmButtonColor: 'var(--cor-secundaria)',
@@ -51,7 +50,7 @@ export default {
           });
         } catch (error) {
           console.error(error);
-          Swal.fire(
+          this.$swal.fire(
             'Erro!',
             'Ocorreu um erro ao excluir a categoria.',
             'error'
