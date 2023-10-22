@@ -51,11 +51,11 @@ export default {
       try {
         const { data } = await this.$http.get(`/ingredients/${this.id}`);
         this.form = data;
-        if (this.form.additional === null) {
+        if (data.additional === null) {
           this.form.hasAdditional = false;
         } else {
           this.form.hasAdditional = true;
-          this.form.value = this.form.additional.value;
+          this.form.value = data.additional.value;
         }
       } catch (error) {
         console.error(error);

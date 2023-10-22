@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { toast } from 'vue3-toastify';
 
 export default {
     props: {
@@ -41,15 +42,29 @@ export default {
         },
         async getData () {
             try {
-                const { data } = await this.$http.get(`/promotion/${this.id}`);
+                const { data } = await this.$http.get(`/promotions/${this.id}`);
                 this.promotion = data;
                 console.log(this.promotion.name);
             } catch (error) {
                 console.error(error);
             }
         },
-        submit () {
-            //todo save post
+        async submit () {
+            try {
+                if (this.id) {
+                    await this.$http.put(`/promotions/${this.id}`, this.promotion);
+                } else {
+                    await this.$http.post('/promotions', this.promotion);
+                }
+                this.$emit('savePromotion');
+                this.$emit('close');
+
+                toast.success("Salvo com sucesso!", {
+                  position: toast.POSITION.BOTTOM_LEFT,
+                });
+            } catch (error) {
+                console.error(error);
+            }
         }
     
     },

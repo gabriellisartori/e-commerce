@@ -1,5 +1,4 @@
 <script>
-import Swal from 'sweetalert2';
 import { toast } from 'vue3-toastify';
 import IngredientModal from '@/components/ingredients/IngredientModal.vue';
 
@@ -32,11 +31,9 @@ export default {
       }
     },
     async deleteIngredient(ingredientId) {
-      const confirmed = await Swal.fire({
+      const confirmed = await this.$swal.fire({
         title: 'Tem certeza que deseja excluir?',
         showCancelButton: true,
-        confirmButtonColor: 'var(--cor-secundaria)',
-        cancelButtonColor: '#d33',
         confirmButtonText: 'Sim, excluir',
         reverseButtons: true
       });
@@ -51,7 +48,7 @@ export default {
           });
         } catch (error) {
           console.error(error);
-          Swal.fire(
+          this.$swal.fire(
             'Erro!',
             'Ocorreu um erro ao excluir o ingrediente.',
             'error'
