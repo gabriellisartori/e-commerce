@@ -17,8 +17,10 @@ class PromotionResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'starts_at' => $this->starts_at,
-            'end_at' => $this->end_at,
+            'start_date' => $this->start_date,
+            'start_time' => $this->start_time,
+            'end_date' => $this->end_date,
+            'end_time' => $this->end_time,
         ];
     }
 }

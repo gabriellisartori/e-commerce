@@ -16,8 +16,10 @@ class Promotion extends Model
      */
     protected $fillable = [
         'name',
-        'starts_at',
-        'end_at',
+        'start_date',
+        'start_time',
+        'end_date',
+        'end_time'
     ];
 
     public function establishment(): HasOne

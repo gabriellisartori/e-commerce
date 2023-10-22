@@ -23,8 +23,10 @@ class CreatePromotionRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'starts_at' => 'required',
-            'end_at' => 'required',
+            'start_date' => 'required',
+            'start_time' => 'required',
+            'end_date' => 'required',
+            'end_time' => 'required',
         ];
     }
 }
