@@ -8,6 +8,7 @@ use App\Http\Requests\Promotion\PromotionRequest;
 use App\Http\Requests\Promotion\UpdatePromotionRequest;
 use App\Http\Resources\PromotionResource;
 use App\Models\Product;
+use App\Models\ProductPromotion;
 use App\Models\Promotion;
 use App\Services\Promotion\CreatePromotionService;
 use App\Services\Promotion\UpdatePromotionService;
@@ -90,7 +91,7 @@ class PromotionController extends Controller
     {
         DB::beginTransaction();
         try {
-            $product = Product::where('promotion_id', $id)->first();
+            $product = ProductPromotion::where('promotion_id', $id)->first();
             if ($product) {
                 return response()->json(['message' => 'Promoção não pode ser deletada, pois está sendo usada em um produto'], 400);
             }
