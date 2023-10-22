@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router'; 
+import router from './router';
 
 import './assets/css/resset.css';
 
@@ -53,7 +53,7 @@ app.component('font-awesome-icon', FontAwesomeIcon);
 import Vue3Toasity from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 app.use(Vue3Toasity, {
-    autoClose: 3000,
+  autoClose: 3000,
 });
 
 // Vue Sweetalert2 Dialog
@@ -61,8 +61,8 @@ import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 const options = {
-    confirmButtonColor: '#5F8A17',
-    cancelButtonColor: '#7A7373',
+  confirmButtonColor: '#5F8A17',
+  cancelButtonColor: '#7A7373',
 };
 app.use(VueSweetalert2, options);
 
@@ -72,12 +72,51 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: 'http://localhost:8000/api',
-  timeout: 10000, 
+  timeout: 10000,
   headers: {
-    'Content-Type': 'application/json', 
+    'Content-Type': 'application/json',
   },
 });
 
 app.config.globalProperties.$http = axiosInstance;
+
+/**
+ * Vue Auth
+ */
+import { createAuth } from '@websanova/vue-auth';
+import driverAuthBearer from '@websanova/vue-auth/src/drivers/auth/bearer.js';
+import driverHttpAxios from '@websanova/vue-auth/src/drivers/http/axios.1.x.js';
+import driverRouterVueRouter from '@websanova/vue-auth/src/drivers/router/vue-router.2.x.js';
+
+var auth = createAuth({
+  plugins: {
+    http: axiosInstance,
+    router: router
+  },
+  drivers: {
+    http: driverHttpAxios,
+    auth: driverAuthBearer,
+    router: driverRouterVueRouter,
+  },
+  options: {
+    loginData: { url: 'auth/login', method: 'POST', fetchUser: true, staySignedIn: false },
+    logoutData: { url: 'auth/logout', method: 'POST', redirect: { name: 'LoginForm' }, makeRequest: true },
+    refreshData: { enabled: false },
+    tokenDefaultKey: 'token',
+    forbiddenRedirect: { path: '/403' },
+    notFoundRedirect: { path: '/404' },
+    stores: ['storage'],
+    parseUserData ({ user }) {
+      try {
+        app.prototype.$user.login(user);
+      } catch (error) {
+        console.error(error);
+      }
+      return user;
+    }
+  }
+});
+
+app.use(auth);
 
 app.mount('#app');

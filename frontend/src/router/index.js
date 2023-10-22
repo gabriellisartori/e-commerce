@@ -9,25 +9,41 @@ import PromotionPage from '../pages/establishment/PromotionPage.vue'
 /* import LimitPizzaModal from '../components/LimitPizzaModal.vue'
  */
 const routes = [
+  { 
+    path: '/', 
+    redirect: { name: 'login' } 
+  },
   {
-    path: '/',
-    name: 'LoginForm',
+    path: '/login',
+    name: 'login',
     component: Login,
+    meta: {
+      auth: false,
+    }
   },
   {
     path: '/registrar',
     name: 'RegisterEstablishment',
     component: RegisterEstablishment,
+    meta: {
+      auth: true,
+    }
   },
   {
     path: '/home',
     name: 'HomePage',
     component: HomePage,
+    meta: {
+      auth: false,
+    }
   },
   {
     path: '/cardapio',
     name: 'MenuPage',
     component: MenuPageVue,
+    meta: {
+      auth: false,
+    }
   },
   /* {
     path: '/limit',
@@ -38,16 +54,25 @@ const routes = [
     path: '/ingredient',
     name: 'IngredientPage',
     component: IngredientPage,
+    meta: {
+      auth: true,
+    }
   },
   {
     path: '/category',
     name: 'CategoryPage',
     component: CategoryPage,
+    meta: {
+      auth: true,
+    }
   },
   {
     path: '/promotion',
     name: 'PromotionPage',
     component: PromotionPage,
+    meta: {
+      auth: true,
+    }
   },
 ];
 
