@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('promotions', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('name');
-            $table->dateTime('starts_at');
-            $table->dateTime('end_at');
+            $table->date('start_date');
+            $table->time('start_time');
+            $table->date('end_date');
+            $table->time('end_time');
             $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();

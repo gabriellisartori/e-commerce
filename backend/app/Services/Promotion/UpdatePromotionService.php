@@ -12,8 +12,10 @@ class UpdatePromotionService
 
         $promotion->update([
             'name' => $attributes['name'],
-            'starts_at' => $attributes['starts_at'],
-            'end_at' => $attributes['end_at']
+            'start_date' => $attributes['start_date'],
+            'start_time' => $attributes['start_time'],
+            'end_date' => $attributes['end_date'],
+            'end_time' => $attributes['end_time'],
         ]);
 
         return $promotion;
