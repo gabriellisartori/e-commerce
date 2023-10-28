@@ -18,6 +18,7 @@ export default {
         name: '',
         value: 0,
         hasAdditional: false,
+        additional: null,
       },
       modalTitle: 'Adicionar ingrediente'
     };
@@ -31,8 +32,19 @@ export default {
 
         if (this.id) {
           this.form.id = this.id;
+
+          if (!this.form.hasAdditional) {
+            this.form.additional = null;
+            console.log(this.form)
+
+          }
+
           await this.$http.put(`/ingredients/${this.id}`, this.form);
         } else {
+          if (!this.form.hasAdditional) {
+            this.form.additional = null;
+          }
+
           await this.$http.post('/ingredients', this.form);
         }
 
@@ -51,15 +63,20 @@ export default {
       try {
         const { data } = await this.$http.get(`/ingredients/${this.id}`);
         this.form = data;
-        if (this.form.additional === null) {
-          this.form.hasAdditional = false;
-        } else {
+        console.log(data);
+        if (this.form.additional && this.form.additional.value !== null) {
           this.form.hasAdditional = true;
           this.form.value = this.form.additional.value;
+        } else {
+          this.form.hasAdditional = false;
         }
       } catch (error) {
         console.error(error);
       }
+    },
+    handleSwitchChange(newValue) {
+      console.log('Novo valor:', newValue);
+      this.form.hasAdditional = newValue;
     },
   },
   mounted() {
@@ -69,20 +86,21 @@ export default {
     }
   }
 };
+
 </script>
 
 <template>
-    <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveIngredient">
-      <div class="components">
-        <div class="infos">
-            <base-input v-model="form.name" label="Nome" class="input value" />
-            <BaseSwitch label="Adicional" v-model="form.hasAdditional" @input="form.hasAdditional = $event" />
-        </div>
+  <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveIngredient">
+    <div class="components">
+      <div class="infos">
+        <base-input v-model="form.name" label="Nome" class="input value" />
+        <base-switch label="Adicional" v-model="form.hasAdditional" @update:modelValue="handleSwitchChange" />
+      </div>
 
-        <div>
-            <base-input v-if="form.hasAdditional" v-model="form.value" label="Valor Adicional"
-                class="input value additional" />
-        </div>
+      <div>
+        <base-input v-if="form.hasAdditional" v-model="form.value" label="Valor Adicional"
+          class="input value additional" />
+      </div>
     </div>
   </base-modal>
 </template>
@@ -107,7 +125,7 @@ export default {
     margin-top: 40px;
     margin-bottom: 0px;
 
-    &.additional{
+    &.additional {
       width: 100%;
     }
   }

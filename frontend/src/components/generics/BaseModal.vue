@@ -29,13 +29,15 @@ export default {
     <div v-if="!showModal" class="overlay"></div>
     <div :class="{ 'modal': true, 'show-modal': showModal }">
       <div class="exit">
-        <font-awesome-icon class="icon" icon="fa-solid fa-xmark" @click="closeModal"/>
+        <h2 class="title">{{ modalTitle }}</h2>
+        <div class="hover-icon">
+          <font-awesome-icon class="icon" icon="fa-solid fa-xmark" @click="closeModal" />
+        </div>
       </div>
 
       <div class="content-modal">
-        <h2 class="title">{{ modalTitle }}</h2>
         <slot></slot>
-        
+
         <div class="content-buttons">
           <base-button class="button" color="dark-green" isOutlined @onClick="closeModal">
             Cancelar
@@ -68,9 +70,7 @@ export default {
   top: 50%;
   transform: translate(-50%, -50%);
   width: 70%;
-  /* height: 50%; */
   max-width: 600px;
-  /* Largura máxima da modal */
   background-color: #fefefe;
   padding: 20px;
   border: 1px solid #888;
@@ -79,9 +79,10 @@ export default {
 
   .exit {
     display: flex;
-    flex-direction: row-reverse;
     opacity: 0.7;
-    
+    justify-content: space-between;
+    align-items: center;
+
     .icon {
       cursor: pointer;
       font-size: 20px;
@@ -89,7 +90,7 @@ export default {
     }
   }
 
-  .content-modal{
+  .content-modal {
     padding: 0px 15px;
     display: flex;
     flex-direction: column;

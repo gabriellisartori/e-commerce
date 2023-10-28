@@ -32,7 +32,7 @@
 
 .base-label{
     display: block;
-    color: #7A7373;
+    color: var(--cor-fonte);
     font-weight: bold;
 }
 
@@ -40,8 +40,25 @@
     width: -webkit-fill-available;
     height: 20px;
     padding: 10px;
-    border: 1px solid #5F8A17;
+    border: 1px solid var(--cor-primaria);
     border-radius: 16px;
     margin-top: 10px; 
     outline: none; 
 }
+
+.hover-icon{
+    border-radius: 20px;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover{
+        background-color: var(--hover);
+        transition: 0.3s;
+        color: var(--cor-primaria);
+    }
+}
+

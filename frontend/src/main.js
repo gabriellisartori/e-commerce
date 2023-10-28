@@ -38,6 +38,9 @@ app.component('base-date', BaseDate);
 import BaseTime from './components/generics/BaseTimePicker.vue';
 app.component('base-time', BaseTime);
 
+import BaseSwitch from './components/generics/BaseSwitch.vue';
+app.component('base-switch', BaseSwitch)
+
 // Font Awesome
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
