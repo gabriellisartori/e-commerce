@@ -20,8 +20,12 @@ export default {
         hasAdditional: false,
         additional: null,
       },
-      modalTitle: 'Adicionar ingrediente'
     };
+  },
+  computed: {
+    modalTitle() {
+      return this.id ? 'Editar ingrediente' : 'Adicionar ingrediente';
+    }
   },
   methods: {
     closeModal() {
@@ -81,7 +85,6 @@ export default {
   },
   mounted() {
     if (this.id) {
-      this.modalTitle = 'Editar ingrediente';
       this.getData();
     }
   }

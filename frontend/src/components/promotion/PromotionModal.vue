@@ -1,6 +1,6 @@
 <template>
     <div class="promotion-modal">
-        <base-modal modalTitle="Promoção" @cancel="closeModal" @close="closeModal" @save="submit">
+        <base-modal :modalTitle="modalTitle" @cancel="closeModal" @close="closeModal" @save="submit">
             <base-input label="Nome" class="input name" v-model="promotion.name" />
             <div class="content">
                 <base-date label="Dia de início" v-model="promotion.start_date" type="date" class="input date" @update:modelValue="promotion.start_date = $event"></base-date>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import { toast } from 'vue3-toastify';
 
 export default {
     props: {
@@ -35,21 +36,40 @@ export default {
             }
         };
     },
+    computed: {
+        modalTitle () {
+            return this.id ? 'Editar promoção' : 'Adicionar promoção';
+        }
+    },
     methods: {
         closeModal () {
             this.$emit('close');
         },
         async getData () {
             try {
-                const { data } = await this.$http.get(`/promotion/${this.id}`);
+                const { data } = await this.$http.get(`/promotions/${this.id}`);
                 this.promotion = data;
                 console.log(this.promotion.name);
             } catch (error) {
                 console.error(error);
             }
         },
-        submit () {
-            //todo save post
+        async submit () {
+            try {
+                if (this.id) {
+                    await this.$http.put(`/promotions/${this.id}`, this.promotion);
+                } else {
+                    await this.$http.post('/promotions', this.promotion);
+                }
+                this.$emit('savePromotion');
+                this.$emit('close');
+
+                toast.success("Salvo com sucesso!", {
+                  position: toast.POSITION.BOTTOM_LEFT,
+                });
+            } catch (error) {
+                console.error(error);
+            }
         }
     
     },

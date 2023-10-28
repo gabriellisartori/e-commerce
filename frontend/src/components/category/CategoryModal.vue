@@ -18,8 +18,12 @@ export default {
         name: '',
         active: false,
       },
-      modalTitle: 'ADICIONAR CATEGORIA',
     };
+  },
+  computed: {
+    modalTitle() {
+      return this.id ? 'Editar categoria' : 'Adicionar categoria';
+    }
   },
   methods: {
     closeModal() {
@@ -56,7 +60,6 @@ export default {
   },
   mounted() {
     if (this.id) {
-      this.modalTitle = 'EDITAR CATEGORIA';
       this.getData();
     }
   }

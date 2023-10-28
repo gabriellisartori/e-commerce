@@ -1,21 +1,33 @@
 <template>
-  <div id="app">
-    <PageHeaderEstablishment></PageHeaderEstablishment>
-    <div class="content">
-      <router-view></router-view>
+  <div id="app" v-if="isAuth">
+    <div v-if="$auth.ready()">
+      <PageHeaderEstablishment></PageHeaderEstablishment>
+      <div class="content">
+        <router-view></router-view>
+      </div>
     </div>
+  </div>
+  <div v-else>
+    <PageHeaderEstablishment v-if="! isLogin"></PageHeaderEstablishment>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import PageHeaderEstablishment from '@/components/pageHeaders/PageHeaderEstablishment.vue';
+import PageHeaderEstablishment from "@/components/pageHeaders/PageHeaderEstablishment.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     PageHeaderEstablishment,
-    //Todo: verificar se está autenticado
+  },
+  computed: {
+    isAuth() {
+      return this.$auth.user();
+    },
+    isLogin () {
+      return this.$route.name === 'login'
+    }
   }
-}
-
+};
 </script>

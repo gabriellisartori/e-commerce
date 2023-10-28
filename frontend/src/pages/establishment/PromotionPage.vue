@@ -11,6 +11,7 @@
       :key="promotion.id"
       :title="promotion.name"
       @edit="openModal(promotion)"
+      @delete="deletePromotion(promotion.id)"
     >
     </base-card>
   </div>
@@ -18,11 +19,14 @@
     v-if="showModal"
     :id="id"
     @close="showModal = false"
+    @savePromotion="getData"
   />
 </template>
 
 <script>
 import PromotionModal from '@/components/promotion/PromotionModal.vue';
+import { toast } from 'vue3-toastify';
+
 export default {
   components: {
     PromotionModal
@@ -46,7 +50,33 @@ export default {
     openModal (promotion) {
       this.id = promotion.id;
       this.showModal = true;
-    }
+    },
+    async deletePromotion (promotionId) {
+      const confirmed = await this.$swal.fire({
+        title: 'Tem certeza que deseja excluir?',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, excluir',
+        reverseButtons: true
+      });
+
+      if (confirmed.isConfirmed) {
+        try {
+          await this.$http.delete(`/promotions/${promotionId}`);
+          this.getData();
+
+          toast.success("Promoção excluída!", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+        } catch (error) {
+          console.error(error);
+          this.$swal.fire(
+            'Erro!',
+            'Ocorreu um erro ao excluir a promoção.',
+            'error'
+          );
+        }
+      }
+    },
   },
   mounted () {
     this.getData();

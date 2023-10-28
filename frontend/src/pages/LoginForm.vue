@@ -16,15 +16,14 @@ export default {
     methods: {
         async handleSubmit() {
             try {
-                const response = await this.$http.post('/auth/login', {
-                    email: this.email,
-                    password: this.password
-                });
+                await this.$auth.login({
+					data: {
+						email: this.email,
+						password: this.password
+					},
+					redirect: { name: 'HomePage' }
+				});
 
-                //teste apenas
-                localStorage.setItem('token', response.data.token);
-
-                this.$router.push('/home'); 
             } catch (error) {
                 console.error(error);
             }
@@ -75,9 +74,11 @@ export default {
                 />
 
                 <div class="buttons">
-                    <button type="submit" class="button filled enter">
+                    <base-button
+                        type="submit"
+                        class="filled enter">
                         ENTRAR
-                    </button>
+                    </base-button>
                     <RouterLink to="/registrar">Criar conta</RouterLink>
                 </div>
             </form>
