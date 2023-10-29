@@ -4,7 +4,7 @@ import router from './router';
 
 import './assets/css/resset.css';
 
-const app = createApp(App).use(router)
+const app = createApp(App).use(router);
 
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -100,7 +100,7 @@ var auth = createAuth({
   },
   options: {
     loginData: { url: 'auth/login', method: 'POST', fetchUser: true, staySignedIn: false },
-    logoutData: { url: 'auth/logout', method: 'POST', redirect: { name: 'LoginForm' }, makeRequest: true },
+    logoutData: { url: 'auth/logout', method: 'POST', redirect: { name: 'login' }, makeRequest: true },
     refreshData: { enabled: false },
     tokenDefaultKey: 'token',
     forbiddenRedirect: { path: '/403' },
@@ -108,7 +108,7 @@ var auth = createAuth({
     stores: ['storage'],
     parseUserData ({ user }) {
       try {
-        app.prototype.$user.login(user);
+        app.config.globalProperties.$user = user;
       } catch (error) {
         console.error(error);
       }

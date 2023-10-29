@@ -11,7 +11,7 @@ import PromotionPage from '../pages/establishment/PromotionPage.vue'
 const routes = [
   { 
     path: '/', 
-    redirect: { name: 'login' } 
+    redirect: { name: 'homePage' } 
   },
   {
     path: '/login',
@@ -31,19 +31,13 @@ const routes = [
   },
   {
     path: '/home',
-    name: 'HomePage',
+    name: 'homePage',
     component: HomePage,
-    meta: {
-      auth: false,
-    }
   },
   {
     path: '/cardapio',
     name: 'MenuPage',
     component: MenuPageVue,
-    meta: {
-      auth: false,
-    }
   },
   /* {
     path: '/limit',
@@ -74,6 +68,10 @@ const routes = [
       auth: true,
     }
   },
+  {
+    path: '/404',
+    redirect: { name: 'homePage' },
+  }
 ];
 
 const router = createRouter({
