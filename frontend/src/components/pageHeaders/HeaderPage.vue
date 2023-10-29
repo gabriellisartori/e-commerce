@@ -118,7 +118,7 @@ export default {
         <li v-if="hasPermission" @click="showSubmenu = !showSubmenu">
           <button class="text-uppercase">Configurações</button>
           <ul class="submenu" v-if="showSubmenu">
-            <li v-for="(link, index) in configOptions" :key="index">
+            <li v-for="(link, index) in configOptions" :key="index" class="submenu-item">
               <button @click="route(link.route)">{{ link.name }}</button>
             </li>
           </ul>
@@ -199,6 +199,7 @@ export default {
     }
 
     .submenu {
+      width: auto;
       display: flex;
       flex-direction: column;
       margin-top: 10px;
@@ -221,14 +222,27 @@ export default {
         color: #5f8a17;
       }
 
-      li {
-        display: block;
+      .submenu-item {
+        margin: 0;
+        padding-bottom: 0.5rem;
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
 
-        a,
         button {
-          color: var(--cor-site);
-          padding: 10px 16px;
-          text-decoration: none;
+          color: #ffffff;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          transition: color 0.3s;
+
+          &:hover {
+            color: var(--cor-secundaria);
+          }
+        }
+
+        &:last-child {
+          padding-bottom: 0;
         }
       }
     }
