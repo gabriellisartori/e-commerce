@@ -21,12 +21,15 @@ export default {
 						email: this.email,
 						password: this.password
 					},
-					redirect: { name: 'HomePage' }
 				});
-
             } catch (error) {
                 console.error(error);
             }
+        }
+    },
+    mounted () {
+        if (this.$auth.check()) {
+            this.$router.push({ name: 'homePage' });
         }
     }
 }
