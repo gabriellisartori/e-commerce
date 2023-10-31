@@ -63,6 +63,8 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 const options = {
   confirmButtonColor: '#5F8A17',
   cancelButtonColor: '#7A7373',
+  iconColor: '#5F8A17',
+  focusConfirm: false,
 };
 app.use(VueSweetalert2, options);
 
