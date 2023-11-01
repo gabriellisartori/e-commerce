@@ -76,6 +76,18 @@ export default {
   border: 1px solid #888;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
+  max-height: 550px;
+  overflow-y: auto;
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* Cor do "thumb" (o indicador da posição atual) */
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #eee;
+    /* Cor do "track" (a área da barra de rolagem que não está sendo percorrida) */
+  }
 
   .exit {
     display: flex;

@@ -64,54 +64,43 @@ export default {
 </script>
 
 <template>
-    <div>
-      <div class="page-header-options">
-        <h3 class="title">INGREDIENTES</h3>
-        <base-button isTransparent color="dark-green" @onClick="showModal = true"> Adicionar </base-button>
+  <div>
+    <div class="page-header-options">
+      <h3 class="title">INGREDIENTES</h3>
+      <base-button isTransparent color="dark-green" @onClick="showModal = true"> Adicionar </base-button>
     </div>
-    
-    <div class="content-ingredient">
-      <base-card
-        v-for="ingredient in ingredients"
-        :key="ingredient.id"
-        :title="ingredient.name"
-        @edit="openEditModal(ingredient.id)"
-        @delete="deleteIngredient(ingredient.id)"
-      />
-    </div>
-    </div>
-   
-    <IngredientModal
-      v-if="showModal"
-      :id="id"
-      @close="closeModal"
-      @ingredientSave="fetchIngredients"
-    />
 
+    <div class="content-ingredient">
+      <base-card v-for="ingredient in ingredients" :key="ingredient.id" :title="ingredient.name"
+        @edit="openEditModal(ingredient.id)" @delete="deleteIngredient(ingredient.id)" />
+    </div>
+  </div>
+
+  <IngredientModal v-if="showModal" :id="id" @close="closeModal" @ingredientSave="fetchIngredients" />
 </template>
 
 <style lang="scss">
-.menu-home{
-  .settings{
+.menu-home {
+  .settings {
     border-bottom: 3px solid var(--cor-primaria);
   }
 }
-.content{
+
+.content {
   width: 80%;
   margin: 0 auto;
 
-  .page-header-options{
+  .page-header-options {
     display: flex;
     justify-content: space-between;
 
   }
 
-  .content-ingredient{
+  .content-ingredient {
     display: grid;
     grid-template-columns: 2fr 1fr;
     width: 90%;
     margin: 0 auto;
   }
 }
-
 </style>

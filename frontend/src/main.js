@@ -10,9 +10,9 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 app.component('VueDatePicker', VueDatePicker);
 
-import VueTimepicker from 'vue3-timepicker'
-import 'vue3-timepicker/dist/VueTimepicker.css'
-app.component('VueTimepicker', VueTimepicker);
+import VCalendar from 'v-calendar';
+import 'v-calendar/style.css';
+app.use(VCalendar, {})
 
 import BaseButton from './components/generics/BaseButton.vue';
 app.component('base-button', BaseButton);
