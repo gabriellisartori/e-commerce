@@ -46,7 +46,7 @@ export default {
                 const minute = String(this.selectedMinute).padStart(2, '0');
                 this.selectedTimeDisplay = `${hour}:${minute}`;
                 this.showPicker = false;
-                this.$emit('update:modelValue', this.selectedTimeDisplay); // Emitindo o evento para atualizar o v-model
+                this.$emit('update:modelValue', this.selectedTimeDisplay);
             }
         }
     }
@@ -57,7 +57,7 @@ export default {
     <div class="time-picker">
         <label class="label">{{ label }}</label>
 
-        <input class="time-picker abc" type="text" v-model="selectedTimeDisplay" readonly @click="openPicker"
+        <input class="time-picker baseInput" type="text" v-model="selectedTimeDisplay" readonly @click="openPicker"
             ref="timeInput" />
         <div v-if="showPicker" class="picker">
             <div class="hours">
@@ -84,9 +84,9 @@ export default {
 }
 
 .input {
-    width: 100px;
+    width: 22%;
 
-    .abc {
+    .baseInput {
         border: 1px solid var(--cor-primaria);
         height: 44px;
         border-radius: 16px;
@@ -94,6 +94,10 @@ export default {
         margin-top: 10px;
         font-size: 14px;
         padding-left: 10px;
+
+        &:focus{
+            outline-color: var(--cor-primaria);
+        }
     }
 
     .picker {
@@ -138,7 +142,6 @@ export default {
         background-color: var(--cor-primaria);
         color: var(--cor-site);
     }
-
 }
 </style>
   

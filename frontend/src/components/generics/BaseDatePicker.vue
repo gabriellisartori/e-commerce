@@ -1,9 +1,3 @@
-
-
-<template>
-      <VDatePicker v-model="date" color="green" mode="date" class="calendar" @click="onDateSelected"/>
-</template>
-
 <script>
 import { ref } from 'vue';
 import { format } from 'date-fns';
@@ -42,15 +36,14 @@ export default {
 };
 </script>
 
+<template>
+      <VDatePicker v-model="date" color="green" mode="date" class="calendar" @click="onDateSelected"/>
+</template>
+
 <style lang="scss">
   .calendar {
     margin-left: 60px;
     border: 1px solid var(--cor-primaria)!important;
-
-    .vc-light .vc-attr{
-      color: red;
-      background-color: red;
-    }
   }
 </style>
 
