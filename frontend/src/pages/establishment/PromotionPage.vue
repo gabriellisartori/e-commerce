@@ -53,8 +53,11 @@ export default {
     },
     async deletePromotion (promotionId) {
       const confirmed = await this.$swal.fire({
-        title: 'Tem certeza que deseja excluir?',
+        icon: 'warning',
+        title: 'Realmente deseja excluir?',
+        text: 'Você não poderá reverter isso!',
         showCancelButton: true,
+        cancelButtonText: 'Cancelar',
         confirmButtonText: 'Sim, excluir',
         reverseButtons: true
       });

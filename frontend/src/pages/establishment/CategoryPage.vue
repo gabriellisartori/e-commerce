@@ -32,10 +32,11 @@ export default {
     },
     async deleteCategory(categoryId) {
       const confirmed = await this.$swal.fire({
-        title: 'Tem certeza que deseja excluir?',
+        icon: 'warning',
+        title: 'Realmente deseja excluir?',
+        text: 'Você não poderá reverter isso!',
         showCancelButton: true,
-        confirmButtonColor: 'var(--cor-secundaria)',
-        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
         confirmButtonText: 'Sim, excluir',
         reverseButtons: true
       });
