@@ -19,7 +19,7 @@ export default {
         <div class="pizza-infos">
             <h3 class="text-uppercase title">{{ name }}</h3>
             <h3 class="title">{{ value }}</h3>
-            <BaseSwitch class="switch-menu"></BaseSwitch>
+            <BaseSwitch id="card" class="switch-menu"></BaseSwitch>
         </div>
     </div>
 </template>

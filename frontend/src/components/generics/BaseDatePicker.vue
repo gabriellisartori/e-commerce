@@ -4,7 +4,8 @@ import { format } from 'date-fns';
 
 export default {
   props: {
-    formattedDate: String, 
+    formattedDate: String,
+    modelValue: String,
   },
   data() {
     return {

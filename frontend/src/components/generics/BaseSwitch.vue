@@ -32,14 +32,14 @@ export default {
 <template>
     <div class="switch">
         <p>{{ label }}</p>
-        <input type="checkbox" id="mySwitch" class="switch-input" :checked="modelValue" @change="updateValue">
-        <label for="mySwitch" class="switch-label"></label>
+        <input type="checkbox" :id="id" class="switch-input" :checked="modelValue" @change="updateValue">
+        <label :for="id" class="switch-label"></label>
     </div>
 </template>
   
 <script>
 export default {
-    props: ['modelValue', 'label'],
+    props: ['modelValue', 'label', 'id'],
     methods: {
         updateValue(event) {
             const newValue = event.target.checked;
@@ -70,8 +70,8 @@ export default {
         position: relative;
         cursor: pointer;
         top: 0;
-        height: 30px;
-        width: 60px;
+        height: 25px;
+        width: 50px;
         right: 0;
         bottom: 0;
         background-color: var(--cor-site) !important;
@@ -82,10 +82,10 @@ export default {
         &:before {
             position: absolute;
             content: "";
-            width: 25px;
-            height: 25px;
-            left: 4px;
-            bottom: 2px;
+            width: 20px;
+            height: 20px;
+            left: 1px;
+            bottom: 3px;
             background-color: var(--cor-primaria) !important;
             border-radius: 50%;
             transition: transform 0.3s;

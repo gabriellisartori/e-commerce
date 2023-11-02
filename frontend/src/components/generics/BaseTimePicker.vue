@@ -2,6 +2,7 @@
 export default {
     props: {
         label: String,
+        modelValue: String
     },
     name: 'TimePicker',
     data() {
@@ -14,6 +15,14 @@ export default {
             highlightedHour: null,
             highlightedMinute: null,
             selectedTimeDisplay: ''
+        }
+    },
+    watch: {
+        modelValue: {
+            immediate: true,
+            handler(newValue) {
+                this.selectedTimeDisplay = newValue;
+            }
         }
     },
     methods: {
@@ -48,6 +57,11 @@ export default {
                 this.showPicker = false;
                 this.$emit('update:modelValue', this.selectedTimeDisplay);
             }
+        }
+    },
+    mounted() {
+        if (this.modelValue) {
+            this.selectedTimeDisplay = this.modelValue;
         }
     }
 }
@@ -88,12 +102,12 @@ export default {
 
     .baseInput {
         border: 1px solid var(--cor-primaria);
-        height: 44px;
+        height: 40px;
         border-radius: 16px;
         width: -webkit-fill-available;
         margin-top: 10px;
         font-size: 14px;
-        padding-left: 10px;
+        text-align: center;
 
         &:focus{
             outline-color: var(--cor-primaria);
@@ -103,6 +117,8 @@ export default {
     .picker {
         display: flex;
         justify-content: space-between;
+        position: absolute;
+        background: white;
     }
 
 

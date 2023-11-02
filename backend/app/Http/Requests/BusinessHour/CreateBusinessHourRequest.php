@@ -24,8 +24,8 @@ class CreateBusinessHourRequest extends FormRequest
         return [
             'days' => 'required|array',
             'days.*' => 'required',
-            'days.*.day_week' => 'required|int|between:0,6',
-            'days.*.start_at' => 'nullable',
+            'days.*.day_week' => 'required|string',
+            'days.*.starts_at' => 'nullable',
             'days.*.end_at' => 'nullable'
         ];
     }

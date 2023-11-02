@@ -70,7 +70,7 @@ export default {
   <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveCategory">
     <div class="components">
       <base-input v-model="form.name" label="Nome" class="input name" @update:modelValue="form.name = $event"/>
-      <BaseSwitch label="Ativo" v-model="form.active" />
+      <BaseSwitch label="Ativo" id="active" v-model="form.active" />
     </div>
   </base-modal>
 </template>

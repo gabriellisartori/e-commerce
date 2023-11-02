@@ -60,7 +60,7 @@ export default {
             <div class="vertical-top-line"></div>
             <hr class="horizontal-top-line">
             <form class="form-login" @submit.prevent="handleSubmit">
-                <h2>FAÇA SEU LOGIN</h2>
+                <h2>Entre na sua conta 😀</h2>
                 <BaseInput 
                     v-model="email"
                     label="E-mail" 
@@ -214,7 +214,11 @@ export default {
 
             .input{
                 margin-top: 60px;
-                margin-bottom: 50px;
+            }
+
+            .password-input {
+                margin-top: 20px;
+                margin-bottom: 60px;
             }
 
             .buttons{

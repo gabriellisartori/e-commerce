@@ -97,7 +97,7 @@ export default {
     <div class="components">
       <div class="infos">
         <base-input v-model="form.name" label="Nome" class="input value" />
-        <base-switch label="Adicional" v-model="form.hasAdditional" @update:modelValue="handleSwitchChange" />
+        <base-switch label="Adicional" v-model="form.hasAdditional" id="name" @update:modelValue="handleSwitchChange" />
       </div>
 
       <div>

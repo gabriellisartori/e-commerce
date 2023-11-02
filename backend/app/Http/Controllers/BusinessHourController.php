@@ -9,6 +9,7 @@ use App\Http\Resources\BusinessHourResource;
 use App\Models\BusinessHour;
 use App\Services\BusinessHour\CreateBusinessHourService;
 use App\Services\BusinessHour\UpdateBusinessHourService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -25,7 +26,7 @@ class BusinessHourController extends Controller
         try {
             $businessHour = BusinessHour::all();
 
-            return response()->json(BusinessHourResource::collection($businessHour), 200);
+            return response()->json(new BusinessHourResource($businessHour), 200);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Erro ao listar horários de funcionamento',
@@ -39,11 +40,13 @@ class BusinessHourController extends Controller
         try {
             $data = $request->validated();
 
+            BusinessHour::all()->each->delete();
+
             foreach ($data['days'] as $dayWeek) {
                 $attributes = [
-                    "day_week" => BusinessHour::WEEK_DAY[$dayWeek['day_week']],
-                    "starts_at" => $dayWeek['starts_at'],
-                    "end_at" => $dayWeek['end_at'],
+                    "day_week" => $dayWeek['day_week'],
+                    "starts_at" => Carbon::parse($dayWeek['hours'][0]['starts_at'])->format('H:i'),
+                    "end_at" => Carbon::parse($dayWeek['hours'][0]['end_at'])->format('H:i'),
                 ];
 
                 $businessHour[] = $this->createBusinessHourService->handle($attributes);

@@ -1,13 +1,13 @@
 <script>
 import LimitPizzaModal from "../limitPizza/LimitPizzaModal.vue";
-import OpeningHoursModal from "../openingHours/OpeningHoursModal.vue";
+import BusinessHoursModal from "../businessHours/BusinessHoursModal.vue";
 import SideBar from "../generics/SideBar.vue";
 
 export default {
   components: {
     SideBar,
     LimitPizzaModal,
-    OpeningHoursModal,
+    BusinessHoursModal,
   },
   data() {
     return {
@@ -17,7 +17,7 @@ export default {
       configOptions: [
         {
           name: "Horário",
-          route: "OpeningHours",
+          route: "BusinessHours",
         },
         {
           name: "Limite de Pizzas",
@@ -61,12 +61,6 @@ export default {
         sideBarElement.style.width = "200px";
       }
     },
-    showSubMenu() {
-      this.showSubmenu = true;
-    },
-    hideSubMenu() {
-      this.showSubmenu = false;
-    },
     openModal(modalType) {
       this.modalType = modalType;
       this.showModal = true;
@@ -76,7 +70,7 @@ export default {
     },
     route(option) {
       this.showSubmenu = false;
-      if (option === "OpeningHours" || option === "LimitPizza") {
+      if (option === "BusinessHours" || option === "LimitPizza") {
         this.openModal(option);
       } else {
         this.$router.push({ name: option });
@@ -115,7 +109,7 @@ export default {
             Contato
           </button>
         </li>
-        <li v-if="hasPermission" @click="showSubmenu = !showSubmenu">
+        <li v-if="hasPermission" @click="showSubmenu = ! showSubmenu">
           <button class="text-uppercase">Configurações</button>
           <ul class="submenu" v-if="showSubmenu">
             <li v-for="(link, index) in configOptions" :key="index" class="submenu-item">
@@ -132,10 +126,10 @@ export default {
 
   <SideBar />
 
-  <OpeningHoursModal
-    v-if="showModal && modalType === 'OpeningHours'"
+  <BusinessHoursModal
+    v-if="showModal && modalType === 'BusinessHours'"
     @close="closeModal"
-  ></OpeningHoursModal>
+  ></BusinessHoursModal>
   <LimitPizzaModal
     v-if="showModal && modalType === 'LimitPizza'"
     @close="closeModal"
@@ -184,6 +178,7 @@ export default {
           background-color: transparent;
           border: none;
           cursor: pointer;
+          font-size: 16px;
 
           &:hover {
             color: var(--cor-secundaria);
