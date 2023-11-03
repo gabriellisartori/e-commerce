@@ -54,7 +54,7 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-top: 15px;
+    margin-top: 10px;
     cursor: pointer;
 
     .icon {

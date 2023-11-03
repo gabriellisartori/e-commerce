@@ -7,8 +7,8 @@ import CategoryPage from '../pages/establishment/CategoryPage.vue'
 import MenuPageVue from '@/pages/establishment/MenuPage.vue';
 import PromotionPage from '../pages/establishment/PromotionPage.vue'
 import BusinessHoursModal from '../components/businessHours/BusinessHoursModal.vue'
-/* import LimitPizzaModal from '../components/LimitPizzaModal.vue'
- */
+import LimitPizzaPage from '../pages/establishment/LimitPizzaPage.vue'
+
 const routes = [
   { 
     path: '/', 
@@ -40,11 +40,14 @@ const routes = [
     name: 'MenuPage',
     component: MenuPageVue,
   },
-  /* {
-    path: '/limit',
-    name: 'LimitPizzaModal',
-    component: LimitPizzaModal,
-  }, */
+  {
+    path: '/limite-diario-de-pizzas',
+    name: 'LimitPizzaPage',
+    component: LimitPizzaPage,
+    meta: {
+      auth: true,
+    }
+  },
   {
     path: '/ingredientes',
     name: 'IngredientPage',

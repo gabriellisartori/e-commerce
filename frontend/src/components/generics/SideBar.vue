@@ -31,7 +31,7 @@ export default {
         {
           name: "Limite de pizzas",
           icon: "fa-solid fa-mitten",
-          route: "LimitPizza",
+          route: "LimitPizzaPage",
         },
       ],
     };

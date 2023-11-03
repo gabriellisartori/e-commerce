@@ -1,6 +1,26 @@
 <script>
 export default {
-  props: ['modelValue', 'label', 'placeholder', 'mask'],
+  props: {
+    modelValue: {
+      default: '',
+    },
+    label: {
+      type: String,
+      default: '',
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    mask: {
+      type: String,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: 'text',
+    },
+  },
 };
 </script>
 
@@ -10,7 +30,8 @@ export default {
     <input 
       class="base-input"
       :value="modelValue" 
-      :placeholder="placeholder" 
+      :placeholder="placeholder"
+      :type="type" 
       @input="$emit('update:modelValue', $event.target.value)" 
       />      
   </div>

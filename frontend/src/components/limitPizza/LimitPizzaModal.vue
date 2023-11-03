@@ -1,88 +1,99 @@
 <script>
-import BaseDatePicker from '../generics/BaseDatePicker.vue';
+import { toast } from "vue3-toastify";
 
 export default {
+  props: {
+    id: {
+      type: Number,
+      default: null,
+    },
+  },
   data() {
     return {
-      limit: '',
-      modalTitle: 'DEFINIR LIMITE DE PIZZAS',
-      selectedTime: '',
-      endTime: '',
-      showDatepicker: false,
-      selectedDate: '',
+      form: {
+        quantity: 0,
+        date: "",
+      },
     };
+  },
+  computed: {
+    modalTitle() {
+      return this.id
+        ? "Editar limite diário de pizzas"
+        : "Adicionar limite diário de pizzas";
+    },
   },
   methods: {
     closeModal() {
-      this.$emit('close');
+      this.$emit("close");
     },
-    updateDate(newValue) {
-      this.date = newValue;
-      console.log(this.date);
+    async saveLimit() {
+      try {
+        if (this.id) {
+          this.form.id = this.id;
+
+          await this.$http.put(
+            `/daily-pizza-sale-limits/${this.id}`,
+            this.form
+          );
+        } else {
+          await this.$http.post("/daily-pizza-sale-limits", this.form);
+        }
+
+        this.$emit("limitSave");
+        this.$emit("close");
+
+        toast.success("Salvo com sucesso!", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      } catch (error) {
+        console.error("Erro ao salvar o limite diário de pizza:", error);
+      }
     },
-    updateStartTime(newValue) {
-      this.selectedTime = newValue;
-      console.log(this.selectedTime);
-    },
-    updateEndTime(newValue) {
-      this.endTime = newValue;
-      console.log(this.endTime);
-    },
-    showDatePicker() {
-      setTimeout(() => {
-        this.showDatepicker = true;
-        document.body.addEventListener('click', this.handleBodyClick);
-      }, 0);
-    },
-    onDateSelected(date) {
-      this.selectedDate = date;
-    },
-    handleBodyClick(event) {
-      if (!this.$refs.datePicker.$el.contains(event.target)) {
-        this.showDatepicker = false;
-        document.body.removeEventListener('click', this.handleBodyClick);
+    async getData() {
+      try {
+        const { data } = await this.$http.get(
+          `/daily-pizza-sale-limits/${this.id}`
+        );
+        this.form = data;
+      } catch (error) {
+        console.error(error);
       }
     },
   },
-  components: { BaseDatePicker },
+  mounted() {
+    if (this.id) {
+      this.getData();
+    }
+  },
 };
-
 </script>
 
 <template>
-  <base-modal :modalTitle="modalTitle" @cancel="closeModal">
-    <div class="div-settings">
-      <base-input label="Limite" class="input name" v-model="limit" />
-      <base-input label="Data" @click="showDatePicker" v-model="selectedDate"></base-input>
-      <base-time label="Início" v-model="selectedTime" class="input" @update:modelValue="updateStartTime" />
-      <base-time label="Fim" v-model="endTime" class="input" @update:modelValue="updateEndTime" />
+  <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveLimit">
+    <div class="limit-pizza">
+      <base-input
+        v-model="form.quantity"
+        label="Quantidade"
+        type="number"
+        class="input"
+        :placeholder="'Quantidade de pizzas'"
+        @update:modelValue="form.quantity = $event"
+      />
+      <base-date
+        label="Data"
+        v-model="form.date"
+        type="date"
+        class="input date"
+        @date-selected="form.date = $event"
+      >
+      </base-date>
     </div>
-
-    <BaseDatePicker v-if="showDatepicker" @date-selected="onDateSelected" ref="datePicker" @click.stop></BaseDatePicker>
   </base-modal>
 </template>
 
 <style lang="scss">
-.div-settings {
-  margin-top: 35px;
+.limit-pizza {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
-  .base-input-div {
-    width: 22%;
-
-    .base-input {
-      height: 25px;
-    }
-  }
-
-  .name {
-    .base-input {
-      color: var(--cor-fonte);
-      font-weight: 700;
-      font-size: 14px;
-    }
-  }
 }
 </style>
