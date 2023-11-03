@@ -66,10 +66,22 @@ export default {
     }
 
      .svg {
-        width: 30%;
+        width: 25%;
         float: right;
         fill: #7A7373;
         margin-top: 10px;
+
+        @media (max-width: 480px){
+            width: 70%;
+        }
+
+        @media (max-width: 800px){
+            width: 50%;
+        }
+
+        @media (max-width: 1024px){
+            width: 40%;
+        }
     }
   }
   </style>

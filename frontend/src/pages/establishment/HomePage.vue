@@ -43,7 +43,6 @@ export default {
 .contentHome{
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background-color: var(--cor-site);
   overflow: hidden;
 
   .infos-content{

@@ -184,7 +184,7 @@ export default {
       }
 
       &.right{
-        background-color: #FBFBFB;
+        align-self: center;
 
         .vertical-top-line{
             border-right: 1px solid #333;

@@ -45,15 +45,17 @@ class BusinessHourController extends Controller
             foreach ($data['days'] as $dayWeek) {
                 $attributes = [
                     "day_week" => $dayWeek['day_week'],
-                    "starts_at" => Carbon::parse($dayWeek['hours'][0]['starts_at'])->format('H:i'),
-                    "end_at" => Carbon::parse($dayWeek['hours'][0]['end_at'])->format('H:i'),
+                    "starts_at" => $dayWeek['hours'][0]['starts_at'] ==! null ? Carbon::parse($dayWeek['hours'][0]['starts_at'])->format('H:i') : null,
+                    "end_at" => $dayWeek['hours'][0]['end_at'] ==! null ? Carbon::parse($dayWeek['hours'][0]['end_at'])->format('H:i') : null,
                 ];
 
-                $businessHour[] = $this->createBusinessHourService->handle($attributes);
+                $this->createBusinessHourService->handle($attributes);
             }
 
+            $businessHour = BusinessHour::all();
+
             DB::commit();
-            return response()->json(BusinessHourResource::collection($businessHour), 201);
+            return response()->json(new BusinessHourResource($businessHour), 201);
         } catch (ValidationException $e) {
             DB::rollBack();
             return response()->json([

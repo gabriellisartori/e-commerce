@@ -23,9 +23,9 @@ export default {
 </script>
 
 <template>
-    <div class="content">
+    <div>
         <div class="page-header-options">
-            <h2 class="title">PRODUTOS</h2>
+            <h2 class="title">Produtos</h2>
             <base-button isTransparent color="dark-green" @onClick="showModal = true"> Adicionar </base-button>
         </div>
         <div class="content-menu">

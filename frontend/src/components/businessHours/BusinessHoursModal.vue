@@ -17,14 +17,13 @@ export default {
       this.showModal = true;
     },
     closeModal() {
-      this.$emit("close");
+      this.$router.go(-1);
     },
     addHour(day) {
       day.hours.push({ start_time: "", end_time: "" });
     },
     async getData() {
       const { data } = await this.$http.get("/business-hours");
-      console.log(data);
       this.businessHours = data;
       this.businessHours.forEach((day) => {
         day.isOpen = day.hours[0].starts_at != null ? true : false;
@@ -62,6 +61,17 @@ export default {
       await this.$http.post("/business-hours", this.businessHours);
       this.closeModal();
     },
+    isMobile() {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   mounted() {
     this.getData();
@@ -78,21 +88,19 @@ export default {
     @close="closeModal"
   >
     <div class="business-hours">
-      <div
-        class="business-hours-items"
-        v-for="(day, index) in businessHours"
-        :key="index"
-      >
-        <div class="business-hours-day-week">{{ day.day_week }}</div>
+      <div v-for="(day, index) in businessHours" :key="index" :class=" { 'business-hours-items': ! isMobile() }">
+        <div :class="isMobile() ? 'business-hours-items' : 'contents'">
+          <div class="business-hours-day-week">{{ day.day_week }}</div>
 
-        <base-switch
-          v-model="day.isOpen"
-          :id="index"
-          @update:modelValue="
-            removeAllHours(day);
-            day.isOpen = !day.isOpen;
-          "
-        />
+          <base-switch
+            v-model="day.isOpen"
+            :id="index"
+            @update:modelValue="
+              removeAllHours(day);
+              day.isOpen = !day.isOpen;
+            "
+          />
+        </div>
 
         <div v-if="day.isOpen" style="display: contents">
           <div
@@ -100,19 +108,21 @@ export default {
             :key="index"
             style="display: contents"
           >
-            <base-time
-              v-model="hour.starts_at"
-              class="input time"
-              @update:modelValue="hour.starts_at = $event"
-            />
+            <div :class="isMobile() ? 'business-hours-items' : 'contents'">
+              <base-time
+                v-model="hour.starts_at"
+                class="input time"
+                @update:modelValue="hour.starts_at = $event"
+              />
 
-            <p style="margin-right: 15px">até</p>
+              <p style="margin-right: 15px">até</p>
 
-            <base-time
-              v-model="hour.end_at"
-              class="input time"
-              @update:modelValue="hour.end_at = $event"
-            />
+              <base-time
+                v-model="hour.end_at"
+                class="input time"
+                @update:modelValue="hour.end_at = $event"
+              />
+            </div>
           </div>
         </div>
 
@@ -159,10 +169,18 @@ export default {
   .input {
     width: 10% !important;
     margin-top: 0px !important;
+
+    .baseInput {
+      margin-top: 0px !important;
+    }
   }
 
   .time {
     margin-right: 15px;
+  }
+
+  .contents {
+    display: contents;
   }
 }
 </style>
