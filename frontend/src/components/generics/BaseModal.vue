@@ -8,6 +8,10 @@ export default {
       type: String,
       default: 'medium',
     },
+    showButtons: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -15,7 +19,7 @@ export default {
     };
   },
   computed: {
-    computedClass () {
+    computedClass() {
       return {
         'is-medium': this.size === 'medium',
         'is-large': this.size === 'large',
@@ -52,7 +56,7 @@ export default {
       <div class="content-modal">
         <slot></slot>
 
-        <div class="content-buttons">
+        <div class="content-buttons" v-if="showButtons">
           <base-button class="button" color="dark-green" isOutlined @onClick="closeModal">
             Cancelar
           </base-button>
@@ -120,6 +124,7 @@ export default {
       color: var(--cor-fonte);
     }
   }
+
   .title {
     margin-bottom: 20px;
   }

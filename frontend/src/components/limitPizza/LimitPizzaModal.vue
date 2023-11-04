@@ -1,5 +1,6 @@
 <script>
 import { toast } from "vue3-toastify";
+import moment from "moment";
 
 export default {
   props: {
@@ -14,6 +15,8 @@ export default {
         quantity: 0,
         date: "",
       },
+      showModal: false,
+      showDateModal: false,
     };
   },
   computed: {
@@ -22,16 +25,33 @@ export default {
         ? "Editar limite diário de pizzas"
         : "Adicionar limite diário de pizzas";
     },
+    formattedDate() {
+      return this.form.date ? moment(this.form.date).format("DD/MM/YYYY") : '';
+    }
   },
   methods: {
+    closeDateModal() {
+      this.$emit("close");
+    },
     closeModal() {
       this.$emit("close");
+    },
+    updateDate(selectedDate) {
+      this.form.date = selectedDate;
+      console.log("data recebida", this.form.date)
+      this.showDateModal = false;
     },
     async saveLimit() {
       try {
         if (this.id) {
           this.form.id = this.id;
 
+
+          let dataString = this.form.date;
+          let dataFormatada = moment(dataString, 'DD/MM/YYYY').format('YYYY-MM-DD');
+          this.form.date = dataFormatada;
+
+          console.log(this.form)
           await this.$http.put(
             `/daily-pizza-sale-limits/${this.id}`,
             this.form
@@ -72,28 +92,29 @@ export default {
 <template>
   <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveLimit">
     <div class="limit-pizza">
-      <base-input
-        v-model="form.quantity"
-        label="Quantidade"
-        type="number"
+      <base-input 
+        v-model="form.quantity" 
+        label="Quantidade" 
+        type="number" 
         class="input"
         :placeholder="'Quantidade de pizzas'"
-        @update:modelValue="form.quantity = $event"
+        @update:modelValue="form.quantity = $event" 
       />
-      <base-date
-        label="Data"
-        v-model="form.date"
-        type="date"
-        class="input date"
+      <base-input 
+        label="Data" 
+        v-model="form.date" 
+        class="input date" 
         @date-selected="form.date = $event"
-      >
-      </base-date>
+        @click="showDateModal = true"
+      />
     </div>
   </base-modal>
+  <base-date v-if="showDateModal" @date-selected="updateDate" :formattedDate="form.date" @close="closeModal"></base-date>
 </template>
 
 <style lang="scss">
 .limit-pizza {
   display: flex;
+  justify-content: space-evenly;
 }
 </style>
