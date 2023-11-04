@@ -1,41 +1,13 @@
 <script>
-import LimitPizzaModal from "../limitPizza/LimitPizzaModal.vue";
-import BusinessHoursModal from "../businessHours/BusinessHoursModal.vue";
 import SideBar from "../generics/SideBar.vue";
 
 export default {
   components: {
     SideBar,
-    LimitPizzaModal,
-    BusinessHoursModal,
   },
   data() {
     return {
-      showSubmenu: false,
-      showModal: false,
-      modalType: null,
-      configOptions: [
-        {
-          name: "Horário",
-          route: "BusinessHours",
-        },
-        {
-          name: "Limite de Pizzas",
-          route: "LimitPizza",
-        },
-        {
-          name: "Ingredientes",
-          route: "IngredientPage",
-        },
-        {
-          name: "Categorias",
-          route: "CategoryPage",
-        },
-        {
-          name: "Promoções",
-          route: "PromotionPage",
-        },
-      ],
+      showSidebar: false,
     };
   },
   computed: {
@@ -52,31 +24,12 @@ export default {
   },
   methods: {
     toggleSideBar() {
-      this.showSubmenu = false;
-      const sideBarElement = document.getElementById("mySideBar");
-
-      if (sideBarElement.style.width === "200px") {
-        sideBarElement.style.width = "0";
-      } else {
-        sideBarElement.style.width = "200px";
-      }
+      this.showSidebar = true;
     },
-    openModal(modalType) {
-      this.modalType = modalType;
-      this.showModal = true;
-    },
-    closeModal() {
-      this.showModal = false;
-    },
-    route(option) {
-      this.showSubmenu = false;
-      if (option === "BusinessHours" || option === "LimitPizza") {
-        this.openModal(option);
-      } else {
-        this.$router.push({ name: option });
-      }
-    },
-  },
+    closeSidebar () {
+      this.showSidebar = false;
+    }
+  }
 };
 </script>
 
@@ -90,50 +43,39 @@ export default {
           <div class="menu-bar"></div>
         </div>
         <li>
-          <button @click="route('homePage')" class="text-uppercase">
+          <button @click="$router.push({ name: 'homePage' })" class="text-uppercase">
             Home
           </button>
         </li>
         <li>
-          <button @click="route('MenuPage')" class="text-uppercase">
+          <button @click="$router.push({ name: 'MenuPage' })" class="text-uppercase">
             Cardápio
           </button>
         </li>
         <li v-if="! hasPermission">
-          <button @click="route('MenuPage')" class="text-uppercase">
+          <button @click="$router.push({ name: 'MenuPage' })" class="text-uppercase">
             Sobre nós
           </button>
         </li>
         <li v-if="! hasPermission">
-          <button @click="route('MenuPage')" class="text-uppercase">
+          <button @click="$router.push({ name: 'MenuPage' })" class="text-uppercase">
             Contato
           </button>
         </li>
-        <li v-if="hasPermission" @click="showSubmenu = ! showSubmenu">
-          <button class="text-uppercase">Configurações</button>
-          <ul class="submenu" v-if="showSubmenu">
-            <li v-for="(link, index) in configOptions" :key="index" class="submenu-item">
-              <button @click="route(link.route)">{{ link.name }}</button>
-            </li>
-          </ul>
+        <li v-if="hasPermission">
+          <button class="text-uppercase">Pedidos</button>
         </li>
         <li class="logo">
-          <img src="@/assets/logo-pizza.png" alt="Pizzaria Basileus" />
+          <img @click="$router.push({ name: 'homePage' })" src="@/assets/logo-pizza.png" alt="Pizzaria Basileus" />
         </li>
       </ul>
     </nav>
   </header>
 
-  <SideBar />
-
-  <BusinessHoursModal
-    v-if="showModal && modalType === 'BusinessHours'"
-    @close="closeModal"
-  ></BusinessHoursModal>
-  <LimitPizzaModal
-    v-if="showModal && modalType === 'LimitPizza'"
-    @close="closeModal"
-  ></LimitPizzaModal>
+  <SideBar 
+    v-if="showSidebar"
+    @close="closeSidebar"
+  />
 </template>
 
 
@@ -190,55 +132,6 @@ export default {
       li:last-child {
         width: -webkit-fill-available;
         text-align: end;
-      }
-    }
-
-    .submenu {
-      width: auto;
-      display: flex;
-      flex-direction: column;
-      margin-top: 10px;
-      padding: 15px;
-      border-radius: 16px;
-      position: absolute;
-      background-color: var(--cor-primaria);
-      border: none;
-      line-height: 1.8;
-      font-size: 14px;
-      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-      z-index: 1;
-
-      &:before {
-        content: "▲";
-        position: absolute;
-        top: -30px;
-        left: 3px;
-        font-size: 33px;
-        color: #5f8a17;
-      }
-
-      .submenu-item {
-        margin: 0;
-        padding-bottom: 0.5rem;
-        width: 100%;
-        display: flex;
-        justify-content: flex-start;
-
-        button {
-          color: #ffffff;
-          background-color: transparent;
-          border: none;
-          cursor: pointer;
-          transition: color 0.3s;
-
-          &:hover {
-            color: var(--cor-secundaria);
-          }
-        }
-
-        &:last-child {
-          padding-bottom: 0;
-        }
       }
     }
   }

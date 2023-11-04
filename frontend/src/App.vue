@@ -1,14 +1,16 @@
 <template>
-  <HeaderPage v-if="! isLogin"></HeaderPage>
-  <div id="app" v-if="isAuth">
-    <div v-if="$auth.ready()">
-      <div class="content">
-        <router-view></router-view>
+  <div id="app">
+    <HeaderPage v-if="! isLogin"></HeaderPage>
+    <div v-if="isAuth">
+      <div v-if="$auth.ready()">
+        <div class="content">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
-  </div>
-  <div v-else>
-    <router-view></router-view>
+    <div v-else>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 

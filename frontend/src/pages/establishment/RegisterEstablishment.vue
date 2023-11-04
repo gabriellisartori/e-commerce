@@ -53,7 +53,7 @@ export default {
 
 <template>
     <div class="content-page">
-         <h2 class="title">CADASTRO DE ESTABELECIMENTO</h2>
+         <h2 class="title">Cadastrar estabelecimento</h2>
         <form @submit.prevent="handleSubmit">
             <div class="container">
                 <div class="column">
@@ -72,7 +72,7 @@ export default {
                         <BaseInput v-model="numero" label="Número" class="input grid"></BaseInput>
                         <BaseInput v-model="complemento" label="Complemento" class="input grid"></BaseInput>
                     </div>
-                    <button type="submit" class="button login filled" @click="saveEstablishment">ENTRAR</button>
+                    <base-button class="login" @click="saveEstablishment">ENTRAR</base-button>
                 </div>
             </div>
         </form>
@@ -95,6 +95,7 @@ export default {
         width: 70%; 
         margin: 0 auto;
         margin-top: 20px;
+        height: calc(100vh - 200px);
 
         .column{
             .input{

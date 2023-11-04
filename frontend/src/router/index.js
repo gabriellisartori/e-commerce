@@ -6,8 +6,9 @@ import IngredientPage from '../pages/establishment/IngredientPage.vue'
 import CategoryPage from '../pages/establishment/CategoryPage.vue'
 import MenuPageVue from '@/pages/establishment/MenuPage.vue';
 import PromotionPage from '../pages/establishment/PromotionPage.vue'
-/* import LimitPizzaModal from '../components/LimitPizzaModal.vue'
- */
+import BusinessHoursModal from '../components/businessHours/BusinessHoursModal.vue'
+import LimitPizzaPage from '../pages/establishment/LimitPizzaPage.vue'
+
 const routes = [
   { 
     path: '/', 
@@ -22,7 +23,7 @@ const routes = [
     }
   },
   {
-    path: '/registrar',
+    path: '/registrar-estabelecimento',
     name: 'RegisterEstablishment',
     component: RegisterEstablishment,
     meta: {
@@ -39,13 +40,16 @@ const routes = [
     name: 'MenuPage',
     component: MenuPageVue,
   },
-  /* {
-    path: '/limit',
-    name: 'LimitPizzaModal',
-    component: LimitPizzaModal,
-  }, */
   {
-    path: '/ingredient',
+    path: '/limite-diario-de-pizzas',
+    name: 'LimitPizzaPage',
+    component: LimitPizzaPage,
+    meta: {
+      auth: true,
+    }
+  },
+  {
+    path: '/ingredientes',
     name: 'IngredientPage',
     component: IngredientPage,
     meta: {
@@ -53,7 +57,7 @@ const routes = [
     }
   },
   {
-    path: '/category',
+    path: '/categorias',
     name: 'CategoryPage',
     component: CategoryPage,
     meta: {
@@ -61,9 +65,17 @@ const routes = [
     }
   },
   {
-    path: '/promotion',
+    path: '/promocoes',
     name: 'PromotionPage',
     component: PromotionPage,
+    meta: {
+      auth: true,
+    }
+  },
+  {
+    path: '/horario',
+    name: 'BusinessHoursModal',
+    component: BusinessHoursModal,
     meta: {
       auth: true,
     }

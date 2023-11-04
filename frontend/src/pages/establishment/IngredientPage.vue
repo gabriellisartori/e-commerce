@@ -69,7 +69,7 @@ export default {
 <template>
   <div>
     <div class="page-header-options">
-      <h3 class="title">INGREDIENTES</h3>
+      <h2 class="title">Ingredientes</h2>
       <base-button isTransparent color="dark-green" @onClick="showModal = true"> Adicionar </base-button>
     </div>
 

@@ -39,8 +39,6 @@ export default {
 
           if (!this.form.hasAdditional) {
             this.form.additional = null;
-            console.log(this.form)
-
           }
 
           await this.$http.put(`/ingredients/${this.id}`, this.form);
@@ -67,7 +65,6 @@ export default {
       try {
         const { data } = await this.$http.get(`/ingredients/${this.id}`);
         this.form = data;
-        console.log(data);
         if (this.form.additional && this.form.additional.value !== null) {
           this.form.hasAdditional = true;
           this.form.value = this.form.additional.value;
@@ -79,7 +76,6 @@ export default {
       }
     },
     handleSwitchChange(newValue) {
-      console.log('Novo valor:', newValue);
       this.form.hasAdditional = newValue;
     },
   },

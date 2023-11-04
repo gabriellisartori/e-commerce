@@ -102,7 +102,8 @@ export default {
 
     .baseInput {
         border: 1px solid var(--cor-primaria);
-        height: 40px;
+        height: 20px;
+        padding: 10px;
         border-radius: 16px;
         width: -webkit-fill-available;
         margin-top: 10px;

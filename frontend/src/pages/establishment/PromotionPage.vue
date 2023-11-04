@@ -1,8 +1,8 @@
 <template>
-  <div class="content">
+  <div>
     <div class="page-header-options">
-      <h3 class="title text-uppercase">Promoções</h3>
-      <base-button isTransparent color="dark-green" @onClick="showModal = true"> Adicionar </base-button>
+      <h2 class="title">Promoções</h2>
+      <base-button isTransparent color="dark-green" @onClick="addPromotion()"> Adicionar </base-button>
     </div>
   </div>
   <div class="content-ingredient">
@@ -49,6 +49,10 @@ export default {
     },
     openModal (promotion) {
       this.id = promotion.id;
+      this.showModal = true;
+    },
+    addPromotion() {
+      this.id = null;
       this.showModal = true;
     },
     async deletePromotion (promotionId) {

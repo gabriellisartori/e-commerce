@@ -47,9 +47,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
-import { faUserSecret, faXmark, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten } from '@fortawesome/free-solid-svg-icons'
 /* add icons to the library */
-library.add(faUserSecret, faXmark, faPenToSquare, faTrash)
+library.add(faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten)
 app.component('font-awesome-icon', FontAwesomeIcon);
 
 // Vue3 Toastify
