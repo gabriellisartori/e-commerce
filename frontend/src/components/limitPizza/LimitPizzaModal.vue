@@ -2,6 +2,7 @@
 import BaseDatePicker from '../generics/BaseDatePicker.vue';
 
 export default {
+  emits: ['close'], 
   data() {
     return {
       limit: '',
@@ -10,9 +11,13 @@ export default {
       endTime: '',
       showDatepicker: false,
       selectedDate: '',
+      showModal: false,
     };
   },
   methods: {
+    openModal() {
+      this.showModal = true;
+    },
     closeModal() {
       this.$emit('close');
     },
@@ -28,38 +33,21 @@ export default {
       this.endTime = newValue;
       console.log(this.endTime);
     },
-    showDatePicker() {
-      setTimeout(() => {
-        this.showDatepicker = true;
-        document.body.addEventListener('click', this.handleBodyClick);
-      }, 0);
-    },
-    onDateSelected(date) {
-      this.selectedDate = date;
-    },
-    handleBodyClick(event) {
-      if (!this.$refs.datePicker.$el.contains(event.target)) {
-        this.showDatepicker = false;
-        document.body.removeEventListener('click', this.handleBodyClick);
-      }
-    },
   },
   components: { BaseDatePicker },
 };
-
 </script>
 
 <template>
   <base-modal :modalTitle="modalTitle" @cancel="closeModal">
     <div class="div-settings">
       <base-input label="Limite" class="input name" v-model="limit" />
-      <base-input label="Data" @click="showDatePicker" v-model="selectedDate"></base-input>
+      <base-input label="Data" @click="showModal = true" class="input" @update:modelValue="updateStartTime" />
       <base-time label="Início" v-model="selectedTime" class="input" @update:modelValue="updateStartTime" />
       <base-time label="Fim" v-model="endTime" class="input" @update:modelValue="updateEndTime" />
     </div>
-
-    <BaseDatePicker v-if="showDatepicker" @date-selected="onDateSelected" ref="datePicker" @click.stop></BaseDatePicker>
   </base-modal>
+  <BaseDatePicker v-if="showModal" class="datepicker-modal"></BaseDatePicker>
 </template>
 
 <style lang="scss">
@@ -84,5 +72,9 @@ export default {
       font-size: 14px;
     }
   }
+}
+
+.datepicker-modal{
+  z-index: 9999;
 }
 </style>
