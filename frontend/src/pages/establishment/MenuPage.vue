@@ -14,9 +14,8 @@ export default {
                 name: 'Pizza Margherita',
                 value: 'R$60,00',
                 isAvailable: true,
-                showModal: false,
-
-            }
+            },
+            showModal: false,
         };
     },
 }

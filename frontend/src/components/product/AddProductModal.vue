@@ -1,10 +1,13 @@
 
 <script>
+import { toast } from "vue3-toastify";
 import BaseSwitch from '../generics/BaseSwitch.vue';
+import BaseDropzone from '../generics/BaseDropzone.vue';
 
 export default {
     components: {
         BaseSwitch,
+        BaseDropzone,
     },
     props: {
         id: {
@@ -16,8 +19,10 @@ export default {
         return {
             form: {
                 name: '',
+                value: '',
                 active: false,
             },
+            ingredients: [],
         };
     },
     computed: {
@@ -33,34 +38,60 @@ export default {
             try {
                 const { data } = await this.$http.get('/ingredients');
                 this.ingredients = data;
+                console.log(data)
             } catch (error) {
                 console.error(error);
             }
         },
+        async saveProduct() {
+      try {
+
+          await this.$http.post("/products", this.form);
+        
+
+        this.$emit("limitSave");
+        this.$emit("close");
+
+        toast.success("Salvo com sucesso!", {
+          position: toast.POSITION.BOTTOM_LEFT,
+        });
+      } catch (error) {
+        console.error("Erro ao salvar o limite diário de pizza:", error);
+      }
     },
+    },
+    mounted() {
+        this.fetchIngredients();
+    }
 };
 </script>
 
 <template>
-    <base-modal :modalTitle="modalTitle" @close="closeModal">
+    <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveProduct">
         <div class="components-grid">
             <div>
-                <base-input label="Nome" />
-                <base-input label="Valor" />
+                <base-input 
+                    label="Nome" 
+                    v-model="form.name"
+                    @update:modelValue="form.name = $event"    
+                />
+                <base-input 
+                    label="Valor"
+                    v-model="form.value"
+                    @update:modelValue="form.value = $event"
+                />
                 <base-input label="Categoria" />
                 <base-input label="Selecione a promoção" />
             </div>
             <div>
-                <!-- upload image -->
+                <BaseDropzone></BaseDropzone>
                 <base-input label="Valor promocional" />
             </div>
         </div>
         <p>Ingredientes</p>
         <div class="ingredient-content">
-            <base-chip-checkbox label="queijo" />
-            <base-chip-checkbox v-for="ingredient in ingredients" :key="ingredient.id" :label="ingredient.name" />
-            <base-chip-checkbox />
-            <base-chip-checkbox />
+            <base-chip-checkbox v-for="ingredient in ingredients" :key="ingredient.id" :label="ingredient.name"
+                :myCheckbox="`ingredient_${ingredient.id}`"  />
         </div>
 
         <p>Adicionais</p>
