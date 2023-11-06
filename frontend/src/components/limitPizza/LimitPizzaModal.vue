@@ -13,7 +13,6 @@ export default {
     return {
       form: {
         quantity: 0,
-        date: "",
       },
       showModal: false,
       showDateModal: false,
@@ -31,7 +30,7 @@ export default {
   },
   methods: {
     closeDateModal() {
-      this.$emit("close");
+      this.showDateModal = false;
     },
     closeModal() {
       this.$emit("close");
@@ -57,6 +56,7 @@ export default {
             this.form
           );
         } else {
+          console.log(this.form)
           await this.$http.post("/daily-pizza-sale-limits", this.form);
         }
 
@@ -75,11 +75,14 @@ export default {
         const { data } = await this.$http.get(
           `/daily-pizza-sale-limits/${this.id}`
         );
+
         this.form = data;
+        this.form.date = moment(data.date).format("DD/MM/YYYY");
       } catch (error) {
         console.error(error);
       }
     },
+
   },
   mounted() {
     if (this.id) {
@@ -97,19 +100,17 @@ export default {
         label="Quantidade" 
         type="number" 
         class="input"
-        :placeholder="'Quantidade de pizzas'"
+        :placeholder="'Quantidade de pizzas'" 
         @update:modelValue="form.quantity = $event" 
       />
-      <base-input 
-        label="Data" 
-        v-model="form.date" 
-        class="input date" 
-        @date-selected="form.date = $event"
-        @click="showDateModal = true"
+
+      <base-date 
+        :showModal="showDateModal" 
+        @date-selected="updateDate" 
+        :formattedDate="formattedDate" 
       />
     </div>
   </base-modal>
-  <base-date v-if="showDateModal" @date-selected="updateDate" :formattedDate="form.date" @close="closeModal"></base-date>
 </template>
 
 <style lang="scss">

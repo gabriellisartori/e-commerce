@@ -41,6 +41,9 @@ app.component('base-time', BaseTime);
 import BaseSwitch from './components/generics/BaseSwitch.vue';
 app.component('base-switch', BaseSwitch)
 
+import BaseSelect from './components/generics/BaseSelect.vue'
+app.component('base-select', BaseSelect)
+
 // Font Awesome
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'

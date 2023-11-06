@@ -4,56 +4,53 @@ import { format } from 'date-fns';
 
 export default {
   props: {
-    formattedDate: String,
-    modelValue: String,
+    formattedDate: Date,
   },
   data() {
     return {
+      form: {
+        date: '',
+      },
       showModal: false,
+      showDatePicker: false,
     };
   },
   methods: {
     closeModal() {
       this.showModal = false;
+      this.showDatePicker = false;
       this.$emit('close');
     },
     onDateSelected() {
       const formattedDate = format(this.date, 'dd/MM/yyyy');
-      console.log(formattedDate)
+      this.form.date = formattedDate;
       this.$emit('date-selected', formattedDate);
-    },
-    openModal() {
-      this.showModal = true;
-    },
+      this.showDatePicker = false;
+    }
   },
 
   setup(props) {
     const date = ref(new Date(props.formattedDate + 'T00:00:00'));
-    console.log(props.formattedDate)
 
-    const attrs = ref([
-      {
-        key: 'today',
-        highlight: 'red',
-        dates: new Date(),
-      },
-    ]);
-
-    return { date, attrs };
+    return { date };
   }
 };
 </script>
 
 <template>
-  <base-modal @close="closeModal" :showButtons="false">
-    <VDatePicker v-model="date" color="green" mode="date" id="calendar" @click="onDateSelected" />
-  </base-modal>
+  <div>
+    <base-input label="Data" v-model="form.date" class="input date" @click="showDatePicker = true" />
+    <base-modal @close="closeModal" :showButtons="false" v-if="showDatePicker">
+      <VDatePicker v-model="date" color="green" mode="date" class="calendar" @click="onDateSelected" />
+    </base-modal>
+  </div>
 </template>
 
 <style lang="scss">
-#calendar{
+.calendar {
   margin: 0 auto;
-  border: 1px solid var( --cor-primaria);
+  border: 1px solid var(--cor-primaria);
+
 }
 </style>
 

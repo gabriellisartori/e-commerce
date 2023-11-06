@@ -23,11 +23,15 @@ export default {
                 active: false,
             },
             ingredients: [],
+            categories: [],
         };
     },
     computed: {
         modalTitle() {
             return this.id ? 'Editar produto' : 'Adicionar produto';
+        },
+        filteredIngredients() {
+            return this.ingredients.filter(ingredient => ingredient.additional !== null && ingredient.additional !== undefined);
         }
     },
     methods: {
@@ -38,30 +42,49 @@ export default {
             try {
                 const { data } = await this.$http.get('/ingredients');
                 this.ingredients = data;
-                console.log(data)
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async fetchCategories() {
+            try {
+                const { data } = await this.$http.get('/categories');
+                this.categories = data;
+                console.log('categorias ', this.categories)
+
             } catch (error) {
                 console.error(error);
             }
         },
         async saveProduct() {
-      try {
+            try {
+                const formData = new FormData();
+                formData.append('name', this.form.name);
+                formData.append('value', this.form.value);
+                formData.append('active', this.form.active);
+                formData.append('category_id', this.form.category_id);
 
-          await this.$http.post("/products", this.form);
-        
+                for (let i = 0; i < this.ingredients.length; i++) {
+                    formData.append(`ingredients[${i}][id]`, this.ingredients[i].id);
+                }
 
-        this.$emit("limitSave");
-        this.$emit("close");
+                await this.$http.post("/products", formData)
+                
 
-        toast.success("Salvo com sucesso!", {
-          position: toast.POSITION.BOTTOM_LEFT,
-        });
-      } catch (error) {
-        console.error("Erro ao salvar o limite diário de pizza:", error);
-      }
-    },
+                this.$emit("limitSave");
+                this.$emit("close");
+
+                toast.success("Salvo com sucesso!", {
+                    position: toast.POSITION.BOTTOM_LEFT,
+                });
+            } catch (error) {
+                console.error("Erro ao salvar o limite diário de pizza:", error);
+            }
+        },
     },
     mounted() {
         this.fetchIngredients();
+        this.fetchCategories();
     }
 };
 </script>
@@ -70,17 +93,11 @@ export default {
     <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveProduct">
         <div class="components-grid">
             <div>
-                <base-input 
-                    label="Nome" 
-                    v-model="form.name"
-                    @update:modelValue="form.name = $event"    
-                />
-                <base-input 
-                    label="Valor"
-                    v-model="form.value"
-                    @update:modelValue="form.value = $event"
-                />
-                <base-input label="Categoria" />
+                <base-input label="Nome" v-model="form.name" @update:modelValue="form.name = $event" />
+                <base-input label="Valor" v-model="form.value" @update:modelValue="form.value = $event" />
+                <base-select :options="categories" v-model="form.category_id" />
+
+
                 <base-input label="Selecione a promoção" />
             </div>
             <div>
@@ -91,19 +108,15 @@ export default {
         <p>Ingredientes</p>
         <div class="ingredient-content">
             <base-chip-checkbox v-for="ingredient in ingredients" :key="ingredient.id" :label="ingredient.name"
-                :myCheckbox="`ingredient_${ingredient.id}`"  />
+                :myCheckbox="`ingredient_${ingredient.id}`" />
         </div>
 
         <p>Adicionais</p>
 
         <div class="additional-content">
-            <div class="item">
-                <BaseSwitch label="Queijo" v-model="form.active" />
-                <base-input label="Valor" />
-            </div>
-            <div class="item">
-                <BaseSwitch label="Queijo" v-model="form.active" />
-                <base-input label="Valor" />
+            <div class="item" v-for="ingredient in filteredIngredients" :key="ingredient.id">
+                <BaseSwitch :label="`${ingredient.name}`" />
+                <base-input label="Valor" v-model="ingredient.additional.value" />
             </div>
         </div>
     </base-modal>
