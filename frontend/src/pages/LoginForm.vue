@@ -1,6 +1,8 @@
 <script>
 import BaseInput from '@/components/generics/BaseInput.vue';
 import BasePassword from '@/components/generics/BasePassword.vue';
+import { useVuelidate } from '@vuelidate/core';
+import { required$, email$ } from "../store/validators";
 
 export default {
     components: {
@@ -10,11 +12,25 @@ export default {
     data() {
         return {
             email: '',
-            password: ''
+            password: '',
+            v$: useVuelidate(),
+            errorMessage: '',
+            error: false
+        }
+    },
+    validations () {
+        return {
+            email: { required$, email$ },
+            password: { required$ }
         }
     },
     methods: {
         async handleSubmit() {
+            this.v$.$validate();
+            if (this.v$.$error) {
+              return;
+            }
+
             try {
                 await this.$auth.login({
 					data: {
@@ -23,6 +39,8 @@ export default {
 					},
 				});
             } catch (error) {
+                this.error = true;
+                this.errorMessage = error.response.data.error || "Falha no login.";
                 console.error(error);
             }
         }
@@ -68,6 +86,12 @@ export default {
                     :placeholder="'Digite seu email'"
                     @update:modelValue="email = $event"
                 />
+                <div
+                    :class="{ 'error-message': v$.email.$error }"
+                    v-if="v$.email.$error"
+                >
+                    {{ v$.email.$errors[0].$message }}
+                </div>
                 <BasePassword
                     v-model="password"
                     label="Senha"
@@ -75,6 +99,14 @@ export default {
                     :placeholder="'Digite sua senha'"
                     @update:modelValue="password = $event"
                 />
+                <div
+                  :class="{ 'error-message': v$.password.$error }"
+                  v-if="v$.password.$error"
+                >
+                  {{ v$.password.$errors[0].$message }}
+                </div>
+
+                <base-message v-if="error" :errorMessage="errorMessage" />
 
                 <div class="buttons">
                     <base-button
@@ -218,13 +250,13 @@ export default {
 
             .password-input {
                 margin-top: 20px;
-                margin-bottom: 60px;
             }
 
             .buttons{
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                margin-top: 60px;
 
                 .enter{
                     width: 100%;

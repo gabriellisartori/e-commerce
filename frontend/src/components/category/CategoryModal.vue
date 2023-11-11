@@ -1,6 +1,8 @@
 <script>
-import BaseSwitch from '../generics/BaseSwitch.vue'
-import { toast } from 'vue3-toastify';
+import BaseSwitch from "../generics/BaseSwitch.vue";
+import { toast } from "vue3-toastify";
+import { useVuelidate } from "@vuelidate/core";
+import { required$ } from "../../store/validators";
 
 export default {
   components: {
@@ -10,43 +12,59 @@ export default {
     id: {
       type: Number,
       default: null,
-    }
+    },
   },
   data() {
     return {
       form: {
-        name: '',
+        name: "",
         active: false,
+      },
+      v$: useVuelidate(),
+      errorMessage: "",
+      error: false,
+    };
+  },
+  validations() {
+    return {
+      form: {
+        name: { required$ },
+        active: { required$ },
       },
     };
   },
   computed: {
     modalTitle() {
-      return this.id ? 'Editar categoria' : 'Adicionar categoria';
-    }
+      return this.id ? "Editar categoria" : "Adicionar categoria";
+    },
   },
   methods: {
     closeModal() {
-      this.$emit('close');
+      this.$emit("close");
     },
     async saveCategory() {
+      this.v$.$validate();
+      if (this.v$.$error) {
+        return;
+      }
       try {
         if (this.id) {
           this.form.id = this.id;
           await this.$http.put(`/categories/${this.id}`, this.form);
         } else {
-          await this.$http.post('/categories', this.form);
+          await this.$http.post("/categories", this.form);
         }
 
-        this.$emit('categorySave');
-        this.$emit('close');
+        this.$emit("categorySave");
+        this.$emit("close");
 
         toast.success("Salvo com sucesso!", {
           position: toast.POSITION.BOTTOM_LEFT,
         });
-
       } catch (error) {
-        console.error('Erro ao salvar a categoria:', error);
+        this.error = true;
+        this.errorMessage = "Erro ao salvar a categoria";
+        console.error("Erro ao salvar a categoria:", error);
       }
     },
     async getData() {
@@ -62,16 +80,30 @@ export default {
     if (this.id) {
       this.getData();
     }
-  }
+  },
 };
 </script>
 
 <template>
   <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveCategory">
     <div class="components">
-      <base-input v-model="form.name" label="Nome" class="input name" @update:modelValue="form.name = $event"/>
+      <div>
+        <base-input
+          v-model="form.name"
+          label="Nome"
+          class="input name"
+          @update:modelValue="form.name = $event"
+        />
+        <div
+          :class="{ 'error-message': v$.form.name.$error }"
+          v-if="v$.form.name.$error"
+        >
+          {{ v$.form.name.$errors[0].$message }}
+        </div>
+      </div>
       <BaseSwitch label="Ativo" id="active" v-model="form.active" />
     </div>
+    <base-message v-if="error" :errorMessage="errorMessage" />
   </base-modal>
 </template>
 
@@ -84,7 +116,7 @@ export default {
   margin: 0 auto;
 
   .name {
-    width: 65%;
+    width: 270px;
     margin-top: 40px;
     margin-bottom: 0px;
   }

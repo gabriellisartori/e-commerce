@@ -39,10 +39,13 @@ import BaseTime from './components/generics/BaseTimePicker.vue';
 app.component('base-time', BaseTime);
 
 import BaseSwitch from './components/generics/BaseSwitch.vue';
-app.component('base-switch', BaseSwitch)
+app.component('base-switch', BaseSwitch);
 
 import BaseSelect from './components/generics/BaseSelect.vue'
-app.component('base-select', BaseSelect)
+app.component('base-select', BaseSelect);
+
+import BaseMessage from './components/generics/BaseMessage.vue';
+app.component('base-message', BaseMessage);
 
 // Font Awesome
 /* import the fontawesome core */
@@ -50,9 +53,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
-import { faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
 /* add icons to the library */
-library.add(faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten)
+library.add(faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation)
 app.component('font-awesome-icon', FontAwesomeIcon);
 
 // Vue3 Toastify

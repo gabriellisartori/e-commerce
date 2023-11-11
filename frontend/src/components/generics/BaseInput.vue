@@ -39,7 +39,6 @@ export default {
 
 <style lang="scss">
 .base-input-div{
-    margin-bottom: 20px;
 
 /*     .base-label {
         display: block;

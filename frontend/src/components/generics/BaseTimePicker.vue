@@ -97,6 +97,10 @@ export default {
     font-weight: 700;
 }
 
+.time-picker {
+    margin-top: 1rem;
+}
+
 .input {
     width: 22%;
 
@@ -120,6 +124,7 @@ export default {
         justify-content: space-between;
         position: absolute;
         background: white;
+        z-index: 9999;
     }
 
 

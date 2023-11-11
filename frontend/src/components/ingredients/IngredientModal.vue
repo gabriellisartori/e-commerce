@@ -1,6 +1,8 @@
 <script>
-import { toast } from 'vue3-toastify';
-import BaseSwitch from '../generics/BaseSwitch.vue'
+import { toast } from "vue3-toastify";
+import BaseSwitch from "../generics/BaseSwitch.vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required$ } from "../../store/validators";
 
 export default {
   components: {
@@ -9,31 +11,47 @@ export default {
   props: {
     id: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
       form: {
-        name: '',
+        name: "",
         value: 0,
         hasAdditional: false,
         additional: null,
+      },
+      v$: useVuelidate(),
+      errorMessage: "",
+      error: false,
+    };
+  },
+  validations() {
+    return {
+      form: {
+        name: { required$ },
+        value: { required$ },
+        hasAdditional: { required$ },
       },
     };
   },
   computed: {
     modalTitle() {
-      return this.id ? 'Editar ingrediente' : 'Adicionar ingrediente';
-    }
+      return this.id ? "Editar ingrediente" : "Adicionar ingrediente";
+    },
   },
   methods: {
     closeModal() {
-      this.$emit('close');
+      this.$emit("close");
     },
     async saveIngredient() {
-      try {
+      this.v$.$validate();
+      if (this.v$.$error) {
+        return;
+      }
 
+      try {
         if (this.id) {
           this.form.id = this.id;
 
@@ -47,18 +65,19 @@ export default {
             this.form.additional = null;
           }
 
-          await this.$http.post('/ingredients', this.form);
+          await this.$http.post("/ingredients", this.form);
         }
 
-        this.$emit('ingredientSave');
-        this.$emit('close');
+        this.$emit("ingredientSave");
+        this.$emit("close");
 
         toast.success("Salvo com sucesso!", {
           position: toast.POSITION.BOTTOM_LEFT,
         });
-
       } catch (error) {
-        console.error('Erro ao salvar o ingrediente:', error);
+        this.error = true;
+        this.errorMessage = "Erro ao salvar o ingrediente";
+        console.error("Erro ao salvar o ingrediente:", error);
       }
     },
     async getData() {
@@ -83,24 +102,58 @@ export default {
     if (this.id) {
       this.getData();
     }
-  }
+  },
 };
-
 </script>
 
 <template>
-  <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveIngredient">
+  <base-modal
+    :modalTitle="modalTitle"
+    @close="closeModal"
+    @save="saveIngredient"
+  >
     <div class="components">
       <div class="infos">
-        <base-input v-model="form.name" label="Nome" class="input value" />
-        <base-switch label="Adicional" v-model="form.hasAdditional" id="name" @update:modelValue="handleSwitchChange" />
+        <div>
+          <base-input v-model="form.name" label="Nome" class="input value" />
+          <div
+            :class="{ 'error-message': v$.form.name.$error }"
+            v-if="v$.form.name.$error"
+          >
+            {{ v$.form.name.$errors[0].$message }}
+          </div>
+        </div>
+
+        <base-switch
+          label="Adicional"
+          v-model="form.hasAdditional"
+          id="name"
+          @update:modelValue="handleSwitchChange"
+        />
+        <div
+          :class="{ 'error-message': v$.form.hasAdditional.$error }"
+          v-if="v$.form.hasAdditional.$error"
+        >
+          {{ v$.form.hasAdditional.$errors[0].$message }}
+        </div>
       </div>
 
       <div>
-        <base-input v-if="form.hasAdditional" v-model="form.value" label="Valor Adicional"
-          class="input value additional" />
+        <base-input
+          v-if="form.hasAdditional"
+          v-model="form.value"
+          label="Valor Adicional"
+          class="input value additional"
+        />
+        <div
+          :class="{ 'error-message': v$.form.value.$error }"
+          v-if="v$.form.value.$error"
+        >
+          {{ v$.form.value.$errors[0].$message }}
+        </div>
       </div>
     </div>
+    <base-message v-if="error" :errorMessage="errorMessage" />
   </base-modal>
 </template>
       
@@ -110,7 +163,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
 
   .infos {
@@ -120,7 +173,7 @@ export default {
   }
 
   .value {
-    width: 65%;
+    width: 450px;
     margin-top: 40px;
     margin-bottom: 0px;
 
