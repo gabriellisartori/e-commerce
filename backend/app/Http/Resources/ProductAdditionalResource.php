@@ -18,7 +18,7 @@ class ProductAdditionalResource extends JsonResource
         $additional = Additional::find($this->additional_id);
         return [
             'id' => $additional->id,
-            'value' => $additional->value,
+            'value' => $additional->additional_value,
             'name' => $additional->ingredient->name,
         ];
     }
