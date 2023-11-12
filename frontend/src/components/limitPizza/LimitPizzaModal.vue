@@ -1,6 +1,8 @@
 <script>
 import { toast } from "vue3-toastify";
 import moment from "moment";
+import { useVuelidate } from "@vuelidate/core";
+import { required$ } from "../../store/validators";
 
 export default {
   props: {
@@ -12,10 +14,22 @@ export default {
   data() {
     return {
       form: {
-        quantity: 0,
+        quantity: null,
+        date: null,
       },
       showModal: false,
       showDateModal: false,
+      v$: useVuelidate(),
+      errorMessage: "",
+      error: false,
+    };
+  },
+  validations() {
+    return {
+      form: {
+        quantity: { required$ },
+        date: { required$ },
+      },
     };
   },
   computed: {
@@ -25,8 +39,8 @@ export default {
         : "Adicionar limite diário de pizzas";
     },
     formattedDate() {
-      return this.form.date ? moment(this.form.date).format("DD/MM/YYYY") : '';
-    }
+      return this.form.date ? moment(this.form.date).format("DD/MM/YYYY") : "";
+    },
   },
   methods: {
     closeDateModal() {
@@ -37,26 +51,32 @@ export default {
     },
     updateDate(selectedDate) {
       this.form.date = selectedDate;
-      console.log("data recebida", this.form.date)
+      console.log("data recebida", this.form.date);
       this.showDateModal = false;
     },
     async saveLimit() {
+      this.v$.$validate();
+      if (this.v$.$error) {
+        return;
+      }
+
       try {
         if (this.id) {
           this.form.id = this.id;
 
-
           let dataString = this.form.date;
-          let dataFormatada = moment(dataString, 'DD/MM/YYYY').format('YYYY-MM-DD');
+          let dataFormatada = moment(dataString, "DD/MM/YYYY").format(
+            "YYYY-MM-DD"
+          );
           this.form.date = dataFormatada;
 
-          console.log(this.form)
+          console.log(this.form);
           await this.$http.put(
             `/daily-pizza-sale-limits/${this.id}`,
             this.form
           );
         } else {
-          console.log(this.form)
+          console.log(this.form);
           await this.$http.post("/daily-pizza-sale-limits", this.form);
         }
 
@@ -67,6 +87,8 @@ export default {
           position: toast.POSITION.BOTTOM_LEFT,
         });
       } catch (error) {
+        this.error = true;
+        this.errorMessage = "Erro ao salvar o limite diário de pizza";
         console.error("Erro ao salvar o limite diário de pizza:", error);
       }
     },
@@ -82,7 +104,6 @@ export default {
         console.error(error);
       }
     },
-
   },
   mounted() {
     if (this.id) {
@@ -95,21 +116,38 @@ export default {
 <template>
   <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveLimit">
     <div class="limit-pizza">
-      <base-input 
-        v-model="form.quantity" 
-        label="Quantidade" 
-        type="number" 
-        class="input"
-        :placeholder="'Quantidade de pizzas'" 
-        @update:modelValue="form.quantity = $event" 
-      />
+      <div>
+        <base-input
+          v-model="form.quantity"
+          label="Quantidade"
+          type="number"
+          class="input"
+          :placeholder="'Quantidade de pizzas'"
+          @update:modelValue="form.quantity = $event"
+        />
+        <div
+          :class="{ 'error-message': v$.form.quantity.$error }"
+          v-if="v$.form.quantity.$error"
+        >
+          {{ v$.form.quantity.$errors[0].$message }}
+        </div>
+      </div>
 
-      <base-date 
-        :showModal="showDateModal" 
-        @date-selected="updateDate" 
-        :formattedDate="formattedDate" 
-      />
+      <div>
+        <base-date
+          :showModal="showDateModal"
+          @date-selected="updateDate"
+          :formattedDate="formattedDate"
+        />
+        <div
+          :class="{ 'error-message': v$.form.date.$error }"
+          v-if="v$.form.date.$error"
+        >
+          {{ v$.form.date.$errors[0].$message }}
+        </div>
+      </div>
     </div>
+    <base-message v-if="error" :errorMessage="errorMessage" />
   </base-modal>
 </template>
 
