@@ -33,8 +33,8 @@ export default {
     computed: {
         modalTitle() {
             return this.id
-                ? "Editar limite diário de pizzas"
-                : "Adicionar limite diário de pizzas";
+                ? "Editar produto"
+                : "Adicionar produto";
         },
         filteredIngredients() {
             return this.storeIngredients.filter(ingredient => ingredient.additional !== null && ingredient.additional !== undefined);

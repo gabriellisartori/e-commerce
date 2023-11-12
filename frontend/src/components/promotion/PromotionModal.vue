@@ -1,79 +1,53 @@
 <template>
   <div class="promotion-modal">
-    <base-modal
-      :modalTitle="modalTitle"
-      @cancel="closeModal"
-      @close="closeModal"
-      @save="submit"
-    >
-      <base-input label="Nome" class="input name" v-model="promotion.name" />
-      <div
-        :class="{ 'error-message': v$.promotion.name.$error }"
-        v-if="v$.promotion.name.$error"
-      >
+    <base-modal :modalTitle="modalTitle" @cancel="closeModal" @close="closeModal" @save="submit">
+      <base-input 
+        label="Nome" 
+        class="input name" 
+        v-model="promotion.name" 
+      />
+      <div :class="{ 'error-message': v$.promotion.name.$error }" v-if="v$.promotion.name.$error">
         {{ v$.promotion.name.$errors[0].$message }}
       </div>
 
       <div class="content">
         <div class="content-message-error">
-          <base-date
-            label="Dia de início"
-            v-model="promotion.start_date"
-            type="date"
+          <base-date label="Dia de início" 
+            v-model="promotion.start_date" 
+            type="date" 
             class="input date"
-            @update:modelValue="promotion.start_date = $event"
-          ></base-date>
-          <div
-            :class="{ 'error-message': v$.promotion.start_date.$error }"
-            v-if="v$.promotion.start_date.$error"
-          >
+            @date-selected="updateStartDate" 
+            @update:modelValue="promotion.start_date = $event">
+          </base-date>
+          <div :class="{ 'error-message': v$.promotion.start_date.$error }" v-if="v$.promotion.start_date.$error">
             {{ v$.promotion.start_date.$errors[0].$message }}
           </div>
         </div>
 
         <div>
-          <base-time
-            label="Hora de início"
-            v-model="promotion.start_time"
+          <base-time 
+            label="Hora de início" 
+            v-model="promotion.start_time" 
             class="input"
-            @update:modelValue="promotion.start_time = $event"
-          />
-          <div
-            :class="{ 'error-message': v$.promotion.start_time.$error }"
-            v-if="v$.promotion.start_time.$error"
-          >
+            @update:modelValue="promotion.start_time = $event" />
+          <div :class="{ 'error-message': v$.promotion.start_time.$error }" v-if="v$.promotion.start_time.$error">
             {{ v$.promotion.start_time.$errors[0].$message }}
           </div>
         </div>
       </div>
       <div class="content">
         <div class="content-message-error">
-          <base-date
-            label="Dia final"
-            v-model="promotion.end_date"
-            type="date"
-            class="input date"
-            @update:modelValue="promotion.end_date = $event"
-          ></base-date>
-          <div
-            :class="{ 'error-message': v$.promotion.end_date.$error }"
-            v-if="v$.promotion.end_date.$error"
-          >
+          <base-date label="Dia final" v-model="promotion.end_date" type="date" class="input date"
+            @date-selected="updateEndDate" @update:modelValue="promotion.end_date = $event"></base-date>
+          <div :class="{ 'error-message': v$.promotion.end_date.$error }" v-if="v$.promotion.end_date.$error">
             {{ v$.promotion.end_date.$errors[0].$message }}
           </div>
         </div>
 
         <div>
-          <base-time
-            label="Hora final"
-            v-model="promotion.end_time"
-            class="input"
-            @update:modelValue="promotion.end_time"
-          />
-          <div
-            :class="{ 'error-message': v$.promotion.end_time.$error }"
-            v-if="v$.promotion.end_time.$error"
-          >
+          <base-time label="Hora final" v-model="promotion.end_time" class="input"
+            @update:modelValue="promotion.end_time" />
+          <div :class="{ 'error-message': v$.promotion.end_time.$error }" v-if="v$.promotion.end_time.$error">
             {{ v$.promotion.end_time.$errors[0].$message }}
           </div>
         </div>
@@ -130,11 +104,21 @@ export default {
     closeModal() {
       this.$emit("close");
     },
+    updateStartDate(selectedDate) {
+      this.promotion.start_date = selectedDate;
+      console.log("data recebida", this.promotion.start_date);
+      this.showDateModal = false;
+    },
+    updateEndDate(selectedDate) {
+      this.promotion.end_date = selectedDate;
+      console.log("data final recebida", this.promotion.end_date);
+      this.showDateModal = false;
+    },
     async getData() {
       try {
         const { data } = await this.$http.get(`/promotions/${this.id}`);
         this.promotion = data;
-        console.log(this.promotion.name);
+        console.log(this.promotion.end_date);
       } catch (error) {
         console.error(error);
       }
@@ -188,7 +172,7 @@ export default {
     }
 
     .input {
-        width: 100%;
+      width: 100%;
     }
   }
 }

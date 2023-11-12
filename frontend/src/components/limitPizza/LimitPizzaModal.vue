@@ -38,9 +38,6 @@ export default {
         ? "Editar limite diário de pizzas"
         : "Adicionar limite diário de pizzas";
     },
-    formattedDate() {
-      return this.form.date ? moment(this.form.date).format("DD/MM/YYYY") : "";
-    },
   },
   methods: {
     closeDateModal() {
@@ -99,8 +96,8 @@ export default {
         );
 
         this.form = data;
-        this.form.date = moment(data.date).format("DD/MM/YYYY");
-      } catch (error) {
+/*         this.form.date = moment(data.date).format("DD/MM/YYYY");
+ */      } catch (error) {
         console.error(error);
       }
     },
@@ -135,9 +132,10 @@ export default {
 
       <div>
         <base-date
-          :showModal="showDateModal"
+          v-model="form.date" 
+          type="date" 
           @date-selected="updateDate"
-          :formattedDate="formattedDate"
+          @update:modelValue="form.date = $event"
         />
         <div
           :class="{ 'error-message': v$.form.date.$error }"

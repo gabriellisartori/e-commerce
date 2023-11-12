@@ -1,10 +1,10 @@
 <script>
-import { ref } from 'vue';
-import { format } from 'date-fns';
+/* import { ref, watch } from 'vue';
+ */import { format, parseISO   } from 'date-fns';
 
 export default {
   props: {
-    formattedDate: Date,
+    modelValue: String
   },
   data() {
     return {
@@ -15,6 +15,22 @@ export default {
       showDatePicker: false,
     };
   },
+  watch: {
+    modelValue: {
+      immediate: true,
+      handler(newVal) {
+        console.log('emtrei')
+        const dateObject = parseISO(newVal);
+
+        if (!isNaN(dateObject)) {
+          const formattedDate = format(dateObject, 'dd/MM/yyyy');
+          this.form.date = formattedDate;
+        } else {
+          console.error("Invalid date value");
+        }
+      },
+    },
+  },
   methods: {
     closeModal() {
       this.showModal = false;
@@ -22,18 +38,20 @@ export default {
       this.$emit('close');
     },
     onDateSelected() {
-      const formattedDate = format(this.date, 'dd/MM/yyyy');
-      this.form.date = formattedDate;
-      this.$emit('date-selected', formattedDate);
-      this.showDatePicker = false;
-    }
+      const selectedDate = this.date;
+
+      if (selectedDate instanceof Date && !isNaN(selectedDate)) {
+        console.log('www')
+        const formattedDate = format(selectedDate, 'dd/MM/yyyy');
+        this.form.date = formattedDate;
+        this.$emit('date-selected', formattedDate);
+        this.showDatePicker = false;
+      } else {
+        console.error("Invalid date value");
+      }
+    },
   },
 
-  setup(props) {
-    const date = ref(new Date(props.formattedDate + 'T00:00:00'));
-
-    return { date };
-  }
 };
 </script>
 
