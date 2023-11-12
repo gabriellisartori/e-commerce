@@ -1,4 +1,3 @@
-
 <script>
 import { toast } from "vue3-toastify";
 import BaseSwitch from '../generics/BaseSwitch.vue';
@@ -17,21 +16,28 @@ export default {
     },
     data() {
         return {
+            selectedFilePath: '',
             form: {
                 name: '',
+                image: '',
                 value: '',
-                active: false,
+                active: true,
+                ingredients: [],
+                promotion: [],
+                additional: []
             },
-            ingredients: [],
+            storeIngredients: [],
             categories: [],
         };
     },
     computed: {
         modalTitle() {
-            return this.id ? 'Editar produto' : 'Adicionar produto';
+            return this.id
+                ? "Editar limite diário de pizzas"
+                : "Adicionar limite diário de pizzas";
         },
         filteredIngredients() {
-            return this.ingredients.filter(ingredient => ingredient.additional !== null && ingredient.additional !== undefined);
+            return this.storeIngredients.filter(ingredient => ingredient.additional !== null && ingredient.additional !== undefined);
         }
     },
     methods: {
@@ -41,7 +47,7 @@ export default {
         async fetchIngredients() {
             try {
                 const { data } = await this.$http.get('/ingredients');
-                this.ingredients = data;
+                this.storeIngredients = data;
             } catch (error) {
                 console.error(error);
             }
@@ -50,7 +56,6 @@ export default {
             try {
                 const { data } = await this.$http.get('/categories');
                 this.categories = data;
-                console.log('categorias ', this.categories)
 
             } catch (error) {
                 console.error(error);
@@ -61,15 +66,25 @@ export default {
                 const formData = new FormData();
                 formData.append('name', this.form.name);
                 formData.append('value', this.form.value);
-                formData.append('active', this.form.active);
+                formData.append('active', this.form.active ? '1' : '0');
                 formData.append('category_id', this.form.category_id);
-
-                for (let i = 0; i < this.ingredients.length; i++) {
-                    formData.append(`ingredients[${i}][id]`, this.ingredients[i].id);
+                formData.append('image', this.form.image);
+                for (let i = 0; i < this.form.ingredients.length; i++) {
+                    formData.append(`ingredients[${i}][id]`, this.form.ingredients[i].id);
                 }
+                formData.append('promotion', this.form.promotion);
+                this.form.additional.forEach((add, index) => {
+                    formData.append(`additional[${index}][id]`, add.id);
+                    formData.append(`additional[${index}][active]`, add.active);
+                    formData.append(`additional[${index}][value]`, add.value);
+                });
 
-                await this.$http.post("/products", formData)
-                
+                console.log('mandando isso', formData)
+                await this.$http.post('/products', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
 
                 this.$emit("limitSave");
                 this.$emit("close");
@@ -78,13 +93,73 @@ export default {
                     position: toast.POSITION.BOTTOM_LEFT,
                 });
             } catch (error) {
-                console.error("Erro ao salvar o limite diário de pizza:", error);
+                console.error("Erro ao salvar o produto:", error);
             }
         },
+        async getData() {
+            try {
+                const { data } = await this.$http.get(
+                    `/products/${this.id}`
+                );
+
+                this.form = data;
+                console.log(this.form)
+            } catch (error) {
+                console.error(error);
+            }
+        },
+
+        handleCategoryChange(event) {
+            this.form.category_id = event.target.value;
+        },
+        handleSendFileToParent(file) {
+            if (file instanceof File) {
+                console.log('Arquivo recebido no componente pai:', file);
+                this.form.image = file; // Atribui o objeto File diretamente à propriedade form.image
+            } else {
+                console.error('O objeto recebido não é um arquivo válido:', file);
+            }
+        },
+
+        isIngredientSelected(ingredient) {
+            return this.form.ingredients.includes(ingredient);
+        },
+
+        handleCheckboxChange(ingredient) {
+            if (this.isIngredientSelected(ingredient)) {
+                this.form.ingredients = this.form.ingredients.filter(item => item !== ingredient);
+            } else {
+                this.form.ingredients.push(ingredient);
+            }
+        },
+        handleSwitchChange(ingredient) {
+            // Encontre o índice do ingrediente no array form.additional
+            const index = this.form.additional.findIndex((add) => add.id === ingredient.id);
+
+            if (ingredient.additional.active) {
+                // Se o switch estiver ativo, adicione o ingrediente a form.additional
+                if (index === -1) {
+                    this.form.additional.push({
+                        id: ingredient.id,
+                        active: ingredient.additional.active,
+                        value: ingredient.additional.value,
+                    });
+                }
+            } else {
+                // Se o switch estiver inativo, remova o ingrediente de form.additional
+                if (index !== -1) {
+                    this.form.additional.splice(index, 1);
+                }
+            }
+        },
+
     },
     mounted() {
         this.fetchIngredients();
         this.fetchCategories();
+        if (this.id) {
+            this.getData();
+        }
     }
 };
 </script>
@@ -92,30 +167,32 @@ export default {
 <template>
     <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveProduct">
         <div class="components-grid">
-            <div>
+            <div class="column">
                 <base-input label="Nome" v-model="form.name" @update:modelValue="form.name = $event" />
                 <base-input label="Valor" v-model="form.value" @update:modelValue="form.value = $event" />
-                <base-select :options="categories" v-model="form.category_id" />
-
+                <base-select label="Categoria" :options="categories" :selectedValue="categories.id"
+                    @change="handleCategoryChange($event)" />
 
                 <base-input label="Selecione a promoção" />
             </div>
-            <div>
-                <BaseDropzone></BaseDropzone>
+            <div class="column">
+                <BaseDropzone label="Imagem" :sendFileToParent="handleSendFileToParent" />
                 <base-input label="Valor promocional" />
             </div>
         </div>
         <p>Ingredientes</p>
         <div class="ingredient-content">
-            <base-chip-checkbox v-for="ingredient in ingredients" :key="ingredient.id" :label="ingredient.name"
-                :myCheckbox="`ingredient_${ingredient.id}`" />
+            <base-chip-checkbox v-for="ingredient in storeIngredients" :key="ingredient.id" :label="ingredient.name"
+                :myCheckbox="`ingredient_${ingredient.id}`" :modelValue="isIngredientSelected(ingredient)"
+                @change="handleCheckboxChange(ingredient)" />
         </div>
 
         <p>Adicionais</p>
 
         <div class="additional-content">
             <div class="item" v-for="ingredient in filteredIngredients" :key="ingredient.id">
-                <BaseSwitch :label="`${ingredient.name}`" />
+                <BaseSwitch :label="`${ingredient.name}`" :id="'active_' + ingredient.id"
+                    v-model="ingredient.additional.active" @change="handleSwitchChange(ingredient)" />
                 <base-input label="Valor" v-model="ingredient.additional.value" />
             </div>
         </div>
@@ -123,12 +200,56 @@ export default {
 </template>
 
 <style scoped lang="scss">
-.components-grid {
-    display: flex;
-
+:deep(.modal) {
+    max-width: none;
+    width: 55%;
 }
+
+.components-grid {
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    gap: 60px;
+
+    @media screen and (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 0px;
+    }
+}
+
+p {
+    color: var(--cor-fonte);
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+
 
 .additional-content {
     display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    @media screen and (max-width: 768px) {
+        flex-direction: column;
+
+        .item {
+            justify-content: space-around;
+        }
+    }
+
+    .item {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+
+        :deep(.switch) {
+            justify-content: flex-start;
+            margin-top: 0px;
+
+            .switch-label {
+                margin-top: 10px;
+            }
+        }
+    }
 }
 </style>

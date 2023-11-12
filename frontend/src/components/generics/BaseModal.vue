@@ -117,16 +117,13 @@ export default {
     opacity: 0.7;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
 
     .icon {
       cursor: pointer;
       font-size: 20px;
       color: var(--cor-fonte);
     }
-  }
-
-  .title {
-    margin-bottom: 20px;
   }
 
   .content-modal {

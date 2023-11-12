@@ -1,23 +1,31 @@
+<script>
+export default {
+  props: {
+    options: Array,
+    selectedValue: [String, Number],
+    label: String
+  }
+};
+</script>
+
 <template>
-    <select :value="selectedValue" class="form-control" @input="$emit('update:selectedValue', $event.target.value)">
+  <div>
+    <label class="base-label">{{label}}</label>
+
+    <select :value="selectedValue" class="form-control base-input">
+      <option value="" disabled selected>Selecione uma opção</option>
       <option v-for="option in options" :key="option.id" :value="option.id">
         {{ option.name }}
       </option>
     </select>
-  </template>
+  </div>
+</template>
   
-  <script>
-  export default {
-    props: {
-      options: Array,
-      selectedValue: [String, Number]
-    }
-  };
-  </script>
   
-  <style scoped lang="scss">
-  .form-control {
-    width: 200px;
-  }
-  </style>
+<style scoped lang="scss">
+.form-control {
+  height: 44px;
+  margin-bottom: 20px;
+}
+</style>
   

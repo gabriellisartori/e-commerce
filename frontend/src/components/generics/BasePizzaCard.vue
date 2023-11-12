@@ -1,15 +1,31 @@
 <script>
-import BaseSwitch from './BaseSwitch.vue';
 
 export default {
     props: {
         image: String,
         name: String,
         value: String,
-        switchValue: Boolean
+        active: Boolean,
+        hasEdit: {
+            type: Boolean,
+            required: false,
+            default: true,
+        },
     },
-    components: { BaseSwitch }
+    data() {
+        return {
+            switchValue: this.active,
+        };
+    },
+    methods: {
+        toggleSwitch() {
+            console.log(this.switchValue)
+            this.switchValue = !this.switchValue;
+            this.$emit('update:switchValue', this.switchValue);
+        },
+    },
 }
+
 </script>
 
 <template>
@@ -18,8 +34,11 @@ export default {
         <img class="pizza-image" src="../../assets/login.jpeg">
         <div class="pizza-infos">
             <h3 class="text-uppercase title">{{ name }}</h3>
-            <h3 class="title">{{ value }}</h3>
-            <BaseSwitch id="card" class="switch-menu"></BaseSwitch>
+            <h3 class="title">R$ {{ value }}</h3>
+            <base-switch id="card" class="switch-menu" v-model="switchValue"  @click="toggleSwitch"></base-switch>
+        </div>
+        <div v-if="hasEdit" class="icon" @click="$emit('edit')">
+            <font-awesome-icon icon="fa-solid fa-pen-to-square" />
         </div>
     </div>
 </template>
@@ -28,7 +47,7 @@ export default {
 .pizza-card {
     background-color: rgba(95, 138, 23, 0.6);
     border-radius: 16px;
-    width: 460px;
+    /* width: 460px; */
     height: 165px;
     display: flex;
 
@@ -38,6 +57,7 @@ export default {
     }
 
     .pizza-infos {
+        width: 100%;
         padding: 20px;
         line-height: 2;
 
@@ -48,6 +68,12 @@ export default {
         .switch-menu {
             margin-top: 10px;
         }
+    }
+
+    .icon {
+        padding: 20px;
+        color: var(--cor-fonte);
+        cursor: pointer;
     }
 }
 </style>

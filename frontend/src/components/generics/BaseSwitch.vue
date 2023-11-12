@@ -1,42 +1,3 @@
-<!-- <script>
-import { ref } from 'vue';
-
-export default {
-    props: ['modelValue', 'label'],
-    setup(props, { emit }) {
-        const inputValue = ref(props.modelValue);
-        console.log('Valor recebido pelo BaseSwitch:', inputValue.value);
-
-        const updateValue = (event) => {
-            const newValue = event.target.checked;
-            inputValue.value = newValue;
-            emit('update:modelValue', newValue);
-        };
-
-        return {
-            inputValue,
-            updateValue
-        };
-    }
-};
-</script> -->
-
-<!-- <template>
-    <div class="switch">
-        <p>{{ label }}</p>
-        <input type="checkbox" id="mySwitch" class="switch-input" v-model="inputValue" @change="updateValue">
-        <label for="mySwitch" class="switch-label"></label>
-    </div>
-</template> -->
-
-<template>
-    <div class="switch">
-        <p>{{ label }}</p>
-        <input type="checkbox" :id="id" class="switch-input" :checked="modelValue" @change="updateValue">
-        <label :for="id" class="switch-label"></label>
-    </div>
-</template>
-  
 <script>
 export default {
     props: ['modelValue', 'label', 'id'],
@@ -45,12 +6,22 @@ export default {
             const newValue = event.target.checked;
             this.$emit('update:modelValue', newValue);
         }
-    }
+    },
+    data() {
+        return {
+            isChecked: this.value || false,
+        };
+    },
 };
 </script>
 
-
-  
+<template>
+    <div class="switch">
+        <p>{{ label }}</p>
+        <input type="checkbox" :id="id" class="switch-input" :checked="modelValue" @change="updateValue">
+        <label :for="id" class="switch-label"></label>
+    </div>
+</template>  
 <style scoped lang="scss">
 .switch {
     display: flex;
