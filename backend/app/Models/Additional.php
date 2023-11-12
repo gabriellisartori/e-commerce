@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Additional extends Model
@@ -16,9 +17,9 @@ class Additional extends Model
         'value',
     ];
 
-    public function ingredient(): HasOne
+    public function ingredient(): BelongsTo
     {
-        return $this->hasOne(Ingredient::class);
+        return $this->belongsTo(Ingredient::class);
     }
 
     public function productAdditional(): HasOne

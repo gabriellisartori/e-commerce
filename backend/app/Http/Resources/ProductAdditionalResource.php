@@ -15,7 +15,7 @@ class ProductAdditionalResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $additional = Additional::find($this->additional_id);
+        $additional = Additional::find($this->additional_id)->load('ingredient');
         return [
             'id' => $additional->id,
             'value' => $additional->additional_value,
