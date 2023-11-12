@@ -24,7 +24,7 @@ export default {
                 active: true,
                 ingredients: [],
                 promotion: [],
-                additional: []
+                additional:[]
             },
             storeIngredients: [],
             categories: [],
@@ -73,11 +73,8 @@ export default {
                     formData.append(`ingredients[${i}][id]`, this.form.ingredients[i].id);
                 }
                 formData.append('promotion', this.form.promotion);
-                this.form.additional.forEach((add, index) => {
-                    formData.append(`additional[${index}][id]`, add.id);
-                    formData.append(`additional[${index}][active]`, add.active);
-                    formData.append(`additional[${index}][value]`, add.value);
-                });
+                formData.append('additional', this.form.additional);
+
 
                 console.log('mandando isso', formData)
                 await this.$http.post('/products', formData, {
@@ -132,27 +129,6 @@ export default {
                 this.form.ingredients.push(ingredient);
             }
         },
-        handleSwitchChange(ingredient) {
-            // Encontre o índice do ingrediente no array form.additional
-            const index = this.form.additional.findIndex((add) => add.id === ingredient.id);
-
-            if (ingredient.additional.active) {
-                // Se o switch estiver ativo, adicione o ingrediente a form.additional
-                if (index === -1) {
-                    this.form.additional.push({
-                        id: ingredient.id,
-                        active: ingredient.additional.active,
-                        value: ingredient.additional.value,
-                    });
-                }
-            } else {
-                // Se o switch estiver inativo, remova o ingrediente de form.additional
-                if (index !== -1) {
-                    this.form.additional.splice(index, 1);
-                }
-            }
-        },
-
     },
     mounted() {
         this.fetchIngredients();
@@ -170,8 +146,7 @@ export default {
             <div class="column">
                 <base-input label="Nome" v-model="form.name" @update:modelValue="form.name = $event" />
                 <base-input label="Valor" v-model="form.value" @update:modelValue="form.value = $event" />
-                <base-select label="Categoria" :options="categories" :selectedValue="categories.id"
-                    @change="handleCategoryChange($event)" />
+                <base-select label="Categoria" :options="categories" :selectedValue="categories.id" @change="handleCategoryChange($event)" />
 
                 <base-input label="Selecione a promoção" />
             </div>
@@ -191,8 +166,7 @@ export default {
 
         <div class="additional-content">
             <div class="item" v-for="ingredient in filteredIngredients" :key="ingredient.id">
-                <BaseSwitch :label="`${ingredient.name}`" :id="'active_' + ingredient.id"
-                    v-model="ingredient.additional.active" @change="handleSwitchChange(ingredient)" />
+                <BaseSwitch :label="`${ingredient.name}`" id="active" v-model="ingredient.additional.active" @change="handleSwitchChange(ingredient)"/>
                 <base-input label="Valor" v-model="ingredient.additional.value" />
             </div>
         </div>
@@ -216,7 +190,7 @@ export default {
     }
 }
 
-p {
+p{
     color: var(--cor-fonte);
     font-weight: 700;
     margin-bottom: 10px;
@@ -231,22 +205,21 @@ p {
 
     @media screen and (max-width: 768px) {
         flex-direction: column;
-
-        .item {
+        .item{
             justify-content: space-around;
         }
     }
 
-    .item {
+    .item{
         display: flex;
         flex-direction: row;
         gap: 20px;
 
-        :deep(.switch) {
+        :deep(.switch){
             justify-content: flex-start;
             margin-top: 0px;
 
-            .switch-label {
+            .switch-label{
                 margin-top: 10px;
             }
         }
