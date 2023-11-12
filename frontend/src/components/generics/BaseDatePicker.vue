@@ -5,6 +5,10 @@ import { format } from 'date-fns';
 export default {
   props: {
     formattedDate: Date,
+    label: {
+      type: String,
+      default: 'Data',
+    },
   },
   data() {
     return {
@@ -39,7 +43,7 @@ export default {
 
 <template>
   <div>
-    <base-input label="Data" v-model="form.date" class="input date" @click="showDatePicker = true" />
+    <base-input :label="label" v-model="form.date" class="input date" @click="showDatePicker = true" />
     <base-modal @close="closeModal" :showButtons="false" v-if="showDatePicker">
       <VDatePicker v-model="date" color="green" mode="date" class="calendar" @click="onDateSelected" />
     </base-modal>

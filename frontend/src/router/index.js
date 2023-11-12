@@ -39,9 +39,6 @@ const routes = [
     path: '/cardapio',
     name: 'MenuPage',
     component: MenuPageVue,
-    meta: {
-      auth: true,
-    }
   },
   {
     path: '/limite-diario-de-pizzas',

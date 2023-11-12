@@ -31,7 +31,6 @@ export default {
     return {
       form: {
         name: { required$ },
-        value: { required$ },
         hasAdditional: { required$ },
       },
     };
@@ -145,12 +144,6 @@ export default {
           label="Valor Adicional"
           class="input value additional"
         />
-        <div
-          :class="{ 'error-message': v$.form.value.$error }"
-          v-if="v$.form.value.$error"
-        >
-          {{ v$.form.value.$errors[0].$message }}
-        </div>
       </div>
     </div>
     <base-message v-if="error" :errorMessage="errorMessage" />
