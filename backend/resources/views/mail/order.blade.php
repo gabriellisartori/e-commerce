@@ -91,7 +91,7 @@
     </div>
     <div>
         <p class="info-details">
-            <span class="info-details green ml">Nome do cliente: </span>Gabi
+            <span class="info-details green ml">Nome do cliente: </span> {{ $order['name'] }}
         </p>
         <p class="info-details green ml">Detalhes do pedido:</p>
         <div>
