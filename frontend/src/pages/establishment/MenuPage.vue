@@ -54,7 +54,9 @@ export default {
                 :image="product.image" 
                 :name="product.name"
                 :value="product.value" 
+                :category_id="product.category_id"
                 :active="product.active" 
+                :cardId="product.id"
                 @edit="openEditModal(product.id)"
             />
         </div>

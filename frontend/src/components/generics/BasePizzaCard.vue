@@ -6,6 +6,8 @@ export default {
         name: String,
         value: String,
         active: Boolean,
+        cardId: String,
+        categoryId: String,
         hasEdit: {
             type: Boolean,
             required: false,
@@ -18,10 +20,25 @@ export default {
         };
     },
     methods: {
-        toggleSwitch() {
+        async toggleSwitch() {
             console.log(this.switchValue)
             this.switchValue = !this.switchValue;
-            this.$emit('update:switchValue', this.switchValue);
+
+            try {
+                await this.$http.put(`/products/${this.cardId}`, {
+                    id: this.cardId,
+                    name: this.name,
+                    active: this.switchValue,
+                    category_id: this.categoryId,
+                    image: this.image,
+                    ingredients: ["ingrediente1", "ingrediente2"],
+                    value: this.value,
+                });
+                // Se a chamada for bem-sucedida, emitir o evento para atualizar o estado no componente pai
+                this.$emit('update:active', this.switchValue);
+            } catch (error) {
+                console.error(error);
+            }
         },
     },
 }
@@ -35,7 +52,8 @@ export default {
         <div class="pizza-infos">
             <h3 class="text-uppercase title">{{ name }}</h3>
             <h3 class="title">R$ {{ value }}</h3>
-            <base-switch id="card" class="switch-menu" v-model="switchValue"  @click="toggleSwitch"></base-switch>
+            <base-switch :id="'switch-' + cardId" class="switch-menu" v-model="switchValue"
+                @update:modelValue="toggleSwitch" />
         </div>
         <div v-if="hasEdit" class="icon" @click="$emit('edit')">
             <font-awesome-icon icon="fa-solid fa-pen-to-square" />

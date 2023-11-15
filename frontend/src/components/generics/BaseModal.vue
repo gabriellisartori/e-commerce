@@ -97,16 +97,6 @@ export default {
   max-height: 550px;
   overflow-y: auto;
 
-  ::-webkit-scrollbar-thumb {
-    background-color: #888;
-    /* Cor do "thumb" (o indicador da posição atual) */
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: #eee;
-    /* Cor do "track" (a área da barra de rolagem que não está sendo percorrida) */
-  }
-
   &.is-large {
     max-width: 1000px;
   }

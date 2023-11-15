@@ -31,6 +31,12 @@ export default {
             }
         }
 
+        function initFile(url) {
+            const fileName = url.split('/').pop();
+
+            const file = new File([], fileName, { type: 'image/*' });
+            state.files = [file];
+        }
 
         function handleClickDeleteFile(index) {
             state.files.splice(index, 1);
@@ -52,6 +58,7 @@ export default {
             getInputProps,
             isDragActive,
             deleteFileHandler,
+            initFile,
         };
     },
 };

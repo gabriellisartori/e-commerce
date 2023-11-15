@@ -7,11 +7,11 @@ export default {
             this.$emit('update:modelValue', newValue);
         }
     },
-    data() {
+    /* data() {
         return {
             isChecked: this.value || false,
         };
-    },
+    }, */
 };
 </script>
 
@@ -22,6 +22,7 @@ export default {
         <label :for="id" class="switch-label"></label>
     </div>
 </template>  
+
 <style scoped lang="scss">
 .switch {
     display: flex;
