@@ -1,61 +1,99 @@
 <script>
 export default {
   components: {
+  },
+  mounted () {
+    document.body.classList.add('background');
+  },
+  unmounted () {
+    document.body.classList.remove('background');
   }
 };
 
 </script>
 
 <template>
-    <div class="contentHome">
-      <div class="infos-content">
-        <div class="speciale">
-          <h2>SPECIALE DO MÊS DE </h2>
-          <p>AGOSTO</p>
-        </div>
-        <ul>
-          <li>MOLHO DE TOMATE</li>
-          <li>MOLHO DE TOMATE</li>
-          <li>MOLHO DE TOMATE</li>
-          <li>MOLHO DE TOMATE</li>
-          <li>MOLHO DE TOMATE</li>
-        </ul>
-
-        <div class="value">
-          <p>R$ 60,00 </p>
-        </div>
-
-        <div class="vertical-bottom-line"></div>
-        <hr class="horizontal-bottom-line">
+  <div class="contentHome">
+    <div class="infos-content">
+      <div class="speciale">
+        <h2>SPECIALE DO MÊS DE</h2>
+        <p>AGOSTO</p>
       </div>
-        <img class="img-background" src="../../assets/pizza-home.png">
-    </div>
+      <ul>
+        <li>MOLHO DE TOMATE</li>
+        <li>MOLHO DE TOMATE</li>
+        <li>MOLHO DE TOMATE</li>
+        <li>MOLHO DE TOMATE</li>
+        <li>MOLHO DE TOMATE</li>
+      </ul>
 
-    <div class="triangle"></div>
+      <div class="value">
+        <p>R$ 60,00</p>
+      </div>
+
+      <div class="vertical-bottom-line"></div>
+      <hr class="horizontal-bottom-line" />
+    </div>
+  </div>
 </template>
 
 <style lang="scss">
-.menu-home{
-  .home{
-    border-bottom: 3px solid var(--cor-primaria);
+.background {
+  background-image: url("../../assets/home-background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+
+  @media screen and (max-width: 820px) {
+    background-image: none;
+  }
+
+  @media screen and (min-width: 1024px) {
+    background-position: 0px -310px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    background-position: -140px 0px;
+  }
+
+  @media screen and (min-width: 1920px) {
+    background-position: -100px 0px;
+  }
+
+  @media screen and (min-width: 2000px) {
+    background-position: 0px -100px;
+  }
+
+  @media screen and (min-width: 2240px) {
+    background-position: 0px -150px;
+  }
+
+  @media screen and (min-width: 2400px) {
+    background-position: 0px -200px;
+  }
+
+  @media screen and (min-width: 2560px) {
+    background-position: 0px -750px;
+    
   }
 }
-.contentHome{
+
+.contentHome {
   display: grid;
   grid-template-columns: 1fr 1fr;
   overflow: hidden;
 
-  .infos-content{
+  .infos-content {
     margin-left: 150px;
     margin-top: 80px;
 
-    .speciale{
-      h2{
+    .speciale {
+      h2 {
         font-weight: 700;
         font-size: 22px;
       }
 
-      p{
+      p {
         color: var(--cor-secundaria);
         font-weight: 700;
         font-size: 62px;
@@ -63,15 +101,15 @@ export default {
       }
     }
 
-    ul{
-      line-height: 2.0;
+    ul {
+      line-height: 2;
       font-weight: 700;
       list-style: disc;
       margin-top: 30px;
       font-size: 14px;
     }
 
-    .value{
+    .value {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -88,7 +126,7 @@ export default {
       font-weight: 700;
     }
 
-    .vertical-bottom-line{
+    .vertical-bottom-line {
       border-right: 1px solid #333;
       height: 153px;
       width: 12px;
@@ -97,7 +135,7 @@ export default {
       bottom: 109px;
     }
 
-    .horizontal-bottom-line{
+    .horizontal-bottom-line {
       width: 53%;
       float: left;
       margin-left: -91px;
@@ -105,29 +143,5 @@ export default {
       bottom: 146px;
     }
   }
-
-  .img-background{
-    position: absolute;
-    bottom: -25px;
-    right: 0px;
-    width: 50.5%;
-    overflow: hidden;
-  }
-}
-
-.triangle{
-  position: absolute;
-  bottom: 0;
-  left: 25%;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-left: 25vw solid transparent;
-  border-right: 25vw solid transparent;
-  border-bottom: 15vh solid #0D0D0D;
 }
 </style>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500&display=swap" rel="stylesheet">

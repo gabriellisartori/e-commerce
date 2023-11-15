@@ -27,7 +27,7 @@ export default {
   methods: {
     async saveEstablishment() {
       try {
-        const response = await this.$http.post('/establishment', {
+        const response = await this.$http.post('/establishments', {
           nome: this.nome,
           telefone: this.telefone,
           cnpj: this.cnpj,

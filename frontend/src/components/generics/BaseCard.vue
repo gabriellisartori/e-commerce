@@ -48,7 +48,8 @@ export default {
   border: 1px solid #5f8a17;
   border-left: 15px solid #5f8a17;
   border-radius: 10px;
-  margin-top: 42px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 
   .list-icons {
     display: flex;
