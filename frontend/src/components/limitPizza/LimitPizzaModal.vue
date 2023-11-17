@@ -149,9 +149,13 @@ export default {
   </base-modal>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .limit-pizza {
   display: flex;
   justify-content: space-evenly;
+
+  @media screen and (max-width: 620px) {
+      flex-direction: column;
+    }
 }
 </style>

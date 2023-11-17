@@ -2,10 +2,10 @@
 export default {
   components: {
   },
-  mounted () {
+  mounted() {
     document.body.classList.add('background');
   },
-  unmounted () {
+  unmounted() {
     document.body.classList.remove('background');
   }
 };
@@ -74,7 +74,7 @@ export default {
 
   @media screen and (min-width: 2560px) {
     background-position: 0px -750px;
-    
+
   }
 }
 
@@ -141,6 +141,15 @@ export default {
       margin-left: -91px;
       position: relative;
       bottom: 146px;
+    }
+  }
+
+  @media screen and (max-width: 425px) {
+    overflow: visible;
+
+    .infos-content {
+      margin-left: 0px;
+      margin-top: 0px;
     }
   }
 }

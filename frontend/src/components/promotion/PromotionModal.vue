@@ -162,6 +162,10 @@ export default {
     display: flex;
     justify-content: space-between;
 
+    @media screen and (max-width: 645px) {
+      flex-direction: column;
+    }
+
     &-message-error {
       width: 100%;
       margin-right: 45px;

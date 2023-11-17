@@ -88,16 +88,8 @@ export default {
   <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveCategory">
     <div class="components">
       <div>
-        <base-input
-          v-model="form.name"
-          label="Nome"
-          class="input name"
-          @update:modelValue="form.name = $event"
-        />
-        <div
-          :class="{ 'error-message': v$.form.name.$error }"
-          v-if="v$.form.name.$error"
-        >
+        <base-input v-model="form.name" label="Nome" class="input name" @update:modelValue="form.name = $event" />
+        <div :class="{ 'error-message': v$.form.name.$error }" v-if="v$.form.name.$error">
           {{ v$.form.name.$errors[0].$message }}
         </div>
       </div>
@@ -115,10 +107,19 @@ export default {
   width: 80%;
   margin: 0 auto;
 
+  @media screen and (max-width: 650px) {
+    flex-direction: column;
+  }
+
   .name {
     width: 270px;
     margin-top: 40px;
     margin-bottom: 0px;
+
+    @media screen and (max-width: 650px) {
+      width: auto;
+
+    }
   }
 }
 </style>

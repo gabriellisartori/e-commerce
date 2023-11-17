@@ -290,6 +290,10 @@ export default {
 :deep(.modal) {
     max-width: none;
     width: 55%;
+
+    @media screen and (max-width: 425px) {
+        width: 70%;
+    }
 }
 
 .components-grid {

@@ -1,5 +1,4 @@
 <script>
-
 export default {
     props: {
         image: String,
@@ -41,6 +40,15 @@ export default {
             }
         },
     },
+    computed: {
+        truncatedName() {
+            if (this.name.length > 10) {
+                return this.name.substring(0, 10) + '...';
+            } else {
+                return this.name;
+            }
+        },
+    },
 }
 
 </script>
@@ -50,7 +58,7 @@ export default {
         <!-- <img :src="image" alt="Pizza Image" class="pizza-image" /> -->
         <img class="pizza-image" src="../../assets/login.jpeg">
         <div class="pizza-infos">
-            <h3 class="text-uppercase title">{{ name }}</h3>
+            <h3 class="text-uppercase title">{{ truncatedName }}</h3>
             <h3 class="title">R$ {{ value }}</h3>
             <base-switch :id="'switch-' + cardId" class="switch-menu" v-model="switchValue"
                 @update:modelValue="toggleSwitch" />
@@ -65,7 +73,6 @@ export default {
 .pizza-card {
     background-color: rgba(95, 138, 23, 0.6);
     border-radius: 16px;
-    /* width: 460px; */
     height: 165px;
     display: flex;
 
@@ -92,6 +99,44 @@ export default {
         padding: 20px;
         color: var(--cor-fonte);
         cursor: pointer;
+    }
+
+    @media screen and (max-width: 425px) {
+        height: 90px;
+        width: 95%;
+        margin: 0 auto;
+
+        .pizza-infos {
+            padding: 10px 8px 10px 15px;
+            line-height: 1.5;
+
+            .title {
+                font-size: 14px;
+            }
+
+            .switch {
+                height: 22px;
+
+                .switch-label {
+                    width: 40px;
+
+                    :deep(&:before) {
+                        width: 17px;
+                        height: 17px;
+                        left: -5px;
+                        bottom: 1px;
+                    }
+                }
+            }
+        }
+
+        .icon {
+            padding: 10px 15px;
+
+            svg {
+                width: 12px;
+            }
+        }
     }
 }
 </style>

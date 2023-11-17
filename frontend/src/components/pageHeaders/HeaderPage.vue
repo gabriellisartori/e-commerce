@@ -26,7 +26,7 @@ export default {
     toggleSideBar() {
       this.showSidebar = true;
     },
-    closeSidebar () {
+    closeSidebar() {
       this.showSidebar = false;
     }
   }
@@ -52,12 +52,12 @@ export default {
             Cardápio
           </button>
         </li>
-        <li v-if="! hasPermission">
+        <li v-if="!hasPermission">
           <button @click="$router.push({ name: 'MenuPage' })" class="text-uppercase">
             Sobre nós
           </button>
         </li>
-        <li v-if="! hasPermission">
+        <li v-if="!hasPermission">
           <button @click="$router.push({ name: 'MenuPage' })" class="text-uppercase">
             Contato
           </button>
@@ -72,10 +72,7 @@ export default {
     </nav>
   </header>
 
-  <SideBar 
-    v-if="showSidebar"
-    @close="closeSidebar"
-  />
+  <SideBar v-if="showSidebar" @close="closeSidebar" />
 </template>
 
 
@@ -86,12 +83,19 @@ export default {
   color: #000000;
   width: 50%;
 
+  @media screen and (max-width: 560px) {
+    margin-top: 20px;
+    margin-bottom: 35px;
+    padding: 10px 23px;
+  }
+
   .menu {
     .menu-icon {
       cursor: pointer;
       display: flex;
       flex-direction: column;
       margin-right: 20px;
+
     }
 
     .menu-bar {
@@ -134,11 +138,35 @@ export default {
         text-align: end;
       }
     }
+
+    @media screen and (max-width: 425px) {
+      ul {
+        li {
+          margin-right: 10px;
+
+          button {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+
+    @media screen and (max-width: 375px) {
+      ul {
+        li {
+          margin-right: 7px;
+        }
+      }
+    }
   }
 
   .logo {
     img {
       width: 150px;
+
+      @media screen and (max-width: 425px) {
+        width: 72px;
+      }
     }
   }
 }

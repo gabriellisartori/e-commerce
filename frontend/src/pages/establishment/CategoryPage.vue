@@ -74,23 +74,12 @@ export default {
     </div>
 
     <div class="content-category">
-      <base-card
-        v-for="category in categories"
-        :key="category.id"
-        :title="category.name"
-        @edit="openEditModal(category.id)"
-        @delete="deleteCategory(category.id)"
-      />
+      <base-card v-for="category in categories" :key="category.id" :title="category.name"
+        @edit="openEditModal(category.id)" @delete="deleteCategory(category.id)" />
     </div>
   </div>
 
-  <CategoryModal
-    v-if="showModal"
-    :id="id"
-    @close="closeModal"
-    @categorySave="fetchCategories"
-  />
-
+  <CategoryModal v-if="showModal" :id="id" @close="closeModal" @categorySave="fetchCategories" />
 </template>
 
 <style lang="scss">
@@ -112,6 +101,14 @@ export default {
   .content-category {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    width: 90%;
+    margin: 0 auto;
+
+    @media screen and (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 0px;
+    }
   }
 
 }

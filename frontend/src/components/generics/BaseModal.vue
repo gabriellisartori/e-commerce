@@ -97,6 +97,7 @@ export default {
   max-height: 550px;
   overflow-y: auto;
 
+
   &.is-large {
     max-width: 1000px;
   }
@@ -108,6 +109,10 @@ export default {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+
+    @media screen and (max-width: 645px){
+      margin-top: 5px;
+    }
 
     .icon {
       cursor: pointer;
@@ -122,6 +127,9 @@ export default {
     flex-direction: column;
     justify-content: space-evenly;
 
+    @media screen and (max-width: 645px){
+      margin-bottom: 30px;
+    }
   }
 }
 </style>

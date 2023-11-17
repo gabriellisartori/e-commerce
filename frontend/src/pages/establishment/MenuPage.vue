@@ -71,6 +71,7 @@ export default {
     grid-template-columns: 1fr 1fr;
     gap: 20px;
     margin-top: 25px;
+    padding-bottom: 35px;
 
     @media screen and (max-width: 425px) {
         grid-template-columns: 1fr;

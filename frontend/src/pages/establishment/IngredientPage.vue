@@ -101,9 +101,15 @@ export default {
 
   .content-ingredient {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 50px;
     width: 90%;
     margin: 0 auto;
+
+    @media screen and (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 0px;
+    }
   }
 }
 </style>

@@ -106,44 +106,25 @@ export default {
 </script>
 
 <template>
-  <base-modal
-    :modalTitle="modalTitle"
-    @close="closeModal"
-    @save="saveIngredient"
-  >
+  <base-modal :modalTitle="modalTitle" @close="closeModal" @save="saveIngredient">
     <div class="components">
       <div class="infos">
         <div>
           <base-input v-model="form.name" label="Nome" class="input value" />
-          <div
-            :class="{ 'error-message': v$.form.name.$error }"
-            v-if="v$.form.name.$error"
-          >
+          <div :class="{ 'error-message': v$.form.name.$error }" v-if="v$.form.name.$error">
             {{ v$.form.name.$errors[0].$message }}
           </div>
         </div>
 
-        <base-switch
-          label="Adicional"
-          v-model="form.hasAdditional"
-          id="name"
-          @update:modelValue="handleSwitchChange"
-        />
-        <div
-          :class="{ 'error-message': v$.form.hasAdditional.$error }"
-          v-if="v$.form.hasAdditional.$error"
-        >
+        <base-switch label="Adicional" v-model="form.hasAdditional" id="name" @update:modelValue="handleSwitchChange" />
+        <div :class="{ 'error-message': v$.form.hasAdditional.$error }" v-if="v$.form.hasAdditional.$error">
           {{ v$.form.hasAdditional.$errors[0].$message }}
         </div>
       </div>
 
       <div>
-        <base-input
-          v-if="form.hasAdditional"
-          v-model="form.value"
-          label="Valor Adicional"
-          class="input value additional"
-        />
+        <base-input v-if="form.hasAdditional" v-model="form.value" label="Valor Adicional"
+          class="input value additional" />
       </div>
     </div>
     <base-message v-if="error" :errorMessage="errorMessage" />
@@ -163,6 +144,29 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    @media screen and (max-width: 768px) {
+      width: 80%;
+      margin: 0 auto;
+
+      .base-input-div{
+        width: 320px;
+      }
+    }
+
+    @media screen and (max-width: 534px) {
+      flex-direction: column;
+      width: auto;
+      margin: 0px;
+
+      .base-input-div{
+        width: auto;
+      }
+      
+      :deep(.switch-label){
+        margin-top: 10px;
+      }
+    }
   }
 
   .value {
