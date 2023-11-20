@@ -8,6 +8,7 @@ export default {
   data() {
     return {
       showSidebar: false,
+      hasItemsInCart: false,
     };
   },
   computed: {
@@ -21,6 +22,9 @@ export default {
           this.$auth.user().establishment_id !== null)
       );
     },
+    currentRoute() {
+      return this.$route.name;
+    },
   },
   methods: {
     toggleSideBar() {
@@ -28,8 +32,16 @@ export default {
     },
     closeSidebar() {
       this.showSidebar = false;
-    }
-  }
+    },
+    checkCartItems() {
+      const cartItems = JSON.parse(localStorage.getItem('selectedPizzas')) || [];
+      this.hasItemsInCart = cartItems.length > 0;
+      console.log('tem itens??', this.hasItemsInCart)
+    },
+  },
+  mounted() {
+    this.checkCartItems();
+  },
 };
 </script>
 
@@ -47,8 +59,13 @@ export default {
             Home
           </button>
         </li>
-        <li>
+        <li v-if="hasPermission">
           <button @click="$router.push({ name: 'MenuPage' })" class="text-uppercase">
+            Cardápio
+          </button>
+        </li>
+        <li v-if="!hasPermission">
+          <button @click="$router.push({ name: 'MenuPageClient' })" class="text-uppercase">
             Cardápio
           </button>
         </li>
@@ -67,6 +84,10 @@ export default {
         </li>
         <li class="logo">
           <img @click="$router.push({ name: 'homePage' })" src="@/assets/logo-pizza.png" alt="Pizzaria Basileus" />
+        </li>
+        <li v-if="$route.name === 'MenuPageClient' || $route.name === 'ShoppingPage'" class="carrinho">
+          <img @click="$router.push({ name: 'ShoppingPage' })" class="icon-carrinho"
+            :class="{ 'has-items': hasItemsInCart }" src="@/assets/icons/carrinho-icon.png" alt="Carrinho" />
         </li>
       </ul>
     </nav>
@@ -168,6 +189,34 @@ export default {
         width: 72px;
       }
     }
+  }
+
+  .carrinho {
+    position: absolute;
+    top: 0px;
+    margin-top: 14px;
+    cursor: pointer;
+    z-index: 1;
+
+    .icon-carrinho {
+      width: 4%;
+    }
+
+    .has-items::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background-color: green!important;
+      border-radius: 50%;
+    }
+
+
+    @media screen and (max-width: 425px){
+      display: none;
+    } 
   }
 }
 </style>

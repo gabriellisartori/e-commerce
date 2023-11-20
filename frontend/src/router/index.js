@@ -8,6 +8,8 @@ import MenuPageVue from '@/pages/establishment/MenuPage.vue';
 import PromotionPage from '../pages/establishment/PromotionPage.vue'
 import BusinessHoursModal from '../components/businessHours/BusinessHoursModal.vue'
 import LimitPizzaPage from '../pages/establishment/LimitPizzaPage.vue'
+import MenuPageClient from '../pages/client/MenuPageClient.vue'
+import ShoppingPage from '../pages/client/ShoppingPage.vue'
 
 const routes = [
   { 
@@ -36,9 +38,22 @@ const routes = [
     component: HomePage,
   },
   {
+    path: '/menu',
+    name: 'MenuPageClient',
+    component: MenuPageClient,
+  },
+  {
+    path: '/carrinho',
+    name: 'ShoppingPage',
+    component: ShoppingPage,
+  },
+  {
     path: '/cardapio',
     name: 'MenuPage',
     component: MenuPageVue,
+    meta: {
+      auth: true,
+    }
   },
   {
     path: '/limite-diario-de-pizzas',

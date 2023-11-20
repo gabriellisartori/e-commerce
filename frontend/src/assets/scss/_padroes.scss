@@ -95,3 +95,28 @@ h2 {
     font-weight: 700;
     margin-top: 5px;
 }
+
+.checkbox {
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    border: 2px solid var(--cor-primaria);
+    background-color: var(--cor-site);
+    cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.checkbox:checked {
+    background-color: var(--cor-primaria);
+}
+
+.checkbox::before {
+    content: '\2713';
+    display: block;
+    text-align: center;
+    line-height: 20px;
+    color: #fff;
+    font-size: 20px;
+}

@@ -96,7 +96,7 @@ export default {
                 const { data } = await this.$http.get('/promotions');
                 this.promotions = data;
 
-                console.log(this.promotions)
+                console.log('promocoes', this.promotions)
 
             } catch (error) {
                 console.error(error);
@@ -130,13 +130,21 @@ export default {
                     formData.append('additional', this.form.additional);
                 }
 
-                if (Array.isArray(this.form.promotion) && this.form.promotion.length > 0) {
+                if (this.form.promotion.length > 0) {
                     for (let i = 0; i < this.form.promotion.length; i++) {
-                        formData.append(`promotion[${i}][id]`, this.form.promotion[i].id);
+                        const promotionItem = this.form.promotion[i];
+                        if (promotionItem && typeof promotionItem === 'string') {
+                            formData.append(`promotion[${i}][id]`, promotionItem);
+                            formData.append(`promotion[${i}][value]`, ''); // Envie uma string vazia ou ajuste conforme necessário
+                        } else if (promotionItem && typeof promotionItem === 'object') {
+                            formData.append(`promotion[${i}][id]`, promotionItem.id);
+                            formData.append(`promotion[${i}][value]`, promotionItem.value === null ? '' : promotionItem.value);
+                        }
                     }
                 } else {
                     formData.append('promotion', this.form.promotion);
                 }
+
 
                 console.log('mandando isso', formData)
                 await this.$http.post('/products', formData, {
@@ -176,7 +184,8 @@ export default {
             this.form.category_id = event.target.value;
         },
         handlePromotionChange(event) {
-            this.form.promotion = event.target.value;
+            this.form.promotion = Array.isArray(event.target.value) ? event.target.value : [event.target.value];
+            console.log('promcaaaaao', this.form.promotion);
         },
         handleSendFileToParent(file) {
             if (file instanceof File) {
@@ -248,8 +257,8 @@ export default {
                     {{ v$.form.category_id.$errors[0].$message }}
                 </div>
 
-                <base-select label="Promoção" :options="promotions" v-model="form.promotion" :selectedValue="this.form.promotion"
-                    @change="handlePromotionChange($event)" />
+                <base-select label="Promoção" :options="promotions" v-model="form.promotion"
+                    :selectedValue="this.form.promotion" @change="handlePromotionChange($event)" />
             </div>
             <div class="column">
                 <BaseDropzone label="Imagem" :sendFileToParent="handleSendFileToParent" :initialFile="selectedFilePath"

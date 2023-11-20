@@ -47,6 +47,12 @@ app.component('base-select', BaseSelect);
 import BaseMessage from './components/generics/BaseMessage.vue';
 app.component('base-message', BaseMessage);
 
+import BaseSpecialeCard from './components/generics/BaseSpecialeCard.vue';
+app.component('base-speciale', BaseSpecialeCard);
+
+import BasePizzaCardClient from './components/generics/BasePizzaCardClient.vue';
+app.component('base-pizza-card-client', BasePizzaCardClient);
+
 // Font Awesome
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
