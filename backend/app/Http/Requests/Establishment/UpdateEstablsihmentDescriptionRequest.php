@@ -4,7 +4,7 @@ namespace App\Http\Requests\Establishment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateEstablishmentRequest extends FormRequest
+class UpdateEstablsihmentDescriptionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,13 +23,7 @@ class UpdateEstablishmentRequest extends FormRequest
     {
         return [
             'id' => 'required|exists:establishments,id',
-            'name' => 'required|string',
-            'cnpj' => 'required|string|size:18',
-            'phone_number' => 'required|string|size:15',
             'description' => 'nullable|string',
-            'user_id' => 'required|exists:users,id',
-            'email' => 'required',
-            'password' => 'nullable'
         ];
     }
 }

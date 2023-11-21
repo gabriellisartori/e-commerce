@@ -27,7 +27,13 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:sanctum']], function () {
     
     //update establishment data and relations (user e address)
-    Route::put('establishments/{id}', [EstablishmentController::class, 'update'])->middleware('verify.establishment.user');
+    Route::prefix('establishments')->middleware('verify.establishment.user')->group(function () {
+        Route::post('', [EstablishmentController::class, 'store']);
+        Route::put('/basic-data/{id}', [EstablishmentController::class, 'update']);
+        Route::put('/address/{id}', [EstablishmentController::class, 'updateAddress']);
+        Route::put('/about/{id}', [EstablishmentController::class, 'updateAbout']);
+
+    });
     
     Route::prefix('clients')->group(function () {
         Route::get('{id}', [ClientController::class, 'show']);
@@ -92,8 +98,8 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('establishments')->group(function () {
-    Route::post('', [EstablishmentController::class, 'store']);
     Route::get('', [EstablishmentController::class, 'index']);
+    Route::get('contact', [EstablishmentController::class, 'getContact']);
 });
 
 Route::get('daily-pizza-sale-limits/{id}', [DailyPizzaSaleLimitController::class, 'show']);

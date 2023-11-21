@@ -70,12 +70,12 @@ export default {
           </button>
         </li>
         <li v-if="!hasPermission">
-          <button @click="$router.push({ name: 'MenuPage' })" class="text-uppercase">
+          <button @click="$router.push({ name: 'AboutPage' })" class="text-uppercase">
             Sobre nós
           </button>
         </li>
         <li v-if="!hasPermission">
-          <button @click="$router.push({ name: 'MenuPage' })" class="text-uppercase">
+          <button @click="$router.push({ name: 'ContactPage' })" class="text-uppercase">
             Contato
           </button>
         </li>
@@ -103,9 +103,9 @@ export default {
   padding: 10px 70px;
   color: #000000;
   width: 50%;
+  margin-top: 20px;
 
   @media screen and (max-width: 560px) {
-    margin-top: 20px;
     margin-bottom: 35px;
     padding: 10px 23px;
   }

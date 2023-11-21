@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Establishment\CreateEstablishmentRequest;
+use App\Http\Requests\Establishment\UpdateEstablishmentAddressRequest;
 use App\Http\Requests\Establishment\UpdateEstablishmentRequest;
+use App\Http\Requests\Establishment\UpdateEstablsihmentDescriptionRequest;
+use App\Http\Resources\ContactResource;
 use App\Http\Resources\EstablishmentResource;
 use App\Models\Establishment;
 use App\Models\User;
@@ -75,9 +78,6 @@ class EstablishmentController extends Controller
         try {
             $data = $request->validated();
 
-            //update address
-            $this->updateAddressService->handle($data);
-
             $user = User::findOrFail($data['user_id']);
 
             if (isset($data['password']) || $user->email !== $data['email']) {
@@ -96,6 +96,61 @@ class EstablishmentController extends Controller
             DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao atualizar estabelecimento',
+            ], 401);
+        }
+    }
+
+    public function updateAddress(UpdateEstablishmentAddressRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $data = $request->validated();
+
+            //update address
+            $this->updateAddressService->handle($data);
+
+            DB::commit();
+            return response()->json([], 200);
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Erro ao atualizar endereço do estabelecimento',
+            ], 401);
+        }
+    }
+
+    public function updateAbout(UpdateEstablsihmentDescriptionRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $data = $request->validated();
+
+            //update establishment
+            Establishment::where('id', $data['id'])->update([
+                'description' => $data['description']
+            ]);
+
+            DB::commit();
+            return response()->json([], 200);
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Erro ao atualizar estabelecimento',
+            ], 401);
+        }
+    }
+
+    public function getContact ()
+    {
+        try {
+            $establishment = Establishment::find(1);
+
+            $establishment->load(['address', 'user']);
+
+            return response()->json(new ContactResource($establishment), 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao listar estabelecimento',
             ], 401);
         }
     }

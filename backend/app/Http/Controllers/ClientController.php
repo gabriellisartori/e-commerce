@@ -29,9 +29,9 @@ class ClientController extends Controller
     {
         try {
             //get one client
-            $client = Client::findOrFail($id)->load(['user']);
+            $client = Client::where('user_id', $id)->with(['user'])->get();
 
-            return response()->json(new ClientResource($client), 200);
+            return response()->json(ClientResource::collection($client), 200);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Erro ao listar cliente',
