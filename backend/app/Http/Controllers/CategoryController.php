@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Services\Category\CreateCategoryService;
 use App\Services\Category\UpdateCategoryService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -21,11 +22,18 @@ class CategoryController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $inputs = $request->input();
         try {
             //get all category
-            $categories = Category::all();
+            $categories = Category::query()->orderBy('name', 'asc');
+
+            if (isset($inputs['name'])) {
+                $categories->where('name', 'ilike', '%' . $inputs['name'] . '%');
+            }
+
+            $categories = $categories->get();
             
             return response()->json(CategoryResource::collection($categories), 200);
         } catch (ValidationException $e) {

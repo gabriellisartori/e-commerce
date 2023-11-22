@@ -12,6 +12,7 @@ use App\Models\ProductPromotion;
 use App\Models\Promotion;
 use App\Services\Promotion\CreatePromotionService;
 use App\Services\Promotion\UpdatePromotionService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -23,11 +24,18 @@ class PromotionController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $inputs = $request->input();
         try {
             //get all promotion
-            $promotions = Promotion::all();
+            $promotions = Promotion::query()->orderBy('name', 'asc');
+
+            if (isset($inputs['name'])) {
+                $promotions->where('name', 'ilike', '%' . $inputs['name'] . '%');
+            }
+
+            $promotions = $promotions->get();
             
             return response()->json(PromotionResource::collection($promotions), 200);
         } catch (ValidationException $e) {

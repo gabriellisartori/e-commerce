@@ -1,17 +1,23 @@
 <script>
 import BasePizzaCard from '@/components/generics/BasePizzaCard.vue';
 import AddProductModal from '@/components/product/AddProductModal.vue';
+import FiltersModal from '@/components/FiltersModal.vue';
 
 export default {
     components: {
         BasePizzaCard,
-        AddProductModal
+        AddProductModal,
+        FiltersModal
     },
     data() {
         return {
             products: [],
             showModal: false,
             id: null,
+            search: {
+              name: null
+            },
+            showFilters: false
         };
     },
     methods: {
@@ -25,7 +31,9 @@ export default {
         },
         async fetchProducts() {
             try {
-                const { data } = await this.$http.get("/products");
+                const { data } = await this.$http.get("/products", {
+                    params: this.search
+                });
                 this.products = data;
 
                 console.log(this.products)
@@ -33,6 +41,14 @@ export default {
                 console.error(error);
             }
         },
+        searchFilter (event) {
+            this.search.name = event
+            this.fetchProducts()
+        },
+        getAll () {
+          this.search.name = null
+          this.fetchProducts()
+        }
     },
     mounted() {
         this.fetchProducts();
@@ -43,8 +59,14 @@ export default {
 <template>
     <div>
         <div class="page-header-options">
-            <h2 class="title">Produtos</h2>
-            <base-button isTransparent color="dark-green" @onClick="showModal = true"> Adicionar </base-button>
+            <div>
+                <h2 class="title">Produtos</h2>
+            </div>
+            <div>
+                <base-button isTransparent color="dark-green" @onClick="showModal = true"> Adicionar </base-button>
+                <base-button class="icon" isTransparent isIcon icon="fa-solid fa-magnifying-glass" color="dark-green" @onClick="showFilters = true"/>
+                <base-button class="icon" isTransparent isIcon icon="fa-solid fa-rotate" color="dark-green" @onClick="getAll"/>
+            </div>
         </div>
         <div class="content-menu">
             <BasePizzaCard 
@@ -63,6 +85,13 @@ export default {
     </div>
 
     <AddProductModal v-if="showModal" :id="id" @close="closeModal" @limitSave="fetchProducts" />
+
+    <FiltersModal 
+        v-if="showFilters"
+        isName
+        @close="showFilters = false"
+        @getValues="searchFilter($event)"
+    />
 </template>
 
 <style scoped lang="scss">

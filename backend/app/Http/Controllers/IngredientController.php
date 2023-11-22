@@ -13,6 +13,7 @@ use App\Services\Additional\CreateAdditionalService;
 use App\Services\Additional\UpdateAdditionalService;
 use App\Services\Ingredient\CreateIngredientService;
 use App\Services\Ingredient\UpdateIngredientService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -26,13 +27,18 @@ class IngredientController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $inputs = $request->input();
         try {
             //get all ingredients
-            $ingredients = Ingredient::all();
+            $ingredients = Ingredient::query()->orderBy('name', 'asc')->with(['ingredientAdditional']);
 
-            $ingredients->load(['ingredientAdditional']);
+            if (isset($inputs['name'])) {
+                $ingredients->where('name', 'ilike', '%' . $inputs['name'] . '%');
+            }
+
+            $ingredients = $ingredients->get();
 
             return response()->json(IngredientResource::collection($ingredients), 200);
         } catch (ValidationException $e) {

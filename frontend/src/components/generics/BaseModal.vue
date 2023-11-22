@@ -12,6 +12,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    saveLabel: {
+      type: String,
+      default: 'Salvar',
+    },
   },
   data() {
     return {
@@ -61,7 +65,7 @@ export default {
             Cancelar
           </base-button>
           <base-button class="button" color="dark-green" @onClick="saveModal">
-            Salvar
+            {{ saveLabel }}
           </base-button>
         </div>
       </div>

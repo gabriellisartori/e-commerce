@@ -1,8 +1,14 @@
 <template>
   <div>
     <div class="page-header-options">
-      <h2 class="title">Promoções</h2>
-      <base-button isTransparent color="dark-green" @onClick="addPromotion()"> Adicionar </base-button>
+      <div>
+        <h2 class="title">Promoções</h2>
+      </div>
+      <div>
+        <base-button isTransparent color="dark-green" @onClick="addPromotion()"> Adicionar </base-button>
+        <base-button class="icon" isTransparent isIcon icon="fa-solid fa-magnifying-glass" color="dark-green" @onClick="showFilters = true"/>
+        <base-button class="icon" isTransparent isIcon icon="fa-solid fa-rotate" color="dark-green" @onClick="getAll"/>
+      </div>
     </div>
   </div>
   <div class="content-ingredient">
@@ -21,27 +27,42 @@
     @close="showModal = false"
     @savePromotion="getData"
   />
+
+  <FiltersModal 
+    v-if="showFilters"
+    isName
+    @close="showFilters = false"
+    @getValues="searchFilter($event)"
+  />
 </template>
 
 <script>
 import PromotionModal from '@/components/promotion/PromotionModal.vue';
 import { toast } from 'vue3-toastify';
+import FiltersModal from '@/components/FiltersModal.vue';
 
 export default {
   components: {
-    PromotionModal
+    PromotionModal,
+    FiltersModal
   },
   data () {
     return {
       promotions: [],
       showModal: false,
-      id: null
+      id: null,
+      search: {
+        name: null
+      },
+      showFilters: false
     };
   },
   methods: {
     async getData () {
       try {
-        const { data } = await this.$http.get('/promotions');
+        const { data } = await this.$http.get('/promotions', {
+          params: this.search
+        });
         this.promotions = data;
       } catch (error) {
         console.error(error);
@@ -84,6 +105,14 @@ export default {
         }
       }
     },
+    searchFilter (event) {
+      this.search.name = event
+      this.getData()
+    },
+    getAll () {
+      this.search.name = null
+      this.getData()
+    }
   },
   mounted () {
     this.getData();
