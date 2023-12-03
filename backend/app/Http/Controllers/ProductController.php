@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\CreateProductRequest;
-use App\Http\Requests\Product\ProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -234,5 +235,32 @@ class ProductController extends Controller
         if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
         }
+    }
+
+    public function exportFile (Request $request) 
+    {
+        $products = $this->index($request);
+
+        $productsFile = [];
+
+        foreach($products->original->resource as $item) {
+            array_push($productsFile,
+                [
+                    'name' => $item->name,
+                    'value' => $item->value,
+                    'has_additional' => $item->productAdditional !== null ? 'Sim' : 'Não',
+                    'category' => $item->category->name,
+                    'promotion' => $item->productPromotion !== null ? $item->productPromotion->promotion->name : '',
+                    'promotion_value' => $item->productPromotion !== null ? $item->productPromotion->value : '',
+                    'ingredients' => $item->productIngredient->map(function ($ingredient) {
+                        return $ingredient->ingredient->name;
+                    })->implode(', '),
+                ]
+            );
+        }
+
+        $data = new ProductExport(collect($productsFile));
+
+        return Excel::download($data, 'products.csv');
     }
 }

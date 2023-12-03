@@ -7,6 +7,7 @@
       <div>
         <base-button isTransparent color="dark-green" @onClick="addPromotion()"> Adicionar </base-button>
         <base-button class="icon" isTransparent isIcon icon="fa-solid fa-magnifying-glass" color="dark-green" @onClick="showFilters = true"/>
+        <base-button class="icon" isTransparent isIcon icon="fa-solid fa-file-excel" color="dark-green" @click="exportFile()"/>
         <base-button class="icon" isTransparent isIcon icon="fa-solid fa-rotate" color="dark-green" @onClick="getAll"/>
       </div>
     </div>
@@ -112,6 +113,17 @@ export default {
     getAll () {
       this.search.name = null
       this.getData()
+    },
+    async exportFile () {
+      const { data } = await this.$http.get('/promotions/exportFile', { params: this.search }, {
+        responseType: 'blob'
+      });
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'promoções.xlsx');
+      document.body.appendChild(link);
+      link.click();
     }
   },
   mounted () {
