@@ -17,6 +17,7 @@ use App\Services\ProductAdditional\CreateProductAdditionalService;
 use App\Services\ProductIngredient\CreateProductIngredientService;
 use App\Services\ProductPromotion\CreateProductPromotionService;
 use App\Services\ProductPromotion\UpdateProductPromotionService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -237,7 +238,7 @@ class ProductController extends Controller
         }
     }
 
-    public function exportFile (Request $request) 
+    public function exportFile (Request $request)
     {
         $products = $this->index($request);
 
@@ -262,5 +263,34 @@ class ProductController extends Controller
         $data = new ProductExport(collect($productsFile));
 
         return Excel::download($data, 'products.csv');
+    }
+
+    public function getPromotionPizza()
+    {
+        try {
+            $products = Product::
+                with([
+                    'productIngredient',
+                    'productIngredient.ingredient',
+                    'category',
+                    'productPromotion',
+                    'productPromotion.promotion',
+                    'productAdditional',
+                    'productAdditional.additional'
+                ])
+                ->whereHas('productPromotion', function ($query) {
+                    $query->whereHas('promotion', function ($query) {
+                        $query->where('start_date', '<=', Carbon::now()->format('Y-m-d'))
+                            ->where('end_date', '>=', Carbon::now()->format('Y-m-d'));
+                    });
+                })
+                ->get();
+
+            return response()->json(ProductResource::collection($products), 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao listar produtos',
+            ], 401);
+        }
     }
 }

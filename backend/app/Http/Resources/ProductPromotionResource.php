@@ -16,6 +16,7 @@ class ProductPromotionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'value' => $this->promotion_value,
             PromotionResource::make($this->promotion),
         ];
     }

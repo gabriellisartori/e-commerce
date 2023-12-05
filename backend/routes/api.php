@@ -93,6 +93,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 });
 
+Route::get('promotionPizza', [ProductController::class, 'getPromotionPizza']);
+
 // Access system
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
