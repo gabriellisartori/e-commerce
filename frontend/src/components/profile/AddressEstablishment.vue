@@ -2,7 +2,7 @@
   <div class="profile-edit">
     <div class="column">
       <div>
-        <base-input v-model="form.zip_code" label="CEP" class="input"></base-input>
+        <base-input v-model="form.zip_code" label="CEP" placeholder="00000-000" v-mask="'#####-###'" class="input"></base-input>
         <div
           :class="{ 'error-message': v$.form.zip_code.$error }"
           v-if="v$.form.zip_code.$error"

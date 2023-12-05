@@ -103,6 +103,10 @@ const axiosInstance = axios.create({
 
 app.config.globalProperties.$http = axiosInstance;
 
+// add vue mask
+import VueTheMask from 'vue-the-mask'
+app.use(VueTheMask)
+
 /**
  * Vue Auth
  */

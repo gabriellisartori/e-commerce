@@ -28,12 +28,22 @@ export default {
   <div class="base-input-div">
     <label class="base-label">{{ label }}</label>
     <input 
+      v-if="mask === ''"
       class="base-input"
       :value="modelValue" 
       :placeholder="placeholder"
       :type="type" 
       @input="$emit('update:modelValue', $event.target.value)" 
-      />      
+      />
+      <input 
+      v-else
+      class="base-input"
+      :value="modelValue" 
+      :placeholder="placeholder"
+      v-mask="mask"
+      :type="type" 
+      @input="$emit('update:modelValue', $event.target.value)" 
+      /> 
   </div>
 </template>
 

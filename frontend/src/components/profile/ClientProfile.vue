@@ -34,7 +34,7 @@
         </div>
 
         <div>
-          <base-input v-model="form.cpf" label="CPF" class="input"></base-input>
+          <base-input v-model="form.cpf" mask="###.###.###-##" placeholder="999.999.999-99" label="CPF" class="input"></base-input>
           <div
             :class="{ 'error-message': v$.form.cpf.$error }"
             v-if="v$.form.cpf.$error"
@@ -48,6 +48,8 @@
           <base-input
             v-model="form.phone_number"
             label="Telefone"
+            placeholder="(99) 99999-9999"
+            mask="(##) #####-####"
             class="input"
           ></base-input>
           <div
@@ -61,6 +63,7 @@
           <base-input
             v-model="form.email"
             label="E-mail"
+            placeholder="teste@teste.com"
             class="input"
           ></base-input>
           <div
