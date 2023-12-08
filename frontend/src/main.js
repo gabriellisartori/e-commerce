@@ -65,9 +65,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
-import { faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation, faBagShopping, faPhone, faEnvelope, faMapLocation } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation, faBagShopping, faPhone, faEnvelope, faMapLocation, faMagnifyingGlass, faFileExcel, faRotate } from '@fortawesome/free-solid-svg-icons'
 /* add icons to the library */
-library.add(faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation, faBagShopping, faPhone, faEnvelope, faMapLocation)
+library.add(faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation, faBagShopping, faPhone, faEnvelope, faMapLocation, faMagnifyingGlass, faFileExcel, faRotate)
 app.component('font-awesome-icon', FontAwesomeIcon);
 
 // Vue3 Toastify
@@ -102,6 +102,10 @@ const axiosInstance = axios.create({
 });
 
 app.config.globalProperties.$http = axiosInstance;
+
+// add vue mask
+import VueTheMask from 'vue-the-mask'
+app.use(VueTheMask)
 
 /**
  * Vue Auth

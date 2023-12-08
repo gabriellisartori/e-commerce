@@ -18,6 +18,8 @@
         <base-input
           v-model="form.phone_number"
           label="Telefone"
+          placeholder="(99) 99999-9999"
+          mask="(##) #####-####"
           class="input"
         ></base-input>
         <div
@@ -28,7 +30,7 @@
         </div>
       </div>
       <div>
-        <base-input v-model="form.cnpj" label="CNPJ" class="input"></base-input>
+        <base-input v-model="form.cnpj" label="CNPJ" v-mask="'##.###.###/####-##'" placeholder="00.000.000/0000-00" class="input"></base-input>
         <div
           :class="{ 'error-message': v$.form.cnpj.$error }"
           v-if="v$.form.cnpj.$error"

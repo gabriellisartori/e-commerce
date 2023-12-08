@@ -1,8 +1,20 @@
 <script>
 export default {
-  components: {
+  data() {
+    return {
+      promotionPizza: []
+    };
   },
-  mounted() {
+  async mounted() {
+    const { data } = await this.$http.get('promotionPizza');
+    this.promotionPizza.ingredients = data[0].ingredients;
+    this.promotionPizza.value = data[0].promotion.value;
+
+    const split = data[0].promotion[0].name.split(' ');
+    this.promotionPizza.firstName = split[0] + ' ' + split[1];
+    this.promotionPizza.secondName = split[split.length - 1];
+    //this.promotionPizza.firstName =;
+
     document.body.classList.add('background');
   },
   unmounted() {
@@ -16,19 +28,15 @@ export default {
   <div class="contentHome">
     <div class="infos-content">
       <div class="speciale">
-        <h2>SPECIALE DO MÊS DE</h2>
-        <p>AGOSTO</p>
+        <h2 class="text-uppercase">{{ promotionPizza.firstName }}</h2>
+        <p class="text-uppercase">{{ promotionPizza.secondName }}</p>
       </div>
       <ul>
-        <li>MOLHO DE TOMATE</li>
-        <li>MOLHO DE TOMATE</li>
-        <li>MOLHO DE TOMATE</li>
-        <li>MOLHO DE TOMATE</li>
-        <li>MOLHO DE TOMATE</li>
+        <li v-for="(ingredient, index) in promotionPizza.ingredients" :key="index" class="text-uppercase">{{ ingredient.name }}</li>
       </ul>
 
       <div class="value">
-        <p>R$ 60,00</p>
+        <p>R$ {{ promotionPizza.value }},00</p>
       </div>
 
       <div class="vertical-bottom-line"></div>

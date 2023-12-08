@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\CreateProductRequest;
-use App\Http\Requests\Product\ProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
@@ -17,9 +17,12 @@ use App\Services\ProductAdditional\CreateProductAdditionalService;
 use App\Services\ProductIngredient\CreateProductIngredientService;
 use App\Services\ProductPromotion\CreateProductPromotionService;
 use App\Services\ProductPromotion\UpdateProductPromotionService;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -33,20 +36,29 @@ class ProductController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $inputs = $request->input();
+
         try {
             //get all products
-            $products = Product::all();
-            $products->load([
-                'productIngredient',
-                'productIngredient.ingredient',
-                'category',
-                'productPromotion',
-                'productPromotion.promotion',
-                'productAdditional',
-                'productAdditional.additional'
-            ]);
+            $products = Product::query()
+                ->with([
+                    'productIngredient',
+                    'productIngredient.ingredient',
+                    'category',
+                    'productPromotion',
+                    'productPromotion.promotion',
+                    'productAdditional',
+                    'productAdditional.additional'
+                ])
+                ->orderBy('name', 'asc');
+
+            if (isset($inputs['name'])) {
+                $products->where('name', 'ilike', '%' . $inputs['name'] . '%');
+            }
+
+            $products = $products->get();
 
             return response()->json(ProductResource::collection($products), 200);
         } catch (ValidationException $e) {
@@ -121,7 +133,7 @@ class ProductController extends Controller
                     $this->createProductAdditionalService->handle($additional);
                 }
             }
-            
+
             $product->load([
                 'productIngredient',
                 'productIngredient.ingredient',
@@ -223,6 +235,62 @@ class ProductController extends Controller
 
         if (!File::isDirectory($path)) {
             File::makeDirectory($path, 0777, true, true);
+        }
+    }
+
+    public function exportFile (Request $request)
+    {
+        $products = $this->index($request);
+
+        $productsFile = [];
+
+        foreach($products->original->resource as $item) {
+            array_push($productsFile,
+                [
+                    'name' => $item->name,
+                    'value' => $item->value,
+                    'has_additional' => $item->productAdditional !== null ? 'Sim' : 'Não',
+                    'category' => $item->category->name,
+                    'promotion' => $item->productPromotion !== null ? $item->productPromotion->promotion->name : '',
+                    'promotion_value' => $item->productPromotion !== null ? $item->productPromotion->value : '',
+                    'ingredients' => $item->productIngredient->map(function ($ingredient) {
+                        return $ingredient->ingredient->name;
+                    })->implode(', '),
+                ]
+            );
+        }
+
+        $data = new ProductExport(collect($productsFile));
+
+        return Excel::download($data, 'products.csv');
+    }
+
+    public function getPromotionPizza()
+    {
+        try {
+            $products = Product::
+                with([
+                    'productIngredient',
+                    'productIngredient.ingredient',
+                    'category',
+                    'productPromotion',
+                    'productPromotion.promotion',
+                    'productAdditional',
+                    'productAdditional.additional'
+                ])
+                ->whereHas('productPromotion', function ($query) {
+                    $query->whereHas('promotion', function ($query) {
+                        $query->where('start_date', '<=', Carbon::now()->format('Y-m-d'))
+                            ->where('end_date', '>=', Carbon::now()->format('Y-m-d'));
+                    });
+                })
+                ->get();
+
+            return response()->json(ProductResource::collection($products), 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao listar produtos',
+            ], 401);
         }
     }
 }
