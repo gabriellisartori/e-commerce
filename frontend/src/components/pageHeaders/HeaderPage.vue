@@ -38,6 +38,15 @@ export default {
       this.hasItemsInCart = cartItems.length > 0;
       console.log('tem itens??', this.hasItemsInCart)
     },
+    goToCarrinho() {
+      if (this.$auth.check()) {
+        this.$router.push({ name: 'ShoppingPage' });
+      } else {
+        this.$router.push({ name: 'login' });
+      }
+
+      this.checkCartItems();
+    },
   },
   mounted() {
     this.checkCartItems();
@@ -85,9 +94,9 @@ export default {
         <li class="logo">
           <img @click="$router.push({ name: 'homePage' })" src="@/assets/logo-pizza.png" alt="Pizzaria Basileus" />
         </li>
-        <li v-if="$route.name === 'MenuPageClient' || $route.name === 'ShoppingPage'" class="carrinho">
-          <img @click="$router.push({ name: 'ShoppingPage' })" class="icon-carrinho"
-            :class="{ 'has-items': hasItemsInCart }" src="@/assets/icons/carrinho-icon.png" alt="Carrinho" />
+        <li v-if="$route.name !== 'homePage'" class="carrinho">
+          <img @click="goToCarrinho" class="icon-carrinho" src="@/assets/icons/carrinho-icon.png" alt="Carrinho" />
+          <div class="bolinha-verde" v-if="hasItemsInCart"></div>
         </li>
       </ul>
     </nav>
@@ -202,21 +211,20 @@ export default {
       width: 4%;
     }
 
-    .has-items::after {
-      content: '';
+    .bolinha-verde {
       position: absolute;
-      top: 0;
-      right: 0;
       width: 10px;
       height: 10px;
-      background-color: green!important;
       border-radius: 50%;
+      top: 2px;
+      right: -7px;
+      background-color: var(--cor-primaria);
     }
 
 
-    @media screen and (max-width: 425px){
+    @media screen and (max-width: 425px) {
       display: none;
-    } 
+    }
   }
 }
 </style>

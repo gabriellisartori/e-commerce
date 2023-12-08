@@ -1,11 +1,11 @@
 <script>
 export default {
     props: {
-        image: String,
-        name: String,
         value: String,
         disabled: Boolean,
         pizzaDetails: Object,
+        alertVisible: Boolean,
+        pizzaInCart: Boolean,
     },
     data() {
         return {
@@ -19,9 +19,19 @@ export default {
 
             return formattedValue;
         },
+        formatIngredients(ingredients) {
+            if (!ingredients || !Array.isArray(ingredients)) {
+                return '';
+            }
+
+            return ingredients.map(ingredient => ingredient.name).join(', ');
+        },
         activateCheckbox() {
             this.isChecked = !this.isChecked;
-            this.$emit('activate-checkbox', this.isChecked);
+            if(this.pizzaInCart){
+                console.log('sou true')
+            }
+            this.$emit('activate-checkbox', this.pizzaDetails);
 
             const storedPizzas = JSON.parse(localStorage.getItem('selectedPizzas')) || [];
 
@@ -36,25 +46,22 @@ export default {
 
             localStorage.setItem('selectedPizzas', JSON.stringify(storedPizzas));
         },
-
     },
 }
-
 </script>
 
 <template>
     <div class="pizza-content" @click="activateCheckbox">
         <div class="select-item">
-            <h3 class="text-uppercase title">{{ name }}</h3>
-            <input class="checkbox" type="checkbox" v-model="isChecked" :disabled="disabled">
+            <h3 class="text-uppercase title">{{ pizzaDetails.name }}</h3>
+            <input class="checkbox" type="checkbox" v-model="isChecked">
         </div>
-
-        <h4>Pomodoro pelati, muçarela, alho poró, palmito, catupiry e tomate cereja</h4>
+        <h4>{{ formatIngredients(pizzaDetails.ingredients) }}</h4>
         <div class="photo-value">
             <img class="pizza-image" src="../../assets/login.jpeg">
             <div class="pizza-value">
                 <h3 class="subtitle">R$</h3>
-                <h3 class="title">{{ formatValue(value) }}</h3>
+                <h3 class="title-value">{{ formatValue(value) }}</h3>
             </div>
 
         </div>
@@ -64,11 +71,20 @@ export default {
 <style setup lang="scss">
 .pizza-content {
     cursor: pointer;
+    width: 100%;
+
+    @media screen and (max-width: 425px) {
+        width: 100% !important;
+    }
 
     .select-item {
         display: flex;
         justify-content: space-between;
         width: 80%;
+
+        @media screen and (max-width: 425px) {
+            width: 100%;
+        }
 
 
         h3 {
@@ -94,6 +110,10 @@ export default {
         .pizza-image {
             width: 70%;
             border-radius: 16px;
+
+            @media screen and (max-width: 425px) {
+                width: 82%;
+            }
         }
 
         .pizza-value {
@@ -114,8 +134,17 @@ export default {
                 font-size: 14px;
             }
 
-            .title {
-                font-size: 26px;
+            .title-value {
+                font-size: 22px;
+                font-weight: 700;
+            }
+
+            @media screen and (max-width: 425px) {
+                width: 25%;
+                height: 46px;
+                position: absolute;
+                right: 35px;
+                bottom: inherit;
             }
         }
     }

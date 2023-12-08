@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from '../pages/LoginForm.vue'; 
-import RegisterEstablishment from '../pages/establishment/RegisterEstablishment.vue'; 
-import HomePage from '../pages/establishment/HomePage.vue'; 
+import Login from '../pages/LoginForm.vue';
+import RegisterEstablishment from '../pages/establishment/RegisterEstablishment.vue';
+import HomePage from '../pages/establishment/HomePage.vue';
 import IngredientPage from '../pages/establishment/IngredientPage.vue';
 import CategoryPage from '../pages/establishment/CategoryPage.vue';
 import MenuPageVue from '@/pages/establishment/MenuPage.vue';
@@ -9,16 +9,18 @@ import PromotionPage from '../pages/establishment/PromotionPage.vue';
 import BusinessHoursModal from '../components/businessHours/BusinessHoursModal.vue';
 import LimitPizzaPage from '../pages/establishment/LimitPizzaPage.vue';
 import MenuPageClient from '../pages/client/MenuPageClient.vue';
-/* import ShoppingPage from '../pages/client/ShoppingPage.vue';
- */import ProfilePage from '../pages/ProfilePage.vue';
+import ShoppingPage from '../pages/client/ShoppingPage.vue';
+import ProfilePage from '../pages/ProfilePage.vue';
 import AboutPage from '../pages/establishment/AboutPage.vue';
 import ContactPage from '../pages/establishment/ContactPage.vue';
 import RegisterClient from '../pages/RegisterClient.vue';
+import MyOrdersPage from '../pages/client/MyOrdersPage.vue';
+
 
 const routes = [
-  { 
-    path: '/', 
-    redirect: { name: 'homePage' } 
+  {
+    path: '/',
+    redirect: { name: 'homePage' }
   },
   {
     path: '/login',
@@ -51,11 +53,12 @@ const routes = [
     name: 'MenuPageClient',
     component: MenuPageClient,
   },
-/*   {
+  {
     path: '/carrinho',
     name: 'ShoppingPage',
     component: ShoppingPage,
-  }, */
+    props: true,
+  },
   {
     path: '/cardapio',
     name: 'MenuPage',
@@ -118,6 +121,14 @@ const routes = [
     path: '/perfil',
     name: 'ProfilePage',
     component: ProfilePage,
+    meta: {
+      auth: true,
+    }
+  },
+  {
+    path: '/meus-pedidos',
+    name: 'MyOrdersPage',
+    component: MyOrdersPage,
     meta: {
       auth: true,
     }

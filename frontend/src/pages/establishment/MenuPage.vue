@@ -28,7 +28,6 @@ export default {
                 const { data } = await this.$http.get("/products");
                 this.products = data;
 
-                console.log(this.products)
             } catch (error) {
                 console.error(error);
             }

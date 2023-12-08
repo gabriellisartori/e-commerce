@@ -69,7 +69,7 @@ export default {
         closeModal() {
             this.$emit('close');
         },
-        converterParaNumero(valor) {
+        toConvert(valor) {
             const valorNumerico = valor.replace(/[^\d,]/g, '').replace(',', '.');
 
             return parseFloat(valorNumerico);
@@ -108,9 +108,10 @@ export default {
                 return;
             }
             try {
+                console.log(this.form.additional, 'ADICIONAL')
                 const formData = new FormData();
                 formData.append('name', this.form.name);
-                const valorNumerico = this.converterParaNumero(this.form.value);
+                const valorNumerico = this.toConvert(this.form.value);
                 formData.append('value', valorNumerico);
                 formData.append('active', this.form.active ? '1' : '0');
                 formData.append('category_id', this.form.category_id);
@@ -120,16 +121,21 @@ export default {
                     formData.append(`ingredients[${i}][id]`, this.form.ingredients[i].id);
                 }
 
-                if (this.form.additional.length > 0) {
-                    console.log(this.form.additional.length)
+                // Lidar com dados adicionais
+                if (Array.isArray(this.form.additional) && this.form.additional.length > 0) {
                     for (let i = 0; i < this.form.additional.length; i++) {
-                        formData.append(`additional[${i}][id]`, this.form.additional[i].id);
-                        formData.append(`additional[${i}][value]`, this.form.additional[i].value);
+                        const item = this.form.additional[i];
+
+                        const valueToSend = item.value !== null ? parseFloat(item.value) : 0;
+
+                        formData.append(`additional[${i}][id]`, item.id);
+                        formData.append(`additional[${i}][value]`, isNaN(valueToSend) ? 0 : valueToSend);
                     }
                 } else {
-                    formData.append('additional', this.form.additional);
+                    formData.append('additional', this.form.additional); 
                 }
 
+                // Lidar com dados de promoção
                 if (this.form.promotion.length > 0) {
                     for (let i = 0; i < this.form.promotion.length; i++) {
                         const promotionItem = this.form.promotion[i];
@@ -144,7 +150,6 @@ export default {
                 } else {
                     formData.append('promotion', this.form.promotion);
                 }
-
 
                 console.log('mandando isso', formData)
                 await this.$http.post('/products', formData, {
@@ -163,7 +168,8 @@ export default {
                 console.error("Erro ao salvar o produto:", error);
             }
         },
-        async getData() {
+
+        /* async getData() {
             try {
                 const { data } = await this.$http.get(
                     `/products/${this.id}`
@@ -178,14 +184,13 @@ export default {
             } catch (error) {
                 console.error(error);
             }
-        },
+        }, */
 
         handleCategoryChange(event) {
             this.form.category_id = event.target.value;
         },
         handlePromotionChange(event) {
             this.form.promotion = Array.isArray(event.target.value) ? event.target.value : [event.target.value];
-            console.log('promcaaaaao', this.form.promotion);
         },
         handleSendFileToParent(file) {
             if (file instanceof File) {
@@ -229,9 +234,6 @@ export default {
         this.fetchIngredients();
         this.fetchCategories();
         this.fetchPromotions();
-        if (this.id) {
-            this.getData();
-        }
     }
 };
 </script>
