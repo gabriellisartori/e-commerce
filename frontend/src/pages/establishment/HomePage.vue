@@ -5,16 +5,18 @@ export default {
       promotionPizza: []
     };
   },
+  methods: {
+    async getPromotionPizza() {
+      const { data } = await this.$http.get('promotionPizza');
+      this.promotionPizza.ingredients = data[0].ingredients;
+      this.promotionPizza.value = data[0].promotion.value;
+      const split = data[0].promotion[0].name.split(' ');
+      this.promotionPizza.firstName = split[0] + ' ' + split[1];
+      this.promotionPizza.secondName = split[split.length - 1];
+    }
+  },
   async mounted() {
-    const { data } = await this.$http.get('promotionPizza');
-    this.promotionPizza.ingredients = data[0].ingredients;
-    this.promotionPizza.value = data[0].promotion.value;
-
-    const split = data[0].promotion[0].name.split(' ');
-    this.promotionPizza.firstName = split[0] + ' ' + split[1];
-    this.promotionPizza.secondName = split[split.length - 1];
-    //this.promotionPizza.firstName =;
-
+    await this.getPromotionPizza();
     document.body.classList.add('background');
   },
   unmounted() {
@@ -27,16 +29,25 @@ export default {
 <template>
   <div class="contentHome">
     <div class="infos-content">
-      <div class="speciale">
-        <h2 class="text-uppercase">{{ promotionPizza.firstName }}</h2>
-        <p class="text-uppercase">{{ promotionPizza.secondName }}</p>
+      <div v-if="promotionPizza.firstName">
+        <div class="speciale">
+          <h2 class="text-uppercase">{{ promotionPizza.firstName }}</h2>
+          <p class="text-uppercase">{{ promotionPizza.secondName }}</p>
+        </div>
+        <ul>
+          <li v-for="(ingredient, index) in promotionPizza.ingredients" :key="index" class="text-uppercase">{{ ingredient.name }}</li>
+        </ul>
+        
+        <div class="value">
+          <p>R$ {{ promotionPizza.value }},00</p>
+        </div>
       </div>
-      <ul>
-        <li v-for="(ingredient, index) in promotionPizza.ingredients" :key="index" class="text-uppercase">{{ ingredient.name }}</li>
-      </ul>
-
-      <div class="value">
-        <p>R$ {{ promotionPizza.value }},00</p>
+      <div v-else>
+        <div class="speciale">
+          <h2 class="text-uppercase">Speciale de</h2>
+          <p class="text-uppercase">...</p>
+        </div>
+        <h2 style="margin:20px;">Aguarde em breve será divulgado! 😊</h2>
       </div>
 
       <div class="vertical-bottom-line"></div>
