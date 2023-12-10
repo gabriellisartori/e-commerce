@@ -66,6 +66,7 @@ export default {
     border-radius: 16px;
     height: 165px;
     display: flex;
+    justify-content: space-between;
 
     .pizza-image {
         border-bottom-left-radius: 16px;
