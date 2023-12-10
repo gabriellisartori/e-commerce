@@ -55,7 +55,7 @@ export default {
 </script>
 
 <template>
-  <header class="page-header">
+  <header class="page-header" :class="{ 'is-home': $route.name === 'homePage' }">
     <nav class="menu">
       <ul>
         <div class="menu-icon" @click="toggleSideBar" v-if="isLoged">
@@ -89,7 +89,7 @@ export default {
           </button>
         </li>
         <li v-if="hasPermission">
-          <button class="text-uppercase">Pedidos</button>
+          <button @click="$router.push({ name: 'MyOrdersPage' })" class="text-uppercase">Pedidos</button>
         </li>
         <li class="logo">
           <img @click="$router.push({ name: 'homePage' })" src="@/assets/logo-pizza.png" alt="Pizzaria Basileus" />
@@ -111,12 +111,15 @@ export default {
 .page-header {
   padding: 10px 70px;
   color: #000000;
-  width: 50%;
   margin-top: 20px;
 
   @media screen and (max-width: 560px) {
     margin-bottom: 35px;
     padding: 10px 23px;
+  }
+
+  &.is-home {
+    width: 50%;
   }
 
   .menu {
@@ -164,7 +167,7 @@ export default {
 
       ul,
       li:last-child {
-        width: -webkit-fill-available;
+        width: 100%;
         text-align: end;
       }
     }
@@ -201,7 +204,7 @@ export default {
   }
 
   .carrinho {
-    position: absolute;
+    position: relative;
     top: 0px;
     margin-top: 14px;
     cursor: pointer;
