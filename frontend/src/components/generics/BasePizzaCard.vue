@@ -40,15 +40,6 @@ export default {
             }
         },
     },
-    computed: {
-        truncatedName() {
-            if (this.name.length > 10) {
-                return this.name.substring(0, 10) + '...';
-            } else {
-                return this.name;
-            }
-        },
-    },
 }
 
 </script>
@@ -58,7 +49,7 @@ export default {
         <!-- <img :src="image" alt="Pizza Image" class="pizza-image" /> -->
         <img class="pizza-image" src="../../assets/login.jpeg">
         <div class="pizza-infos">
-            <h3 class="text-uppercase title">{{ truncatedName }}</h3>
+            <h3 class="text-uppercase title long-name">{{ name }}</h3>
             <h3 class="title">R$ {{ value }}</h3>
             <base-switch :id="'switch-' + cardId" class="switch-menu" v-model="switchValue"
                 @update:modelValue="toggleSwitch" />
@@ -82,7 +73,7 @@ export default {
     }
 
     .pizza-infos {
-        width: 100%;
+        width: 200px;
         padding: 20px;
         line-height: 2;
 
@@ -92,6 +83,13 @@ export default {
 
         .switch-menu {
             margin-top: 10px;
+        }
+
+        .long-name {
+            white-space: nowrap;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 
