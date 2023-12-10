@@ -8,12 +8,14 @@ use App\Http\Requests\Order\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Mail\OrderMail;
 use App\Models\Additional;
+use App\Models\Client;
 use App\Models\Ingredient;
 use App\Models\Order;
 use App\Models\ProductAdditional;
 use App\Services\Order\CreateOrderService;
 use App\Services\OrderProductAdditional\CreateOrderProductAdditionalService;
 use App\Services\OrderProduct\CreateOrderProductService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
@@ -41,6 +43,8 @@ class OrderController extends Controller
                     'orderProduct.product.productAdditional',
                     'client'
                 ]);
+
+            //$orders->orderBy('created_at', 'desc');
 
             return response()->json(OrderResource::collection($orders), 200);
         } catch (ValidationException $e) {
@@ -86,10 +90,10 @@ class OrderController extends Controller
                 //create order product
                 $newOrderProduct = $this->createOrderProductService->handle($order, $orderProduct);
 
-                if (! isset($orderProduct['order_product_additional'])) {
+                if (!isset($orderProduct['order_product_additional'])) {
                     continue;
                 }
-                
+
                 //create order product additional
                 foreach ($orderProduct['order_product_additional'] as $orderProductAdditional) {
                     $this->createOrderProductAdditionalService->handle($newOrderProduct, $orderProductAdditional);
@@ -111,11 +115,14 @@ class OrderController extends Controller
 
             $orderBlade = $order->toArray();
 
+            $orderBlade['name'] = $order->client->name;
+
             foreach ($orderBlade['order_product'] as $key => $orderProduct) {
+                if (isset($orderProduct['order_product_additional'])) {
                     $productAdditionalId = ProductAdditional::find($orderProduct['order_product_additional']['product_additional_id'])->additional_id;
                     $ingredientId = Additional::find($productAdditionalId)->ingredient_id;
                     $orderBlade['order_product'][$key]['order_product_additional']['name'] = Ingredient::find($ingredientId)->name;;
-
+                }
                 foreach ($orderProduct['product']['product_ingredient'] as $keyIngredient => $productIngredient) {
                     $orderBlade['order_product'][$key]['product']['product_ingredient'][$keyIngredient]['name'] = Ingredient::find($productIngredient['ingredient_id'])->name;
                 }
@@ -160,6 +167,37 @@ class OrderController extends Controller
             DB::rollBack();
             return response()->json([
                 'message' => 'Erro ao atualizar pedido',
+            ], 401);
+        }
+    }
+
+    public function getMyOrders(Request $request)
+    {
+        try {
+            $token = explode('|', $request->bearerToken());
+            $userId = DB::table('personal_access_tokens')
+                ->where('token', hash('sha256', $token[1]))
+                ->value('tokenable_id');
+
+            $client = Client::where('user_id', $userId)->first();
+
+            $orders = Order::where('client_id', $client->id)
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->load([
+                    'orderProduct',
+                    'orderProduct.orderProductAdditional',
+                    'orderProduct.product',
+                    'orderProduct.product.productPromotion',
+                    'orderProduct.product.productIngredient',
+                    'orderProduct.product.productAdditional',
+                    'client'
+                ]);
+
+            return response()->json(OrderResource::collection($orders), 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro ao listar pedidos',
             ], 401);
         }
     }
