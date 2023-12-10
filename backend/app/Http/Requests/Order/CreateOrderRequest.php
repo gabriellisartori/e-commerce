@@ -24,19 +24,19 @@ class CreateOrderRequest extends FormRequest
     {
         return [
             'observation' => 'nullable|string',
-            'total_value' => 'required|numeric',
+            'total_value' => 'required',
             'paid' => 'required|boolean',
             'client_id' => 'required|exists:clients,id',
             'establishment_id' => 'required|exists:establishments,id',
             'order_product' => 'required|array',
             'order_product*.product_id' => 'required|exists:products,id',
-            'order_product*.quantity' => 'required|numeric',
-            'order_product*.value' => 'required|numeric',
+            'order_product*.quantity' => 'required',
+            'order_product*.value' => 'required',
             'order_product*.half_pizza' => 'required|boolean',
             'order_product*half_pizza_product_id' => 'nullable|exists:products,id',
             'order_product*.order_product_additional' => 'nullable|array',
             'order_product*.order_product_additional*.product_additional_id' => 'required|exists:product_additionals,id',
-            'order_product*.order_product_additional*.additional_value' => 'required|numeric',
+            'order_product*.order_product_additional*.additional_value' => 'required',
         ];
     }
 }
