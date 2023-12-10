@@ -128,7 +128,7 @@ class ProductController extends Controller
                 foreach ($data['additional'] as $additional) {
                     $additional['product_id'] = $product->id;
                     $additional['additional_id'] = $additional['id'];
-                    $additional['additional_value'] = $additional['value'] ?? null;
+                    $additional['additional_value'] = (float) $additional['value'] ?? null;
 
                     $this->createProductAdditionalService->handle($additional);
                 }
