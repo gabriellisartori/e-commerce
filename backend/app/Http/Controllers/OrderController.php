@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OrderExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\CreateOrderRequest;
 use App\Http\Requests\Order\UpdateOrderRequest;
@@ -19,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -29,12 +31,15 @@ class OrderController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $inputs = $request->input();
+
         try {
             //get all orders
-            $orders = Order::all()
-                ->load([
+            $orders = Order::query()
+                ->orderBy('created_at', 'desc')
+                ->with([
                     'orderProduct',
                     'orderProduct.orderProductAdditional',
                     'orderProduct.product',
@@ -44,7 +49,15 @@ class OrderController extends Controller
                     'client'
                 ]);
 
-            //$orders->orderBy('created_at', 'desc');
+            if (isset($inputs['start_date']) && isset($inputs['end_date'])) {
+                $orders = $orders->whereBetween('created_at', [$inputs['start_date'], $inputs['end_date'] ]);
+            } else if (isset($inputs['start_date'])) {
+                $orders = $orders->where('created_at', '>=', $inputs['start_date']);
+            } else if (isset($inputs['end_date'])) {
+                $orders = $orders->where('created_at', '<=', $inputs['end_date']);
+            }
+
+            $orders = $orders->get();
 
             return response()->json(OrderResource::collection($orders), 200);
         } catch (ValidationException $e) {
@@ -200,5 +213,34 @@ class OrderController extends Controller
                 'message' => 'Erro ao listar pedidos',
             ], 401);
         }
+    }
+
+    public function exportFile (Request $request)
+    {
+        $orders = $this->index($request);
+
+        $ordersFile = [];
+
+        dd($orders->original->resource);
+
+        foreach($orders->original->resource as $item) {
+            array_push($ordersFile,
+                [
+                    'name' => $item->client->name,
+                    'email' => $item->client->email,
+                    'phone_number' => $item->client->phone_number,
+                    'date_birth' => $item->client->date_birth,
+                    'observation' => $item->observation,
+                    'total_value' => $item->value,
+                    'products' => $item->products->map(function ($product) {
+                        return $product->product->name;
+                    })->implode(', '),
+                ]
+            );
+        }
+
+        $data = new OrderExport(collect($ordersFile));
+
+        return Excel::download($data, 'pedidos.csv');
     }
 }
