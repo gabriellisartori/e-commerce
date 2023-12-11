@@ -248,7 +248,7 @@ export default {
             display: grid;
             grid-template-columns: 3fr 0fr 0fr;
             margin: 0px 30px;
-
+            gap: 15px;
 
             .pizza-title {
                 font-weight: 700;

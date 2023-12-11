@@ -275,11 +275,14 @@ export default {
 
             <div class="menu" :class="{ 'opacity-low': showAddToCartButton }">
                 <base-speciale class="header" v-for="promoPizza in promotionPizza" :key="promoPizza.id"
-                    :promotion="promotionPizza" @activate-checkbox="selectPizza" :resetCheckboxEvent="resetCheckboxEvent"/>
-                <base-pizza-card-client class="content" v-for="product in products" :key="product.id"
-                    :image="product.image" :value="product.value" :pizzaDetails="product" @activate-checkbox="selectPizza"
-                    :pizzaInCart="product.pizzaInCart" :resetCheckboxEvent="resetCheckboxEvent"/>
-
+                    :promotion="promotionPizza" @activate-checkbox="selectPizza" :resetCheckboxEvent="resetCheckboxEvent" />
+                <template v-for="product in products">
+                    <template v-if="!product.promotion">
+                        <base-pizza-card-client class="content" :key="product.id" :image="product.image"
+                            :value="product.value" :pizzaDetails="product" @activate-checkbox="selectPizza"
+                            :pizzaInCart="product.pizzaInCart" :resetCheckboxEvent="resetCheckboxEvent" />
+                    </template>
+                </template>
             </div>
         </div>
 

@@ -15,6 +15,7 @@ export default {
         getPromotionPizza() {
             this.promotionPizza.ingredients = this.promotion[0].ingredients;
             this.promotionPizza.value = this.promotion[0].value;
+            this.promotionPizza.image = this.promotion[0].image;
             const split = this.promotion[0].promotion[0].name.split(' ');
             this.promotionPizza.firstName = split[0] + ' ' + split[1];
             this.promotionPizza.secondName = split[split.length - 1];
@@ -62,9 +63,8 @@ export default {
             </div>
             <input class="checkbox" type="checkbox" v-model="isChecked">
         </div>
-
         <div class="photo-value">
-            <img class="pizza-image" src="../../assets/login.jpeg">
+            <img class="pizza-image" :src="'http://localhost:8000/' + promotionPizza.image" alt="Pizza Image">
             <div class="set">
                 <div class="pizza-value">
                     <h3 class="subtitle">R$</h3>
