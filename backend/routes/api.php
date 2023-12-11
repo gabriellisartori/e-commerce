@@ -91,6 +91,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::put('{id}', [OrderController::class, 'update'])->middleware('verify.establishment.user');
     });
 
+    Route::get('getMyOrders', [OrderController::class, 'getMyOrders']);
+
 });
 
 Route::get('promotionPizza', [ProductController::class, 'getPromotionPizza']);
