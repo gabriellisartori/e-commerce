@@ -108,7 +108,7 @@ export default {
                 total_value: totalValue,
                 observation: observation,
                 paid: true,
-                client_id: 2,
+                client_id: 1,
                 establishment_id: 1,
                 order_product: orderProducts,
             }, {

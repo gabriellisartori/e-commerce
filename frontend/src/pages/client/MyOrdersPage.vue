@@ -1,7 +1,10 @@
 <script>
-import axios from 'axios';
+import BaseCollapsible from '@/components/generics/BaseCollapsible.vue';
 
 export default {
+    components: {
+        BaseCollapsible
+    },
     data() {
         return {
             orders: [],
@@ -9,31 +12,25 @@ export default {
             selectedOrder: null
         };
     },
-    mounted() {
-        this.fetchOrders();
-    },
     methods: {
         async fetchOrders() {
             try {
-                const response = await axios.get('/orders');
+                const response = await this.$http.get('/getMyOrders');
                 this.orders = response.data;
+
+                console.log(this.orders, 'meus pedidos')
             } catch (error) {
                 console.error('Erro ao buscar os pedidos', error);
             }
         },
-        async fetchOrderById(orderId) {
-            try {
-                const response = await axios.get(`/orders/${orderId}`);
-                this.selectedOrder = response.data;
-            } catch (error) {
-                console.error('Erro ao buscar o pedido por ID', error);
-            }
+        formatCurrency(value) {
+            const numericValue = typeof value === 'string' ? parseFloat(value) : value;
+            return numericValue.toFixed(2).replace('.', ',');
         },
-        selectOrder(orderId) {
-            this.selectedOrderId = orderId;
-            this.fetchOrderById(orderId);
-        }
-    }
+    },
+    mounted() {
+        this.fetchOrders();
+    },
 };
 </script>
 
@@ -47,14 +44,16 @@ export default {
             <p>Você ainda não tem nenhum pedido 😔</p>
         </div>
 
-        <ul v-else>
-            <li v-for="order in orders" :key="order.id" @click="selectOrder(order.id)">
-                {{ order.name }} - {{ order.total }}
-            </li>
-        </ul>
-
-        <div v-if="selectedOrder">
-            <h3>{{ selectedOrder.name }} - {{ selectedOrder.total }}</h3>
+        <div v-else class="collapsible-orders">
+            <BaseCollapsible v-for="order in orders" :key="order.id" :title="`11/12/2023 - ${order.client.name}`">
+                <p>Pizza:</p>
+                <div v-for="productItem in order.products" :key="productItem.id">
+                    <p>{{ productItem.product.name }} - R$ {{ productItem.product.value }},00</p>
+                    <p v-if="productItem.product.additional">+ {{ productItem.product.additional.name }} - R${{
+                        formatCurrency(productItem.product.additional.value) }}</p>
+                    <p class="total-value">Total: R${{ formatCurrency(order.total_value) }}</p>
+                </div>
+            </BaseCollapsible>
         </div>
     </div>
 </template>
@@ -75,6 +74,18 @@ export default {
         font-weight: normal;
         font-style: normal;
         font-display: swap;
+    }
+}
+
+.collapsible-orders {
+    gap: 20px;
+    display: grid;
+    font-weight: 700;
+    line-height: 1.6rem;
+
+    .total-value {
+        font-size: 20px;
+        margin-top: 12px;
     }
 }
 </style>
