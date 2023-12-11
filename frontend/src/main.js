@@ -26,6 +26,9 @@ app.component('base-button-group', BaseButtonGroup);
 import BaseCard from './components/generics/BaseCard.vue';
 app.component('base-card', BaseCard);
 
+import BaseDropzone from './components/generics/BaseDropzone.vue';
+app.component('base-dropzone', BaseDropzone);
+
 import BaseModal from './components/generics/BaseModal.vue';
 app.component('base-modal', BaseModal);
 

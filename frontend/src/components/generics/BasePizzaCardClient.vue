@@ -6,6 +6,7 @@ export default {
         pizzaDetails: Object,
         alertVisible: Boolean,
         pizzaInCart: Boolean,
+        resetCheckboxEvent: Boolean,
     },
     data() {
         return {
@@ -28,7 +29,7 @@ export default {
         },
         activateCheckbox() {
             this.isChecked = !this.isChecked;
-            if(this.pizzaInCart){
+            if (this.pizzaInCart) {
                 console.log('sou true')
             }
             this.$emit('activate-checkbox', this.pizzaDetails);
@@ -46,19 +47,30 @@ export default {
 
             localStorage.setItem('selectedPizzas', JSON.stringify(storedPizzas));
         },
+        resetCheckbox() {
+            this.isChecked = false;
+        },
+    },
+    watch: {
+        resetCheckboxEvent(newValue) {
+            if (newValue) {
+                this.isChecked = false;
+            }
+        },
     },
 }
 </script>
 
 <template>
-    <div class="pizza-content" @click="activateCheckbox">
+    <div class="pizza-content" @click="activateCheckbox" :key="resetCheckboxEvent">
         <div class="select-item">
             <h3 class="text-uppercase title">{{ pizzaDetails.name }}</h3>
             <input class="checkbox" type="checkbox" v-model="isChecked">
         </div>
         <h4>{{ formatIngredients(pizzaDetails.ingredients) }}</h4>
         <div class="photo-value">
-            <img class="pizza-image" src="../../assets/login.jpeg">
+            <!--  <img class="pizza-image" src="../../assets/login.jpeg"> -->
+            <img :src="'http://localhost:8000/' + pizzaDetails.image" alt="Pizza Image" class="pizza-image" />
             <div class="pizza-value">
                 <h3 class="subtitle">R$</h3>
                 <h3 class="title-value">{{ formatValue(value) }}</h3>

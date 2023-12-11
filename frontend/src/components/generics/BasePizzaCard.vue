@@ -46,8 +46,8 @@ export default {
 
 <template>
     <div class="pizza-card">
-        <!-- <img :src="image" alt="Pizza Image" class="pizza-image" /> -->
-        <img class="pizza-image" src="../../assets/login.jpeg">
+        <img :src="'http://localhost:8000/' + image" class="pizza-image">
+        
         <div class="pizza-infos">
             <h3 class="text-uppercase title long-name">{{ name }}</h3>
             <h3 class="title">R$ {{ value }}</h3>

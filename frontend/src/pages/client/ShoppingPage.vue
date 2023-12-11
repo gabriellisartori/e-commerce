@@ -5,12 +5,15 @@ export default {
     data() {
         return {
             selectedPizzas: [],
+            showAdditionalInfo: false,
         };
     },
     mounted() {
         this.selectedPizzas = JSON.parse(localStorage.getItem('selectedPizza')) || [];
+        console.log(this.selectedPizzas, 'minhas pzza')
 
         const accessToken = localStorage.getItem('token');
+        console.log(accessToken, 'token')
 
         if (accessToken) {
             const decodedToken = this.decodeAccessToken(accessToken);
@@ -19,18 +22,35 @@ export default {
 
             console.log('ID do cliente:', clientId);
         }
+
+        window.addEventListener('beforeunload', this.clearLocalStorage);
     },
     methods: {
         calcularTotal() {
-            return this.selectedPizzas.reduce((total, pizza) => total + parseFloat(pizza.value), 0).toFixed(2);
+            const total = this.selectedPizzas.reduce((acc, item) => {
+                const pizzaValue = parseFloat(item.pizza.value) || 0;
+
+                if (!isNaN(pizzaValue) && isFinite(pizzaValue)) {
+                    const additionalValue = item.pizza.additional && item.showAdditionalInfo
+                        ? parseFloat(item.pizza.additional.value) || 0
+                        : 0;
+
+                    return acc + pizzaValue + additionalValue;
+                } else {
+                    console.error('Valor inválido para pizza:', item);
+                    return acc;
+                }
+            }, 0);
+
+            return total.toFixed(2);
         },
+
         getAdditionalInfo() {
             return ingredient => {
                 const foundItem = this.storeIngredients.find(item => item.id === ingredient.id);
                 return foundItem || null;
             };
         },
-
         async removerPizza(index) {
             const confirmed = await this.$swal.fire({
                 icon: 'warning',
@@ -46,8 +66,6 @@ export default {
 
                 localStorage.setItem('selectedPizza', JSON.stringify(this.selectedPizzas));
             }
-
-
         },
         finalizarPedido() {
             const token = this.$auth.token();
@@ -58,9 +76,9 @@ export default {
             }
 
             const totalValue = parseFloat(this.calcularTotal());
-
-            const orderProducts = this.selectedPizzas.map(pizza => {
-                const orderProductAdditional = pizza.order_product_additional || null;
+            const orderProducts = this.selectedPizzas.map(item => {
+                const pizza = item.pizza;
+                const orderProductAdditional = pizza.additional || null;
 
                 if (
                     !pizza?.id ||
@@ -78,9 +96,11 @@ export default {
                     value: parseFloat(pizza.value),
                     half_pizza: pizza.half_pizza || false,
                     half_pizza_product_id: pizza.half_pizza_product_id || null,
-                    order_product_additional: orderProductAdditional,
+                    order_product_additional: this.showAdditionalInfo ? orderProductAdditional : null,
                 };
             }).filter(orderProduct => orderProduct !== null);
+
+            console.log('Order Products:', orderProducts);
 
             const observation = this.$el.querySelector('.text-area').value || null;
 
@@ -88,7 +108,7 @@ export default {
                 total_value: totalValue,
                 observation: observation,
                 paid: true,
-                client_id: 1,
+                client_id: 2,
                 establishment_id: 1,
                 order_product: orderProducts,
             }, {
@@ -112,11 +132,18 @@ export default {
                 timer: 1500,
                 didClose: () => {
                     console.log('Notificação fechada', confirmed);
-                    router.push({ name: 'homePage' });
-                    localStorage.setItem('selectedPizza', JSON.stringify(this.selectedPizzas));
+                    router.push({ name: 'MenuPageClient' });
                 }
             });
-        }
+
+            this.clearLocalStorage()
+        },
+        clearLocalStorage() {
+            localStorage.removeItem('selectedPizza');
+        },
+    },
+    beforeUnmount() {
+        window.removeEventListener('beforeunload', this.clearLocalStorage);
     },
 };
 </script>
@@ -124,24 +151,25 @@ export default {
 <template>
     <div class="shopping-content">
         <h2 class="title">Seu carrinho</h2>
-
         <template v-if="selectedPizzas.length > 0">
             <div class="shopping-page">
-                <div v-for="(pizza, index) in selectedPizzas" :key="index" class="products">
+                <div v-for="(item, index) in selectedPizzas" :key="index" class="products">
                     <div>
                         <p class="pizza-title">
-                            <span>{{ pizza.quantity }}x</span>
-                            {{ pizza.half_pizza ? pizza.name : pizza.name }}
+                            <span>{{ item.pizza.quantity }}x</span>
+                            {{ item.pizza.half_pizza ? item.pizza.name : item.pizza.name }}
                         </p>
 
-                        <p>Sabor: <span v-if="Array.isArray(pizza.ingredients)">{{ pizza.ingredients.map(ingredient =>
-                            ingredient.name).join(', ') }}</span></p>
-                        <p>Adicional: <span>{{ pizza.additional ? pizza.additional.name : 'Nenhum' }}</span></p>
+                        <p>Sabor: <span v-if="Array.isArray(item.pizza.ingredients)">{{
+                            item.pizza.ingredients.map(ingredient =>
+                                ingredient.name).join(', ') }}</span></p>
+                        <p v-if="item.showAdditionalInfo">Adicional: <span>{{ item.pizza.additional ?
+                            item.pizza.additional.name : 'Nenhum' }}</span></p>
                     </div>
                     <div class="pizza-values">
-                        <h2>R${{ pizza.value }}</h2>
+                        <h2>R${{ item.pizza.value }}</h2>
                         <h3>R$0,00</h3>
-                        <h3>R${{ pizza.additional.value || '0,00' }}</h3>
+                        <h3 v-if="item.showAdditionalInfo">R${{ item.pizza.additional.value || '0,00' }}</h3>
                     </div>
 
                     <div class="actions-icons">

@@ -1,41 +1,66 @@
 <script>
 export default {
     props: {
-        image: String,
-        name: String,
-        value: String,
-        ingredients: [],
-        promotion: Array,
+        promotion: Object,
+        pizzaInCart: Boolean,
+        resetCheckboxEvent: Boolean,
+    },
+    data() {
+        return {
+            promotionPizza: [],
+            isChecked: false,
+        };
     },
     methods: {
-        getPromotionMonth() {
-            if (this.promotion && this.promotion.length > 0 && this.promotion[0].start_date) {
-                const startMonth = new Date(this.promotion[0].start_date).toLocaleString('default', { month: 'long' });
+        getPromotionPizza() {
+            this.promotionPizza.ingredients = this.promotion[0].ingredients;
+            this.promotionPizza.value = this.promotion[0].value;
+            const split = this.promotion[0].promotion[0].name.split(' ');
+            this.promotionPizza.firstName = split[0] + ' ' + split[1];
+            this.promotionPizza.secondName = split[split.length - 1];
+        },
+        activateCheckbox() {
+            this.isChecked = !this.isChecked;
+            if (this.pizzaInCart) {
+                console.log('sou true')
+            }
+            this.$emit('activate-checkbox', this.promotion);
 
-                return startMonth;
+            const storedPizzas = JSON.parse(localStorage.getItem('selectedPizzas')) || [];
+
+            if (this.isChecked) {
+                storedPizzas.push(this.promotion);
+            } else {
+                const index = storedPizzas.findIndex(pizza => pizza.name === this.promotion.name);
+                if (index !== -1) {
+                    storedPizzas.splice(index, 1);
+                }
             }
 
-            return 'Mês não disponível';
-        },
-        formatValue(value) {
-            const hasCents = value.includes('.');
-            const formattedValue = hasCents ? value : `${value},00`;
-
-            return formattedValue;
+            localStorage.setItem('selectedPizzas', JSON.stringify(storedPizzas));
         },
     },
-
+    async mounted() {
+        this.getPromotionPizza();
+    },
+    watch: {
+        resetCheckboxEvent(newValue) {
+            if (newValue) {
+                this.isChecked = false;
+            }
+        },
+    },
 }
 </script>
 
 <template>
-    <div class="speciale-content">
+    <div class="speciale-content" @click="activateCheckbox" :key="resetCheckboxEvent">
         <div class="select-item">
             <div class="month">
-                <h3 class="text-uppercase title">SPECIALE DO MÊS DE</h3>
-                <h2>{{ getPromotionMonth() }}</h2>
+                <h3 class="text-uppercase title">{{ promotionPizza.firstName }}</h3>
+                <h2>{{ promotionPizza.secondName }}</h2>
             </div>
-            <input class="checkbox" type="checkbox">
+            <input class="checkbox" type="checkbox" v-model="isChecked">
         </div>
 
         <div class="photo-value">
@@ -43,11 +68,14 @@ export default {
             <div class="set">
                 <div class="pizza-value">
                     <h3 class="subtitle">R$</h3>
-                    <h3 class="title-value">{{ formatValue(value) }}</h3>
+                    <h3 class="title-value">{{ promotionPizza.value }},00</h3>
+
                 </div>
                 <div class="ingredients">
+                    {{ promotion.ingredient }}
                     <ul>
-                        <li v-for="(ingredient, index) in ingredients" :key="index">{{ ingredient.name }}</li>
+                        <li v-for="(ingredient, index) in promotionPizza.ingredients" :key="index" class="text-uppercase">{{
+                            ingredient.name }}</li>
                     </ul>
                 </div>
             </div>
@@ -79,6 +107,7 @@ export default {
 
             h2 {
                 font-family: "Sabatons";
+
                 @font-face {
                     font-family: "Sabatons";
                     src: local("Sabatons Sans Stamp"), local("Sabatons-Sans-Stamp"),
@@ -152,7 +181,6 @@ export default {
                 bottom: 38px;
                 background-color: var(--cor-primaria);
                 color: var(--cor-site);
-                height: 22%;
                 z-index: 0;
                 padding: 25px 15px;
                 width: 140%;

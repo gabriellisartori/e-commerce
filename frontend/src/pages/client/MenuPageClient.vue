@@ -1,21 +1,28 @@
 <script>
 import { toast } from "vue3-toastify";
+import DetailsOrderModal from '@/components/orders/DetailsOrderModal.vue';
 
 export default {
+    components: {
+        DetailsOrderModal
+    },
     data() {
         return {
+            showModal: false,
             products: [],
-            productsWithPromotion: [],
             id: null,
             selectedPizza: null,
             selectedPizzaCount: 0,
-            hasProductsPromotion: false,
             selectedPizzaType: null,
             shouldShowAddToCartButton: false,
             selectedHalfPizzas: [],
+            promotionPizza: [],
             pizzaInCart: false,
             showAddToCartButton: false,
             disableOtherElements: false,
+            showAdditionalSwitch: false,
+            showAdditionalInfo: false,
+            resetCheckboxEvent: false,
         };
     },
     computed: {
@@ -25,27 +32,23 @@ export default {
         },
     },
     methods: {
+        closeModal() {
+            this.id = null;
+            this.showModal = false;
+        },
         async fetchProducts() {
             try {
                 const { data } = await this.$http.get("/products");
                 this.products = data;
-                this.fetchProductsWithPromotion();
+                this.getPromotionPizza();
 
             } catch (error) {
                 console.error(error);
             }
         },
-        fetchProductsWithPromotion() {
-            if (this.products) {
-                this.productsWithPromotion = this.products.filter(product => {
-                    const hasPromotion = product.promotion && Array.isArray(product.promotion) && product.promotion.length > 0;
-                    return hasPromotion;
-                });
-                this.hasProductsPromotion = this.productsWithPromotion.length > 0;
-
-            } else {
-                console.log("A lista de todos os produtos não está definida.");
-            }
+        async getPromotionPizza() {
+            const { data } = await this.$http.get('promotionPizza');
+            this.promotionPizza = data
         },
         selectPizzaType(pizzaType) {
             if (this.selectedPizzaType !== pizzaType) {
@@ -53,6 +56,9 @@ export default {
             } else {
                 this.selectedPizzaType = pizzaType === 'whole' ? 'half' : 'whole';
             }
+        },
+        handleAdditionalSwitch(value) {
+            this.showAdditionalSwitch = value;
         },
         selectPizza(pizzaPart) {
             if (!this.selectedPizzaType) {
@@ -86,15 +92,22 @@ export default {
             // Adiciona controle de visibilidade e opacidade
             this.showAddToCartButton = this.shouldShowAddToCartButton;
             this.disableOtherElements = this.showAddToCartButton;
+
+            const pizzaWithAdditional = this.products.find(
+                (product) => product.name === pizzaPart.name && product.additional
+            );
+
+            // Se tiver adicional, abre a modal
+            if (this.shouldShowAddToCartButton && pizzaWithAdditional) {
+                this.showModal = true;
+                this.selectedPizzaWithAdditional = pizzaWithAdditional;
+                this.shouldShowAddToCartButton = false;
+            }
         },
-        resetPizzaSelection() {
-            this.selectedPizzas = [];
+        addToCart(data) {
             this.showAddToCartButton = false;
-            this.disableOtherElements = false;
-        },
-        addToCart() {
-            this.showAddToCartButton = false;
-            this.$emit('pizzaAdicionadaAoCarrinho'); 
+            this.resetCheckboxEvent = !this.resetCheckboxEvent;
+            this.$emit('pizzaAdicionadaAoCarrinho');
 
             if ((this.selectedPizzaType === 'half' && this.selectedHalfPizzas.length !== 2) ||
                 (this.selectedPizzaType === 'whole' && !this.selectedPizza)) {
@@ -103,40 +116,107 @@ export default {
 
             const storedPizzas = JSON.parse(localStorage.getItem('selectedPizza')) || [];
 
-            if (this.selectedPizzaType === 'whole') {
-                const pizzaToAdd = {
-                    id: this.selectedPizza.id,
-                    name: this.selectedPizza.name,
-                    quantity: 1,
-                    value: this.selectedPizza.value,
-                    half_pizza: false,
-                    half_pizza_product_id: null,
-                    additional: this.selectedPizza.additional || [],
-                    ingredients: this.selectedPizza.ingredients || [],
-                };
+            if (data && data.pizzaDetails) {
+                const { pizzaDetails, showAdditionalSwitch } = data;
+                if (this.selectedPizzaType === 'whole') {
+                    const pizzaToAdd = {
+                        pizza: {
+                            id: pizzaDetails.id,
+                            name: pizzaDetails.name,
+                            quantity: 1,
+                            value: pizzaDetails.value,
+                            half_pizza: false,
+                            half_pizza_product_id: null,
+                            additional: pizzaDetails.additional || [],
+                            ingredients: pizzaDetails.ingredients || [],
+                        },
+                        showAdditionalInfo: showAdditionalSwitch,
+                    };
+                    storedPizzas.push(pizzaToAdd);
 
-                storedPizzas.push(pizzaToAdd);
-            } else if (this.selectedPizzaType === 'half') {
-                const maxPricePizza = this.selectedHalfPizzas.reduce((maxPizza, pizza) => (pizza.value > maxPizza.value ? pizza : maxPizza), this.selectedHalfPizzas[0]);
+                } else if (this.selectedPizzaType === 'half') {
+                    const maxPricePizza = this.selectedHalfPizzas.reduce((maxPizza, pizza) => (pizza.value > maxPizza.value ? pizza : maxPizza), this.selectedHalfPizzas[0]);
 
-                const pizzaToAdd = {
-                    id: maxPricePizza.id,
-                    name: this.selectedHalfPizzas.map(pizza => pizza.name).join(' e '),
-                    quantity: 1,
-                    value: parseFloat(maxPricePizza.value).toFixed(2),
-                    half_pizza: true,
-                    half_pizza_product_id: null,
-                    additional: maxPricePizza.additional || [],
-                    ingredients: maxPricePizza.ingredients || [],
-                };
+                    if (this.showAdditionalSwitch) {
+                        this.showAdditionalInfo = true;
+                    }
 
-                storedPizzas.push(pizzaToAdd);
+                    const pizzaToAdd = {
+                        pizza: {
+                            id: maxPricePizza.id,
+                            name: this.selectedHalfPizzas.map(pizza => pizza.name).join(' e '),
+                            quantity: 1,
+                            value: parseFloat(maxPricePizza.value).toFixed(2),
+                            half_pizza: true,
+                            half_pizza_product_id: null,
+                            additional: maxPricePizza.additional || [],
+                            ingredients: maxPricePizza.ingredients || [],
+                        },
+                        showAdditionalInfo: this.showAdditionalSwitch,
+                    };
+                    storedPizzas.push(pizzaToAdd);
+                }
+
+            } else {
+                if (this.selectedPizzaType === 'whole') {
+                    let pizzasToAdd = [];
+
+                    if (Array.isArray(this.selectedPizza)) {
+                        pizzasToAdd = this.selectedPizza.map(pizza => ({
+                            pizza: {
+                                id: pizza.id,
+                                name: pizza.name,
+                                quantity: 1,
+                                value: pizza.value,
+                                half_pizza: false,
+                                half_pizza_product_id: null,
+                                additional: pizza.additional || [],
+                                ingredients: pizza.ingredients || [],
+                            },
+                            showAdditionalInfo: this.showAdditionalSwitch,
+                        }));
+
+                    } else {
+                        const pizzaToAdd = {
+                            pizza: {
+                                id: this.selectedPizza.id,
+                                name: this.selectedPizza.name,
+                                quantity: 1,
+                                value: this.selectedPizza.value,
+                                half_pizza: false,
+                                half_pizza_product_id: null,
+                                additional: this.selectedPizza.additional || [],
+                                ingredients: this.selectedPizza.ingredients || [],
+                            },
+                            showAdditionalInfo: this.showAdditionalSwitch,
+                        };
+                        pizzasToAdd.push(pizzaToAdd);
+                    }
+
+                    storedPizzas.push(...pizzasToAdd);
+                } else if (this.selectedPizzaType === 'half') {
+                    const maxPricePizza = this.selectedHalfPizzas.reduce((maxPizza, pizza) => (pizza.value > maxPizza.value ? pizza : maxPizza), this.selectedHalfPizzas[0]);
+
+                    const pizzaToAdd = {
+                        pizza: {
+                            id: maxPricePizza.id,
+                            name: this.selectedHalfPizzas.map(pizza => pizza.name).join(' e '),
+                            quantity: 1,
+                            value: parseFloat(maxPricePizza.value).toFixed(2),
+                            half_pizza: true,
+                            half_pizza_product_id: null,
+                            additional: maxPricePizza.additional || [],
+                            ingredients: maxPricePizza.ingredients || [],
+                        },
+                        showAdditionalInfo: this.showAdditionalSwitch,
+                    };
+                    storedPizzas.push(pizzaToAdd);
+                }
             }
 
             localStorage.setItem('selectedPizza', JSON.stringify(storedPizzas));
 
             this.pizzaInCart = true;
-            this.resetPizzaSelection();
             this.shouldShowAddToCartButton = false;
             this.disableOtherElements = true;
 
@@ -147,11 +227,6 @@ export default {
         goToCarrinho() {
             this.$router.push({ name: 'ShoppingPage' });
         },
-        addToLocalStorage(pizza) {
-            const storedPizzas = JSON.parse(localStorage.getItem('selectedPizzas')) || [];
-            storedPizzas.push(pizza);
-            localStorage.setItem('selectedPizzas', JSON.stringify(storedPizzas));
-        },
         clearLocalStorage() {
             localStorage.clear();
         },
@@ -159,11 +234,8 @@ export default {
     mounted() {
         this.fetchProducts();
         this.selectedPizzaType = 'whole';
-
-        window.addEventListener('beforeunload', this.clearLocalStorage);
-
         this.selectedPizzas = JSON.parse(localStorage.getItem('selectedPizzas')) || [];
-
+        window.addEventListener('beforeunload', this.clearLocalStorage);
     },
     beforeUnmount() {
         window.removeEventListener('beforeunload', this.clearLocalStorage);
@@ -188,6 +260,12 @@ export default {
                     <img src="../../assets/meia-pizza.png">
                 </div>
             </div>
+
+            <DetailsOrderModal v-if="showModal" @close="closeModal" @add-to-cart="addToCart"
+                :pizzaDetails="selectedPizzaWithAdditional">
+            </DetailsOrderModal>
+
+
             <button v-if="shouldShowAddToCartButton" class="add-cart" @click="addToCart">Adicionar ao Carrinho</button>
 
 
@@ -196,14 +274,11 @@ export default {
             </div>
 
             <div class="menu" :class="{ 'opacity-low': showAddToCartButton }">
-                <base-speciale class="header" v-if="hasProductsPromotion" :key="hasProductsPromotion.id"
-                    :image="productsWithPromotion[0].image" :name="productsWithPromotion[0].name"
-                    :value="productsWithPromotion[0].value" :ingredients="productsWithPromotion[0].ingredients"
-                    :promotion="productsWithPromotion[0].promotion" />
-
-                <base-pizza-card-client ref="pizzaCards" class="content" v-for="product in products" :key="product.id"
+                <base-speciale class="header" v-for="promoPizza in promotionPizza" :key="promoPizza.id"
+                    :promotion="promotionPizza" @activate-checkbox="selectPizza" :resetCheckboxEvent="resetCheckboxEvent"/>
+                <base-pizza-card-client class="content" v-for="product in products" :key="product.id"
                     :image="product.image" :value="product.value" :pizzaDetails="product" @activate-checkbox="selectPizza"
-                    :pizzaInCart="product.pizzaInCart" />
+                    :pizzaInCart="product.pizzaInCart" :resetCheckboxEvent="resetCheckboxEvent"/>
 
             </div>
         </div>
