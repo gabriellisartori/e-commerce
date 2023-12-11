@@ -211,7 +211,13 @@ export default {
     z-index: 1;
 
     .icon-carrinho {
-      width: 4%;
+      width: 50px;
+      height: 50px;
+      transition: all 0.3s;
+
+      &:hover {
+        transform: scale(1.1);
+      }
     }
 
     .bolinha-verde {
