@@ -8,8 +8,9 @@ export default {
   methods: {
     async getPromotionPizza() {
       const { data } = await this.$http.get('promotionPizza');
+      if (!data.length) return;
       this.promotionPizza.ingredients = data[0].ingredients;
-      this.promotionPizza.value = data[0].promotion.value;
+      this.promotionPizza.value = data[0].value;
       const split = data[0].promotion[0].name.split(' ');
       this.promotionPizza.firstName = split[0] + ' ' + split[1];
       this.promotionPizza.secondName = split[split.length - 1];
@@ -47,7 +48,7 @@ export default {
           <h2 class="text-uppercase">Speciale de</h2>
           <p class="text-uppercase">...</p>
         </div>
-        <h2 style="margin:20px;">Aguarde em breve será divulgado! 😊</h2>
+        <h2 style="margin:20px;">Aguarde em breve será divulgado!</h2>
       </div>
 
       <div class="vertical-bottom-line"></div>

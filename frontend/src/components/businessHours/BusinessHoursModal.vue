@@ -9,7 +9,43 @@ export default {
     return {
       showModal: false,
       modalTitle: "Horário de funcionamento",
-      businessHours: [],
+      businessHours: [
+        {
+          day_week: "Segunda",
+          isOpen: false,
+          hours: [{ starts_at: null, end_at: null }],
+        },
+        {
+          day_week: "Terça",
+          isOpen: false,
+          hours: [{ starts_at: null, end_at: null }],
+        },
+        {
+          day_week: "Quarta",
+          isOpen: false,
+          hours: [{ starts_at: null, end_at: null }],
+        },
+        {
+          day_week: "Quinta",
+          isOpen: false,
+          hours: [{ starts_at: null, end_at: null }],
+        },
+        {
+          day_week: "Sexta",
+          isOpen: false,
+          hours: [{ starts_at: null, end_at: null }],
+        },
+        {
+          day_week: "Sábado",
+          isOpen: false,
+          hours: [{ starts_at: null, end_at: null }],
+        },
+        {
+          day_week: "Domingo",
+          isOpen: false,
+          hours: [{ starts_at: null, end_at: null }],
+        }
+      ],
     };
   },
   methods: {
@@ -24,6 +60,7 @@ export default {
     },
     async getData() {
       const { data } = await this.$http.get("/business-hours");
+      if (!data.length) return;
       this.businessHours = data;
       this.businessHours.forEach((day) => {
         day.isOpen = day.hours[0].starts_at != null ? true : false;
