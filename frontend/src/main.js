@@ -96,9 +96,9 @@ const options = {
 app.use(VueSweetalert2, options);
 
 // Vue Collapsible
-import 'vue-collapsible-component/lib/vue-collapsible.css';
+/* import 'vue-collapsible-component/lib/vue-collapsible.css';
 import Collapsible from 'vue-collapsible-component';
-app.use(Collapsible)
+app.use(Collapsible) */
 
 
 // add axios

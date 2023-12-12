@@ -152,7 +152,7 @@ export default {
                         }
                     }
                 } else {
-                    if (this.form.promotion === null) {
+                    if (this.form.promotion === null || this.form.promotion.length === 0) {
                         formData.append('promotion', []);
                     } else {
                         formData.append('promotion[0][id]', this.form.promotion);
