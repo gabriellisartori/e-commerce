@@ -136,6 +136,7 @@ export default {
 
                 } else if (this.selectedPizzaType === 'half') {
                     const maxPricePizza = this.selectedHalfPizzas.reduce((maxPizza, pizza) => (pizza.value > maxPizza.value ? pizza : maxPizza), this.selectedHalfPizzas[0]);
+                    const firstPizzaId = this.selectedHalfPizzas.length > 0 ? this.selectedHalfPizzas[0].id : null;
 
                     if (this.showAdditionalSwitch) {
                         this.showAdditionalInfo = true;
@@ -148,7 +149,7 @@ export default {
                             quantity: 1,
                             value: parseFloat(maxPricePizza.value).toFixed(2),
                             half_pizza: true,
-                            half_pizza_product_id: null,
+                            half_pizza_product_id: firstPizzaId,
                             additional: maxPricePizza.additional || [],
                             ingredients: maxPricePizza.ingredients || [],
                         },
@@ -196,6 +197,7 @@ export default {
                     storedPizzas.push(...pizzasToAdd);
                 } else if (this.selectedPizzaType === 'half') {
                     const maxPricePizza = this.selectedHalfPizzas.reduce((maxPizza, pizza) => (pizza.value > maxPizza.value ? pizza : maxPizza), this.selectedHalfPizzas[0]);
+                    const firstPizzaId = this.selectedHalfPizzas.length > 0 ? this.selectedHalfPizzas[0].id : null;
 
                     const pizzaToAdd = {
                         pizza: {
@@ -204,7 +206,7 @@ export default {
                             quantity: 1,
                             value: parseFloat(maxPricePizza.value).toFixed(2),
                             half_pizza: true,
-                            half_pizza_product_id: null,
+                            half_pizza_product_id: firstPizzaId,
                             additional: maxPricePizza.additional || [],
                             ingredients: maxPricePizza.ingredients || [],
                         },
