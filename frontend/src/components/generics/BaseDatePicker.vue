@@ -70,13 +70,9 @@ export default {
 </template>
 
 <style lang="scss">
-#custom-modal {
-
-  .modal {
-    overflow-y: initial !important;
-  }
+.modal {
+  overflow-y: initial !important;
 }
-
 
 .calendar {
   margin: 0 auto;

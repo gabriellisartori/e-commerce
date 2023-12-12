@@ -322,6 +322,7 @@ export default {
 :deep(.modal) {
     max-width: none;
     width: 55%;
+    overflow-y: auto!important;
 
     @media screen and (max-width: 425px) {
         width: 70%;
