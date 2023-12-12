@@ -63,6 +63,11 @@ export default {
           <div class="menu-bar"></div>
           <div class="menu-bar"></div>
         </div>
+        <div class="menu-icon" v-else @click="$router.push({ name: 'login' })">
+          <div class="menu-bar"></div>
+          <div class="menu-bar"></div>
+          <div class="menu-bar"></div>
+        </div>
         <li>
           <button @click="$router.push({ name: 'homePage' })" class="text-uppercase">
             Home
@@ -194,6 +199,7 @@ export default {
   }
 
   .logo {
+    cursor: pointer;
     img {
       width: 150px;
 
