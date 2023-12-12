@@ -25,7 +25,7 @@ export default {
         <div class="collapsible-header" @click="toggleCollapsible">
             {{ title }}
             <div class="actions-header">
-                <a v-if="icone" class="whats-icon" href="https://wa.me/5551989511735"><img alt="Chat on WhatsApp"
+                <a v-if="icone" class="whats-icon" href="https://wa.me/5551989511735" target="_blank"><img alt="Chat on WhatsApp"
                         src="../../assets/icons/whats-icon.png" /></a>
                 <span :class="{ 'arrow-up': !isCollapsed, 'arrow-down': isCollapsed }"></span>
             </div>
