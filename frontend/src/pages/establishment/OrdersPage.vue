@@ -107,12 +107,10 @@ export default {
         <div v-else class="collapsible-orders">
             <BaseCollapsible v-for="order in orders" :key="order.id"
                 :title="`${formatDate(order.created_at)} - ${order.client.name}`"  :icone="true" :phone="number(order.client.phone_number)">
-               
                     <p>Pizza:</p>
                     <div v-for="productItem in order.products" :key="productItem.id">
                         <template v-if="productItem.half_pizza">
-                            <p>{{ productItem.product.name }} - R$ {{ productItem.product.value }},00</p>
-                        </template>
+                            {{ productItem.product.name }} e  {{ productItem.half_pizza_product.name }}: R$ {{ productItem.product.value }},00                        </template>
                         <template v-else>
                             <p>{{ productItem.product.name }} - R$ {{ productItem.product.value }},00</p>
                         </template>

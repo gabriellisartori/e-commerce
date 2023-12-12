@@ -23,13 +23,13 @@ export default {
             this.isCollapsed = !this.isCollapsed;
         },
     },
-    computed: {
+    /* computed: {
         formattedPhoneNumber() {
             const numericPhoneNumber = this.phoneNumber.replace(/\D/g, '');
 
             return numericPhoneNumber;
         },
-    },
+    }, */
 };
 </script>
 
@@ -37,12 +37,9 @@ export default {
     <div>
         <div class="collapsible-header" @click="toggleCollapsible">
             {{ title }}
-            <div class="actions-header">
-                <base-button v-if="icone" class="whats" isRounded icon="fa-brands fa-whatsapp" :href="whatsapp" target="_blank"></base-button>
-                <span :class="{ 'arrow-up': !isCollapsed, 'arrow-down': isCollapsed }"></span>
             <div class="actions-header" v-if="icone">
-                <base-button  class="whats" isRounded icon="fa-brands fa-whatsapp"
-                    :href="'https://wa.me/55' + formattedPhoneNumber" target="_blank"></base-button>
+                <base-button class="whats" isRounded icon="fa-brands fa-whatsapp" :href="whatsapp"
+                    target="_blank"></base-button>
                 <font-awesome-icon class="icon" :class="{ 'arrow-up': !isCollapsed, 'arrow-down': isCollapsed }"
                     icon="fa-solid fa-chevron-up" />
             </div>
@@ -78,6 +75,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     .base-button.is-medium.is-rounded[data-v-74ec8ad6] {
         border-radius: 42px;
     }
