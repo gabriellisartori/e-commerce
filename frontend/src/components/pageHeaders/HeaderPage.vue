@@ -89,7 +89,7 @@ export default {
           </button>
         </li>
         <li v-if="hasPermission">
-          <button @click="$router.push({ name: 'MyOrdersPage' })" class="text-uppercase">Pedidos</button>
+          <button @click="$router.push({ name: 'OrdersPage' })" class="text-uppercase">Pedidos</button>
         </li>
         <li class="logo">
           <img @click="$router.push({ name: 'homePage' })" src="@/assets/logo-pizza.png" alt="Pizzaria Basileus" />

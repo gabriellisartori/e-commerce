@@ -15,7 +15,7 @@ import AboutPage from '../pages/establishment/AboutPage.vue';
 import ContactPage from '../pages/establishment/ContactPage.vue';
 import RegisterClient from '../pages/RegisterClient.vue';
 import MyOrdersPage from '../pages/client/MyOrdersPage.vue';
-
+import OrdersPage from '../pages/establishment/OrdersPage.vue';
 
 const routes = [
   {
@@ -129,6 +129,14 @@ const routes = [
     path: '/meus-pedidos',
     name: 'MyOrdersPage',
     component: MyOrdersPage,
+    meta: {
+      auth: true,
+    }
+  },
+  {
+    path: '/pedidos',
+    name: 'OrdersPage',
+    component: OrdersPage,
     meta: {
       auth: true,
     }
