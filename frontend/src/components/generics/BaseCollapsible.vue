@@ -11,7 +11,12 @@ export default {
             required: true,
         },
         icone: Boolean,
-        phoneNumber: String,
+        phone: String,
+    },
+    computed: {
+        whatsapp() {
+            return `https://wa.me/55${this.phone}`;
+        },
     },
     methods: {
         toggleCollapsible() {
@@ -32,6 +37,9 @@ export default {
     <div>
         <div class="collapsible-header" @click="toggleCollapsible">
             {{ title }}
+            <div class="actions-header">
+                <base-button v-if="icone" class="whats" isRounded icon="fa-brands fa-whatsapp" :href="whatsapp" target="_blank"></base-button>
+                <span :class="{ 'arrow-up': !isCollapsed, 'arrow-down': isCollapsed }"></span>
             <div class="actions-header" v-if="icone">
                 <base-button  class="whats" isRounded icon="fa-brands fa-whatsapp"
                     :href="'https://wa.me/55' + formattedPhoneNumber" target="_blank"></base-button>
