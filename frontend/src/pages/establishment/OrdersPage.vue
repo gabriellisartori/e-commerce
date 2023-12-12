@@ -118,8 +118,8 @@ export default {
                         </template>
                         <p v-if="productItem.product.additional">+ {{ productItem.product.additional.name }} - R${{
                             formatCurrency(productItem.product.additional.value) }}</p>
-                        <p class="total-value">Total: R${{ formatCurrency(order.total_value) }}</p>
                     </div>
+                    <p class="total-value">Total: R${{ formatCurrency(order.total_value) }}</p>
             </BaseCollapsible>
         </div>
     </div>
