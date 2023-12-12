@@ -11,10 +11,18 @@ export default {
             required: true,
         },
         icone: Boolean,
+        phoneNumber: String,
     },
     methods: {
         toggleCollapsible() {
             this.isCollapsed = !this.isCollapsed;
+        },
+    },
+    computed: {
+        formattedPhoneNumber() {
+            const numericPhoneNumber = this.phoneNumber.replace(/\D/g, '');
+
+            return numericPhoneNumber;
         },
     },
 };
@@ -24,12 +32,14 @@ export default {
     <div>
         <div class="collapsible-header" @click="toggleCollapsible">
             {{ title }}
-            <div class="actions-header">
-                <a v-if="icone" class="whats-icon" href="https://wa.me/5551989511735" target="_blank"><img alt="Chat on WhatsApp"
-                        src="../../assets/icons/whats-icon.png" /></a>
-                <span :class="{ 'arrow-up': !isCollapsed, 'arrow-down': isCollapsed }"></span>
+            <div class="actions-header" v-if="icone">
+                <a class="whats-icon" :href="'https://wa.me/55' + formattedPhoneNumber" target="_blank"><img
+                        alt="Chat on WhatsApp" src="../../assets/icons/whats-icon.png" /></a>
+                <font-awesome-icon class="icon" :class="{ 'arrow-up': !isCollapsed, 'arrow-down': isCollapsed }"
+                    icon="fa-solid fa-chevron-up" />
             </div>
-
+            <font-awesome-icon class="icon" :class="{ 'arrow-up': !isCollapsed, 'arrow-down': isCollapsed }"
+                icon="fa-solid fa-chevron-up" />
         </div>
         <transition name="fade">
             <div v-show="!isCollapsed" class="collapsible-content">
@@ -56,6 +66,8 @@ export default {
 
 .actions-header {
     width: 12%;
+    display: flex;
+    align-items: center;
 
     .whats-icon {
         img {
@@ -64,16 +76,13 @@ export default {
     }
 }
 
-.arrow-up::before {
-    float: right;
-    content: "▲";
-    margin-left: 5px;
+.icon {
+    color: var(--cor-primaria);
 }
 
-.arrow-down::before {
-    float: right;
-    content: "▼";
-    margin-left: 5px;
+.arrow-down {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
 }
 
 .collapsible-content {

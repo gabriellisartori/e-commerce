@@ -72,21 +72,23 @@ export default {
 
         <div v-else class="collapsible-orders">
             <BaseCollapsible v-for="order in orders" :key="order.id"
-                :title="`${formatDate(order.created_at)} - ${order.client.name}`"  :icone="true">
-               
-                    <p>Pizza:</p>
-                    <div v-for="productItem in order.products" :key="productItem.id">
-                        <template v-if="productItem.half_pizza">
-                            <p>{{ productItem.product.name }} - R$ {{ productItem.product.value }},00</p>
-                        </template>
-                        <template v-else>
-                            <p>{{ productItem.product.name }} - R$ {{ productItem.product.value }},00</p>
-                        </template>
-                        <p v-if="productItem.product.additional">+ {{ productItem.product.additional.name }} - R${{
-                            formatCurrency(productItem.product.additional.value) }}</p>
-                        <p class="total-value">Total: R${{ formatCurrency(order.total_value) }}</p>
-                    </div>
+                :title="`${formatDate(order.created_at)} - ${order.client.name}`" :icone="true" :phone-number="order.client.phone_number">
+                <p>Pizza:</p>
+                <div v-for="productItem in order.products" :key="productItem.id">
+                    <template v-if="productItem.half_pizza">
+                        <p v-if="productItem.product && productItem.product.name">
+                            {{ productItem.product.name }} e  {{ productItem.half_pizza_product.name }}: R$ {{ productItem.product.value }},00
+                        </p>
+                    </template>
+                    <template v-else>
+                        <p>{{ productItem.product.name }} - R$ {{ productItem.product.value }},00</p>
+                    </template>
+                    <p v-if="productItem.product.additional">+ {{ productItem.product.additional.name }} - R$ {{
+                        formatCurrency(productItem.product.additional.value) }}</p>
+                </div>
+                <p class="total-value">Total: R$ {{ formatCurrency(order.total_value) }}</p>
             </BaseCollapsible>
+
         </div>
     </div>
 </template>

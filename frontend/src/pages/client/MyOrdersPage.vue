@@ -49,7 +49,10 @@ export default {
                 <p>Pizza:</p>
                 <div v-for="productItem in order.products" :key="productItem.id">
                     <template v-if="productItem.half_pizza">
-                        <p>{{ productItem.product.name }} - R$ {{ productItem.product.value }},00</p>
+                        <p v-if="productItem.product && productItem.product.name">
+                            {{ productItem.product.name }} e {{ productItem.half_pizza_product.name }}: R$ {{
+                                productItem.product.value }},00
+                        </p>
                     </template>
                     <template v-else>
                         <p>{{ productItem.product.name }} - R$ {{ productItem.product.value }},00</p>
