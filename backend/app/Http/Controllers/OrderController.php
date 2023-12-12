@@ -10,6 +10,7 @@ use App\Http\Resources\OrderResource;
 use App\Mail\OrderMail;
 use App\Models\Additional;
 use App\Models\Client;
+use App\Models\DailyPizzaSaleLimit;
 use App\Models\Ingredient;
 use App\Models\Order;
 use App\Models\ProductAdditional;
@@ -96,6 +97,24 @@ class OrderController extends Controller
         DB::beginTransaction();
         try {
             $data = $request->validated();
+
+            $today = Carbon::now()->format('Y-m-d');
+            
+            $limit = DailyPizzaSaleLimit::where('date', $today)->first();
+            
+            if (! $limit) {
+                return response()->json([
+                    'message' => 'Limite de pedidos diários não definido',
+                ], 401);
+            }
+
+            $orderCount = Order::where('created_at', '=', $today)->count();
+
+            if ($orderCount >= $limit->quantity) {
+                return response()->json([
+                    'message' => 'Limite de pedidos diários atingido',
+                ], 401);
+            }
 
             //create order
             $order = $this->createOrderService->handle($data);
