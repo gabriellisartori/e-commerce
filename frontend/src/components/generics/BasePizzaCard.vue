@@ -71,6 +71,7 @@ export default {
     .pizza-image {
         border-bottom-left-radius: 16px;
         border-top-left-radius: 16px;
+        width: 200px;
     }
 
     .pizza-infos {

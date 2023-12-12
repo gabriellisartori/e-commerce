@@ -156,8 +156,8 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request)
     {
-        DB::beginTransaction();
         $data = $request->validated();
+        DB::beginTransaction();
         try {
             if (!is_string($data['image'])) {
                 $imageName = $data['image']->getClientOriginalName();
@@ -179,11 +179,11 @@ class ProductController extends Controller
 
             if ($data['promotion']) {
                 // update promotion
-                $data['promotion_id'] = $data['promotion'][0]['id'];
+                $data['promotion_id'] = (int) $data['promotion'][0]['id'];
                 $data['promotion_value'] = $data['promotion'][0]['value'] ?? null;
-                $productPromotion = ProductPromotion::where('product_id', $product->id)->first();
+                $productPromotion = ProductPromotion::where('promotion_id', $data['promotion_id'])->first();
 
-                if ($productPromotion && $productPromotion->promotion_id === $data['promotion_id']) {
+                if ($productPromotion) {
                     if ($productPromotion->value !== $data['promotion_value']) {
                         $this->updateProductPromotionService->handle($data);
                     }

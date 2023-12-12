@@ -132,11 +132,15 @@ export default {
                         formData.append(`additional[${i}][value]`, isNaN(valueToSend) ? 0 : valueToSend);
                     }
                 } else {
-                    formData.append('additional', this.form.additional); 
+                    if (this.form.additional === null) {
+                        formData.append('additional', []);
+                    } else {
+                        formData.append('additional', this.form.additional); 
+                    }
                 }
 
                 // Lidar com dados de promoção
-                if (this.form.promotion.length > 0) {
+                if (this.form.promotion !== null && this.form.promotion.length > 0) {
                     for (let i = 0; i < this.form.promotion.length; i++) {
                         const promotionItem = this.form.promotion[i];
                         if (promotionItem && typeof promotionItem === 'string') {
@@ -148,15 +152,25 @@ export default {
                         }
                     }
                 } else {
-                    formData.append('promotion', this.form.promotion);
+                    if (this.form.promotion === null) {
+                        formData.append('promotion', []);
+                    } else {
+                        formData.append('promotion[0][id]', this.form.promotion);
+                    }
                 }
 
-                console.log('mandando isso', formData)
-                await this.$http.post('/products', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
+
+                if (this.id) {
+                    formData.append('id', this.id);
+                }
+
+                this.id
+                    ? await this.$http.put(`/products/${this.id}`, formData)
+                    : await this.$http.post('/products', formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        });
 
                 this.$emit("limitSave");
                 this.$emit("close");
@@ -169,13 +183,17 @@ export default {
             }
         },
 
-        /* async getData() {
+        async getData() {
             try {
                 const { data } = await this.$http.get(
                     `/products/${this.id}`
                 );
 
                 this.form = data;
+                this.form.category_id = data.category.id;
+                this.form.category = data.category.id;
+                this.form.promotion = data.promotion[0].id;
+
                 console.log(this.form)
 
                 this.selectedFilePath = this.form.image;
@@ -184,7 +202,7 @@ export default {
             } catch (error) {
                 console.error(error);
             }
-        }, */
+        },
 
         handleCategoryChange(event) {
             this.form.category_id = event.target.value;
@@ -231,6 +249,9 @@ export default {
 
     },
     mounted() {
+        if (this.id) {
+            this.getData();
+        }
         this.fetchIngredients();
         this.fetchCategories();
         this.fetchPromotions();
@@ -253,14 +274,13 @@ export default {
                     {{ v$.form.value.$errors[0].$message }}
                 </div>
 
-                <base-select label="Categoria" :options="categories" :selectedValue="this.form.category"
+                <base-select style="margin-top:30px;" label="Categoria" :options="categories" :selectedValue="this.form.category"
                     @change="handleCategoryChange($event)" />
                 <div :class="{ 'error-message': v$.form.category_id.$error }" v-if="v$.form.category_id.$error">
                     {{ v$.form.category_id.$errors[0].$message }}
                 </div>
-
-                <base-select label="Promoção" :options="promotions" v-model="form.promotion"
-                    :selectedValue="this.form.promotion" @change="handlePromotionChange($event)" />
+                
+                
             </div>
             <div class="column">
                 <BaseDropzone label="Imagem" :sendFileToParent="handleSendFileToParent" :initialFile="selectedFilePath"
@@ -269,7 +289,8 @@ export default {
                     {{ v$.form.image.$errors[0].$message }}
                 </div>
 
-                <base-input label="Valor promocional" placeholder="00,00" />
+                <base-select label="Promoção" :options="promotions" v-model="form.promotion"
+                    :selectedValue="this.form.promotion" @change="handlePromotionChange($event)" />
             </div>
         </div>
         <div class="ingredient-content">
