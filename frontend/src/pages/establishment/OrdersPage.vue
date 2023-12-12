@@ -40,10 +40,9 @@ export default {
             const numericValue = typeof value === 'string' ? parseFloat(value) : value;
             return numericValue.toFixed(2).replace('.', ',');
         },
-        openWhatsApp(phoneNumber) {
-            const formattedPhoneNumber = phoneNumber.replace(/\D/g, '');
-
-            window.open(`https://web.whatsapp.com/send?phone=${formattedPhoneNumber}`, '_blank');
+        number(phoneNumber) {
+            const newphone = phoneNumber.replace(/[^A-Z0-9]+/ig, "");
+            return newphone;
         },
         formatDate(dateTimeString) {
             const parts = dateTimeString.split(/[\s/•:]/);
@@ -107,7 +106,7 @@ export default {
 
         <div v-else class="collapsible-orders">
             <BaseCollapsible v-for="order in orders" :key="order.id"
-                :title="`${formatDate(order.created_at)} - ${order.client.name}`"  :icone="true">
+                :title="`${formatDate(order.created_at)} - ${order.client.name}`"  :icone="true" :phone="number(order.client.phone_number)">
                
                     <p>Pizza:</p>
                     <div v-for="productItem in order.products" :key="productItem.id">
