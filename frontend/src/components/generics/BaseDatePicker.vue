@@ -1,6 +1,6 @@
 <script>
 /* import { ref, watch } from 'vue';
- */import { format, parseISO   } from 'date-fns';
+ */import { format, parseISO } from 'date-fns';
 
 export default {
   props: {
@@ -63,17 +63,24 @@ export default {
 <template>
   <div>
     <base-input :label="label" v-model="form.date" class="input date" @click="showDatePicker = true" />
-    <base-modal @close="closeModal" :showButtons="false" v-if="showDatePicker">
+    <base-modal @close="closeModal" :showButtons="false" v-if="showDatePicker" id="custom-modal">
       <VDatePicker v-model="date" color="green" mode="date" class="calendar" @click="onDateSelected" />
     </base-modal>
   </div>
 </template>
 
 <style lang="scss">
+#custom-modal {
+
+  .modal {
+    overflow-y: initial !important;
+  }
+}
+
+
 .calendar {
   margin: 0 auto;
   border: 1px solid var(--cor-primaria);
-
 }
 </style>
 
