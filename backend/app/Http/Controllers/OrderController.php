@@ -16,6 +16,7 @@ use App\Models\ProductAdditional;
 use App\Services\Order\CreateOrderService;
 use App\Services\OrderProductAdditional\CreateOrderProductAdditionalService;
 use App\Services\OrderProduct\CreateOrderProductService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -221,18 +222,16 @@ class OrderController extends Controller
 
         $ordersFile = [];
 
-        dd($orders->original->resource);
-
         foreach($orders->original->resource as $item) {
             array_push($ordersFile,
                 [
                     'name' => $item->client->name,
-                    'email' => $item->client->email,
+                    'email' => $item->client->user->email,
                     'phone_number' => $item->client->phone_number,
-                    'date_birth' => $item->client->date_birth,
+                    'date_birth' => Carbon::parse($item->client->date_birth)->format('d/m/Y'),
                     'observation' => $item->observation,
-                    'total_value' => $item->value,
-                    'products' => $item->products->map(function ($product) {
+                    'total_value' => $item->total_value,
+                    'products' => $item->orderProduct->map(function ($product) {
                         return $product->product->name;
                     })->implode(', '),
                 ]

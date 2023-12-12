@@ -45,7 +45,7 @@ export default {
         </div>
 
         <div v-else class="collapsible-orders">
-            <BaseCollapsible v-for="order in orders" :key="order.id" :title="`11/12/2023 - ${order.client.name}`">
+            <BaseCollapsible v-for="order in orders" :key="order.id" :title="`${order.created_at} - ${order.client.name}`">
                 <p>Pizza:</p>
                 <div v-for="productItem in order.products" :key="productItem.id">
                     <template v-if="productItem.half_pizza">

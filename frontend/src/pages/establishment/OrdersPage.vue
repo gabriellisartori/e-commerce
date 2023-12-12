@@ -1,15 +1,22 @@
 <script>
 import BaseCollapsible from '@/components/generics/BaseCollapsible.vue';
+import FiltersModal from '@/components/FiltersModal.vue';
 
 export default {
     components: {
-        BaseCollapsible
+        BaseCollapsible,
+        FiltersModal
     },
     data() {
         return {
             orders: [],
             selectedOrderId: null,
-            selectedOrder: null
+            selectedOrder: null,
+            search: {
+                start_date: null,
+                end_date: null
+            },
+            showFilters: false
         };
     },
     methods: {
@@ -19,7 +26,9 @@ export default {
                 this.establishment = establishmentResponse.data;
                 console.log(this.establishment)
 
-                const response = await this.$http.get('/orders');
+                const response = await this.$http.get('/orders' , {
+                    params: this.search
+                });
                 this.orders = response.data;
 
                 console.log(this.orders, 'pedidos');
@@ -52,6 +61,27 @@ export default {
             const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
             return date.toLocaleDateString('pt-BR', options);
         },
+        searchFilter (event) {
+          this.search.start_date = event.start_date;
+          this.search.end_date = event.end_date;
+          this.fetchOrders();
+        },
+        getAll () {
+          this.search.start_date = null;
+          this.search.end_date = null;
+          this.fetchOrders();
+        },
+        async exportFile () {
+            const { data } = await this.$http.get('/orders/exportFile', { params: this.search }, {
+              responseType: 'blob'
+            });
+            const url = window.URL.createObjectURL(new Blob([data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'pedidos.xlsx');
+            document.body.appendChild(link);
+            link.click();
+        }
     },
     mounted() {
         this.fetchOrders();
@@ -64,6 +94,11 @@ export default {
     <div>
         <div class="page-header-options">
             <h2 class="title">Pedidos</h2>
+            <div>
+                <base-button class="icon" isTransparent isIcon icon="fa-solid fa-magnifying-glass" color="dark-green" @onClick="showFilters = true"/>
+                <base-button class="icon" isTransparent isIcon icon="fa-solid fa-file-excel" color="dark-green" @click="exportFile()"/>
+                <base-button class="icon" isTransparent isIcon icon="fa-solid fa-rotate" color="dark-green" @onClick="getAll"/>
+            </div>
         </div>
 
         <div v-if="orders.length === 0">
@@ -89,6 +124,12 @@ export default {
             </BaseCollapsible>
         </div>
     </div>
+    <FiltersModal 
+        v-if="showFilters"
+        isPeriod
+        @close="showFilters = false"
+        @getValues="searchFilter($event)"
+    />
 </template>
 
 <style scoped lang="scss">

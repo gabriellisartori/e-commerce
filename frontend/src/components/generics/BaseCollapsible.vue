@@ -25,8 +25,7 @@ export default {
         <div class="collapsible-header" @click="toggleCollapsible">
             {{ title }}
             <div class="actions-header">
-                <a v-if="icone" class="whats-icon" href="https://wa.me/5551989511735" target="_blank"><img alt="Chat on WhatsApp"
-                        src="../../assets/icons/whats-icon.png" /></a>
+                <base-button v-if="icone" class="whats" isRounded icon="fa-brands fa-whatsapp" href="https://wa.me/5551989511735" target="_blank"></base-button>
                 <span :class="{ 'arrow-up': !isCollapsed, 'arrow-down': isCollapsed }"></span>
             </div>
 
@@ -55,12 +54,15 @@ export default {
 }
 
 .actions-header {
-    width: 12%;
+    width: 8%;
 
-    .whats-icon {
-        img {
-            width: 40%;
-        }
+    .base-button.is-medium.is-rounded[data-v-74ec8ad6] {
+        border-radius: 42px;
+    }
+
+    .base-button.is-medium {
+        min-width: 20px;
+        height: 20px;
     }
 }
 

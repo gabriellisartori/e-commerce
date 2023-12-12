@@ -85,6 +85,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::prefix('orders')->group(function () {
+        Route::get('/exportFile', [OrderController::class, 'exportFile'])->middleware('verify.establishment.user');
         Route::get('', [OrderController::class, 'index'])->middleware('verify.establishment.user');
         Route::get('{id}', [OrderController::class, 'show'])->middleware('verify.establishment.user');
         Route::post('', [OrderController::class, 'store']);
