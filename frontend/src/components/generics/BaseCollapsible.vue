@@ -33,12 +33,12 @@ export default {
         <div class="collapsible-header" @click="toggleCollapsible">
             {{ title }}
             <div class="actions-header" v-if="icone">
-                <a class="whats-icon" :href="'https://wa.me/55' + formattedPhoneNumber" target="_blank"><img
-                        alt="Chat on WhatsApp" src="../../assets/icons/whats-icon.png" /></a>
+                <base-button  class="whats" isRounded icon="fa-brands fa-whatsapp"
+                    :href="'https://wa.me/55' + formattedPhoneNumber" target="_blank"></base-button>
                 <font-awesome-icon class="icon" :class="{ 'arrow-up': !isCollapsed, 'arrow-down': isCollapsed }"
                     icon="fa-solid fa-chevron-up" />
             </div>
-            <font-awesome-icon class="icon" :class="{ 'arrow-up': !isCollapsed, 'arrow-down': isCollapsed }"
+            <font-awesome-icon v-else class="icon" :class="{ 'arrow-up': !isCollapsed, 'arrow-down': isCollapsed }"
                 icon="fa-solid fa-chevron-up" />
         </div>
         <transition name="fade">
@@ -66,13 +66,17 @@ export default {
 
 .actions-header {
     width: 12%;
+    width: 12%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    .base-button.is-medium.is-rounded[data-v-74ec8ad6] {
+        border-radius: 42px;
+    }
 
-    .whats-icon {
-        img {
-            width: 40%;
-        }
+    .base-button.is-medium {
+        min-width: 20px;
+        height: 20px;
     }
 }
 
@@ -80,9 +84,13 @@ export default {
     color: var(--cor-primaria);
 }
 
+.arrow-up {
+    transition: transform 0.8s ease;
+}
+
 .arrow-down {
     transform: rotate(180deg);
-    transition: transform 0.3s ease;
+    transition: transform 0.8s ease;
 }
 
 .collapsible-content {

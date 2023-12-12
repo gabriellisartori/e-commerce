@@ -68,9 +68,12 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
-import { faUserSecret, faXmark, faChevronUp, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation, faBagShopping, faPhone, faEnvelope, faMapLocation, faMagnifyingGlass, faFileExcel, faRotate} from '@fortawesome/free-solid-svg-icons'
+
+import { faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation, faBagShopping, faPhone, faEnvelope, faMapLocation, faMagnifyingGlass, faFileExcel, faRotate } from '@fortawesome/free-solid-svg-icons'
+
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 /* add icons to the library */
-library.add(faUserSecret, faXmark, faChevronUp, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation, faBagShopping, faPhone, faEnvelope, faMapLocation, faMagnifyingGlass, faFileExcel, faRotate)
+library.add(faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation, faBagShopping, faPhone, faEnvelope, faMapLocation, faMagnifyingGlass, faFileExcel, faRotate, faWhatsapp)
 app.component('font-awesome-icon', FontAwesomeIcon);
 
 // Vue3 Toastify

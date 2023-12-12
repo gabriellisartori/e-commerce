@@ -120,21 +120,30 @@ export default {
                     console.log('Pedido salvo:', response.data);
                     this.selectedPizzas = [];
                     localStorage.removeItem('selectedPizzas');
+
+                    const confirmed = this.$swal.fire({
+                        icon: 'success',
+                        title: 'Pedido realizado com sucesso',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        didClose: () => {
+                            console.log('Notificação fechada', confirmed);
+                            router.push({ name: 'MenuPageClient' });
+                        }
+                    });
                 })
                 .catch(error => {
                     console.error('Erro ao salvar o pedido:', error);
+                    const confirmed = this.$swal.fire({
+                        icon: 'error',
+                        title: error.response.data.message,
+                        showConfirmButton: false,
+                        didClose: () => {
+                            console.log('Notificação fechada', confirmed);
+                            router.push({ name: 'MenuPageClient' });
+                        }
+                    });
                 });
-
-            const confirmed = this.$swal.fire({
-                icon: 'success',
-                title: 'Pedido realizado com sucesso',
-                showConfirmButton: false,
-                timer: 1500,
-                didClose: () => {
-                    console.log('Notificação fechada', confirmed);
-                    router.push({ name: 'MenuPageClient' });
-                }
-            });
 
             this.clearLocalStorage()
         },
