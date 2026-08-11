@@ -1,6 +1,6 @@
 # Pizzaria e-commerce
 
-Sistema web de e-commerce para pizzaria, desenvolvido como atividade da disciplina de **Projeto Integrador II**, com o objetivo de desenvolver um sistema web para um **stakeholder real: um dono de pizzaria**. O projeto foi desenvolvido em conjunto com a **Taís A. Pritsch**.
+Sistema web de e-commerce para pizzaria, desenvolvido como atividade da disciplina de **Projeto Integrador II (2023/B)**, com o objetivo de desenvolver um sistema web para um **stakeholder real: um dono de pizzaria**. O projeto foi desenvolvido em conjunto com a **Taís A. Pritsch**.
 
 O sistema atende dois públicos:
 
