@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -15,16 +16,18 @@ class ProductAdditional extends Model
      */
     protected $fillable = [
         'additional_value',
+        'product_id',
+        'additional_id'
     ];
 
-    public function product(): HasOne
+    public function product(): BelongsTo
     {
-        return $this->hasOne(Product::class);
+        return $this->belongsTo(Product::class);
     }
 
-    public function additional(): HasOne
+    public function additional(): BelongsTo
     {
-        return $this->hasOne(Additional::class);
+        return $this->belongsTo(Additional::class);
     }
 
     public function orderProductAdditional(): HasMany

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->string('name');
             $table->boolean('active');
-            $table->unsignedBigInteger('establishment_id')->nullable();
+            $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();
         });

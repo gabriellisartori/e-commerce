@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -20,9 +21,9 @@ class Product extends Model
         'active',
     ];
 
-    public function category(): HasOne
+    public function category(): BelongsTo
     {
-        return $this->hasOne(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function establishment(): HasOne
@@ -30,9 +31,9 @@ class Product extends Model
         return $this->hasOne(Establishment::class);
     }
 
-    public function orderProduct(): HasMany
+    public function orderProduct(): HasOne
     {
-        return $this->hasMany(OrderProduct::class);
+        return $this->hasOne(OrderProduct::class);
     }
 
     public function productAdditional(): HasOne
@@ -42,7 +43,7 @@ class Product extends Model
 
     public function productIngredient(): HasMany
     {
-        return $this->hasMany(productIngredient::class);
+        return $this->hasMany(ProductIngredient::class);
     }
 
     public function productPromotion(): HasOne

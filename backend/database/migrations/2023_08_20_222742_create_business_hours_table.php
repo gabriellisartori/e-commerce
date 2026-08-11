@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('business_hours', function (Blueprint $table) {
             $table->id()->autoIncrement();
             $table->string('day_week');
-            $table->time('starts_at');
-            $table->time('end_at');
-            $table->unsignedBigInteger('establishment_id')->nullable();
+            $table->time('starts_at')->nullable();
+            $table->time('end_at')->nullable();
+            $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
             $table->timestamps();
         });

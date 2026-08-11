@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Promotion extends Model
 {
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -14,8 +16,10 @@ class Promotion extends Model
      */
     protected $fillable = [
         'name',
-        'starts_at',
-        'end_at',
+        'start_date',
+        'start_time',
+        'end_date',
+        'end_time'
     ];
 
     public function establishment(): HasOne

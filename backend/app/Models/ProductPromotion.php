@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductPromotion extends Model
 {
@@ -14,15 +14,17 @@ class ProductPromotion extends Model
      */
     protected $fillable = [
         'promotion_value',
+        'product_id',
+        'promotion_id'
     ];
 
-    public function product(): HasOne
+    public function product(): BelongsTo
     {
-        return $this->hasOne(Product::class);
+        return $this->belongsTo(Product::class);
     }
 
-    public function promotion(): HasOne
+    public function promotion(): BelongsTo
     {
-        return $this->hasOne(Promotion::class);
+        return $this->belongsTo(Promotion::class);
     }
 }

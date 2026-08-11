@@ -15,10 +15,13 @@ return new class extends Migration
             $table->id()->autoIncrement();
             $table->integer('quantity');
             $table->double('value');
-            $table->unsignedBigInteger('order_id')->nullable();
+            $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders');
-            $table->unsignedBigInteger('product_id')->nullable();
+            $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
+            $table->boolean('half_pizza')->default(false);
+            $table->unsignedBigInteger('half_pizza_product_id')->nullable();
+            $table->foreign('half_pizza_product_id')->references('id')->on('products');
             $table->timestamps();
         });
     }

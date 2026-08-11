@@ -15,8 +15,7 @@ class DailyPizzaSaleLimit extends Model
      */
     protected $fillable = [
         'quantity',
-        'starts_at',
-        'end_at',
+        'date'
     ];
 
     public function establishment(): HasOne

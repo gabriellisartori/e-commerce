@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('image');
             $table->double('value');
             $table->boolean('active');
-            $table->unsignedBigInteger('establishment_id')->nullable();
+            $table->unsignedBigInteger('establishment_id');
             $table->foreign('establishment_id')->references('id')->on('establishments');
-            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
         });
