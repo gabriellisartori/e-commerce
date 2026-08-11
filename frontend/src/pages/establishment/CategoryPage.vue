@@ -1,57 +1,105 @@
 <script>
-import PageHeaderEstablishment from '@/components/PageHeaderEstablishment.vue';
-import AddCategoryModal from '@/components/AddCategoryModal.vue'
-import CategoryCard from '@/components/CategoryCard.vue';
-/* import SvgIcon from '@/components/SvgIcon.vue';
- */
+import { toast } from 'vue3-toastify';
+import CategoryModal from '@/components/category/CategoryModal.vue';
+
 export default {
   components: {
-    PageHeaderEstablishment,
-    AddCategoryModal,
-    CategoryCard
-},
+    CategoryModal
+  },
   data() {
     return {
-      showModal: false 
+      categories: [],
+      showModal: false,
+      id: null
     };
   },
   methods: {
-    openModal() {
+    openEditModal(categoryId) {
+      this.id = categoryId;
       this.showModal = true;
     },
     closeModal() {
+      this.id = null;
       this.showModal = false;
-    }
+    },
+    async fetchCategories() {
+      try {
+        const { data } = await this.$http.get('/categories');
+        this.categories = data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async deleteCategory(categoryId) {
+      const confirmed = await this.$swal.fire({
+        icon: 'warning',
+        title: 'Realmente deseja excluir?',
+        text: 'Você não poderá reverter isso!',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Sim, excluir',
+        reverseButtons: true
+      });
+
+      if (confirmed.isConfirmed) {
+        try {
+          await this.$http.delete(`/categories/${categoryId}`);
+          this.fetchCategories();
+
+          toast.success("Categoria excluída!", {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+        } catch (error) {
+          console.error(error);
+          this.$swal.fire(
+            'Erro!',
+            'Ocorreu um erro ao excluir a categoria.',
+            'error'
+          );
+        }
+      }
+    },
+  },
+  mounted() {
+    this.fetchCategories();
   }
-};
+}
 </script>
 
 <template>
-    <PageHeaderEstablishment></PageHeaderEstablishment>
-    <div class="content">
-      <div class="page-header-options">
-        <h2 class="title">CATEGORIAS</h2>
-        <!-- <SvgIcon name="plus"/> -->
-        <button class="button-add" @click="openModal">
-            Adicionar
-        </button>
-      </div>
-    
-      <div class="content-category">
-        <CategoryCard></CategoryCard>
-      </div>
+  <div>
+    <div class="page-header-options">
+      <h2 class="title">Categorias</h2>
+      <base-button isTransparent color="dark-green" @onClick="showModal = true"> Adicionar </base-button>
     </div>
-   
-    <AddCategoryModal v-if="showModal" @close="closeModal"></AddCategoryModal>
+
+    <div class="content-category">
+      <base-card
+        v-for="category in categories"
+        :key="category.id"
+        :title="category.name"
+        @edit="openEditModal(category.id)"
+        @delete="deleteCategory(category.id)"
+      />
+    </div>
+  </div>
+
+  <CategoryModal
+    v-if="showModal"
+    :id="id"
+    @close="closeModal"
+    @categorySave="fetchCategories"
+  />
+
 </template>
 
 <style lang="scss">
-.content{
+.content {
 
 
-  .page-header-options{
+  .page-header-options {
 
-    .button-add{
+    .button-add {
       background-color: transparent;
       color: var(--cor-secundaria);
       font-weight: 700;
@@ -61,10 +109,10 @@ export default {
     }
   }
 
-  .content-category{
+  .content-category {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
-  
+
 }
 </style>

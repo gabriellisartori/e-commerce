@@ -36,7 +36,7 @@ class CreateOrderRequest extends FormRequest
             'order_product*half_pizza_product_id' => 'nullable|exists:products,id',
             'order_product*.order_product_additional' => 'nullable|array',
             'order_product*.order_product_additional*.product_additional_id' => 'required|exists:product_additionals,id',
-            'order_product*.order_product_additional*.additional_vale' => 'required|numeric',
+            'order_product*.order_product_additional*.additional_value' => 'required|numeric',
         ];
     }
 }

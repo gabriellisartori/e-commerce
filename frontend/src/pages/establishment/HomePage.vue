@@ -1,16 +1,12 @@
 <script>
-import PageHeaderEstablishment from '@/components/PageHeaderEstablishment.vue';
-
 export default {
   components: {
-    PageHeaderEstablishment,
   }
 };
 
 </script>
 
 <template>
-    <PageHeaderEstablishment class="menu-home"/>
     <div class="contentHome">
       <div class="infos-content">
         <div class="speciale">
@@ -47,6 +43,7 @@ export default {
 .contentHome{
   display: grid;
   grid-template-columns: 1fr 1fr;
+  overflow: hidden;
 
   .infos-content{
     margin-left: 150px;

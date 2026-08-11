@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -26,9 +27,9 @@ class Order extends Model
         return $this->hasOne(Establishment::class);
     }
 
-    public function client(): HasOne
+    public function client(): BelongsTo
     {
-        return $this->hasOne(Client::class);
+        return $this->belongsTo(Client::class);
     }
 
     public function orderProduct(): HasMany

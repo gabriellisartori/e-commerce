@@ -1,12 +1,9 @@
 <script>
-import axios from '@/axios';
-import PageHeaderEstablishment from '@/components/PageHeaderEstablishment.vue';
-import BaseInput from '@/components/BaseInput.vue';
-import BasePassword from '@/components/BasePassword.vue';
+import BaseInput from '@/components/generics/BaseInput.vue';
+import BasePassword from '@/components/generics/BasePassword.vue';
 
 export default {
   components: {
-    PageHeaderEstablishment,
     BaseInput,
     BasePassword
   },
@@ -30,7 +27,7 @@ export default {
   methods: {
     async saveEstablishment() {
       try {
-        const response = await axios.post('/establishment', {
+        const response = await this.$http.post('/establishment', {
           nome: this.nome,
           telefone: this.telefone,
           cnpj: this.cnpj,
@@ -56,8 +53,7 @@ export default {
 
 <template>
     <div class="content-page">
-        <PageHeaderEstablishment></PageHeaderEstablishment>
-         <h2 class="title">CADASTRO DE ESTABELECIMENTO</h2>
+         <h2 class="title">Cadastrar estabelecimento</h2>
         <form @submit.prevent="handleSubmit">
             <div class="container">
                 <div class="column">
@@ -76,7 +72,7 @@ export default {
                         <BaseInput v-model="numero" label="Número" class="input grid"></BaseInput>
                         <BaseInput v-model="complemento" label="Complemento" class="input grid"></BaseInput>
                     </div>
-                    <button type="submit" class="button login filled" @click="saveEstablishment">ENTRAR</button>
+                    <base-button class="login" @click="saveEstablishment">ENTRAR</base-button>
                 </div>
             </div>
         </form>
@@ -99,6 +95,7 @@ export default {
         width: 70%; 
         margin: 0 auto;
         margin-top: 20px;
+        height: calc(100vh - 200px);
 
         .column{
             .input{

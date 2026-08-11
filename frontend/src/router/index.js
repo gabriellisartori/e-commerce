@@ -4,39 +4,86 @@ import RegisterEstablishment from '../pages/establishment/RegisterEstablishment.
 import HomePage from '../pages/establishment/HomePage.vue'; 
 import IngredientPage from '../pages/establishment/IngredientPage.vue'
 import CategoryPage from '../pages/establishment/CategoryPage.vue'
-/* import LimitPizzaModal from '../components/LimitPizzaModal.vue'
- */
+import MenuPageVue from '@/pages/establishment/MenuPage.vue';
+import PromotionPage from '../pages/establishment/PromotionPage.vue'
+import BusinessHoursModal from '../components/businessHours/BusinessHoursModal.vue'
+import LimitPizzaPage from '../pages/establishment/LimitPizzaPage.vue'
+
 const routes = [
-  {
-    path: '/',
-    name: 'LoginForm',
-    component: Login,
+  { 
+    path: '/', 
+    redirect: { name: 'homePage' } 
   },
   {
-    path: '/registrar',
+    path: '/login',
+    name: 'login',
+    component: Login,
+    meta: {
+      auth: false,
+    }
+  },
+  {
+    path: '/registrar-estabelecimento',
     name: 'RegisterEstablishment',
     component: RegisterEstablishment,
+    meta: {
+      auth: true,
+    }
   },
   {
     path: '/home',
-    name: 'HomePage',
+    name: 'homePage',
     component: HomePage,
   },
-  /* {
-    path: '/limit',
-    name: 'LimitPizzaModal',
-    component: LimitPizzaModal,
-  }, */
   {
-    path: '/ingredient',
+    path: '/cardapio',
+    name: 'MenuPage',
+    component: MenuPageVue,
+  },
+  {
+    path: '/limite-diario-de-pizzas',
+    name: 'LimitPizzaPage',
+    component: LimitPizzaPage,
+    meta: {
+      auth: true,
+    }
+  },
+  {
+    path: '/ingredientes',
     name: 'IngredientPage',
     component: IngredientPage,
+    meta: {
+      auth: true,
+    }
   },
   {
-    path: '/category',
+    path: '/categorias',
     name: 'CategoryPage',
     component: CategoryPage,
+    meta: {
+      auth: true,
+    }
   },
+  {
+    path: '/promocoes',
+    name: 'PromotionPage',
+    component: PromotionPage,
+    meta: {
+      auth: true,
+    }
+  },
+  {
+    path: '/horario',
+    name: 'BusinessHoursModal',
+    component: BusinessHoursModal,
+    meta: {
+      auth: true,
+    }
+  },
+  {
+    path: '/404',
+    redirect: { name: 'homePage' },
+  }
 ];
 
 const router = createRouter({

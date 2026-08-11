@@ -23,7 +23,7 @@ class CreateDailyPizzaSaleLimitRequest extends FormRequest
     {
         return [
             'quantity' => 'required|integer',
-            'date' => 'required|date',
+            'date' => 'required',
         ];
     }
 }

@@ -1,7 +1,8 @@
 <script>
-import axios from '@/axios'
-import BaseInput from '@/components/BaseInput.vue';
-import BasePassword from '@/components/BasePassword.vue';
+import BaseInput from '@/components/generics/BaseInput.vue';
+import BasePassword from '@/components/generics/BasePassword.vue';
+import { useVuelidate } from '@vuelidate/core';
+import { required$, email$ } from "../store/validators";
 
 export default {
     components: {
@@ -11,24 +12,42 @@ export default {
     data() {
         return {
             email: '',
-            password: ''
+            password: '',
+            v$: useVuelidate(),
+            errorMessage: '',
+            error: false
+        }
+    },
+    validations () {
+        return {
+            email: { required$, email$ },
+            password: { required$ }
         }
     },
     methods: {
         async handleSubmit() {
+            this.v$.$validate();
+            if (this.v$.$error) {
+              return;
+            }
+
             try {
-                const response = await axios.post('/auth/login', {
-                    email: this.email,
-                    password: this.password
-                });
-
-                //teste apenas
-                localStorage.setItem('token', response.data.token);
-
-                this.$router.push('/home'); 
+                await this.$auth.login({
+					data: {
+						email: this.email,
+						password: this.password
+					},
+				});
             } catch (error) {
+                this.error = true;
+                this.errorMessage = error.response.data.error || "Falha no login.";
                 console.error(error);
             }
+        }
+    },
+    mounted () {
+        if (this.$auth.check()) {
+            this.$router.push({ name: 'homePage' });
         }
     }
 }
@@ -59,7 +78,7 @@ export default {
             <div class="vertical-top-line"></div>
             <hr class="horizontal-top-line">
             <form class="form-login" @submit.prevent="handleSubmit">
-                <h2>FAÇA SEU LOGIN</h2>
+                <h2>Entre na sua conta 😀</h2>
                 <BaseInput 
                     v-model="email"
                     label="E-mail" 
@@ -67,6 +86,12 @@ export default {
                     :placeholder="'Digite seu email'"
                     @update:modelValue="email = $event"
                 />
+                <div
+                    :class="{ 'error-message': v$.email.$error }"
+                    v-if="v$.email.$error"
+                >
+                    {{ v$.email.$errors[0].$message }}
+                </div>
                 <BasePassword
                     v-model="password"
                     label="Senha"
@@ -74,11 +99,21 @@ export default {
                     :placeholder="'Digite sua senha'"
                     @update:modelValue="password = $event"
                 />
+                <div
+                  :class="{ 'error-message': v$.password.$error }"
+                  v-if="v$.password.$error"
+                >
+                  {{ v$.password.$errors[0].$message }}
+                </div>
+
+                <base-message v-if="error" :errorMessage="errorMessage" />
 
                 <div class="buttons">
-                    <button type="submit" class="button filled enter">
+                    <base-button
+                        type="submit"
+                        class="filled enter">
                         ENTRAR
-                    </button>
+                    </base-button>
                     <RouterLink to="/registrar">Criar conta</RouterLink>
                 </div>
             </form>
@@ -181,7 +216,7 @@ export default {
       }
 
       &.right{
-        background-color: #FBFBFB;
+        align-self: center;
 
         .vertical-top-line{
             border-right: 1px solid #333;
@@ -211,13 +246,17 @@ export default {
 
             .input{
                 margin-top: 60px;
-                margin-bottom: 50px;
+            }
+
+            .password-input {
+                margin-top: 20px;
             }
 
             .buttons{
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                margin-top: 60px;
 
                 .enter{
                     width: 100%;

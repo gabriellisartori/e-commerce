@@ -24,24 +24,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 // routes with authentication
-//Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
     
     //update establishment data and relations (user e address)
-    Route::put('establishments/{id}', [EstablishmentController::class, 'update']);
+    Route::put('establishments/{id}', [EstablishmentController::class, 'update'])->middleware('verify.establishment.user');
     
     Route::prefix('clients')->group(function () {
         Route::get('{id}', [ClientController::class, 'show']);
         Route::put('{id}', [ClientController::class, 'update']);
     });
     
-    // quando tiver autenticação funcionando, colocar a middleware para apenas estabelecimento conseguir fazer alguns request
-    // ->middleware('verify.establishment.user')
-    Route::prefix('business-hours')->group(function () {
+    Route::prefix('business-hours')->middleware('verify.establishment.user')->group(function () {
         Route::post('', [BusinessHourController::class, 'store']);
         Route::put('{id}', [BusinessHourController::class, 'update']);
     });
 
-    Route::prefix('categories')->group(function () {
+    Route::prefix('categories')->middleware('verify.establishment.user')->group(function () {
         Route::get('', [CategoryController::class, 'index']);
         Route::get('{id}', [CategoryController::class, 'show']);
         Route::post('', [CategoryController::class, 'store']);
@@ -49,14 +47,14 @@ use Illuminate\Support\Facades\Route;
         Route::delete('{id}', [CategoryController::class, 'destroy']);
     });
 
-    Route::prefix('daily-pizza-sale-limits')->group(function () {
+    Route::prefix('daily-pizza-sale-limits')->middleware('verify.establishment.user')->group(function () {
         Route::get('', [DailyPizzaSaleLimitController::class, 'index']);
         Route::post('', [DailyPizzaSaleLimitController::class, 'store']);
         Route::put('{id}', [DailyPizzaSaleLimitController::class, 'update']);
         Route::delete('{id}', [DailyPizzaSaleLimitController::class, 'destroy']);
     });
 
-    Route::prefix('ingredients')->group(function () {
+    Route::prefix('ingredients')->middleware('verify.establishment.user')->group(function () {
         Route::get('', [IngredientController::class, 'index']);
         Route::get('{id}', [IngredientController::class, 'show']);
         Route::post('', [IngredientController::class, 'store']);
@@ -64,12 +62,12 @@ use Illuminate\Support\Facades\Route;
         Route::delete('{id}', [IngredientController::class, 'destroy']);
     });
 
-    Route::prefix('products')->group(function () {
+    Route::prefix('products')->middleware('verify.establishment.user')->group(function () {
         Route::post('', [ProductController::class, 'store']);
         Route::put('{id}', [ProductController::class, 'update']);
     });
 
-    Route::prefix('promotions')->group(function () {
+    Route::prefix('promotions')->middleware('verify.establishment.user')->group(function () {
         Route::get('', [PromotionController::class, 'index']);
         Route::get('{id}', [PromotionController::class, 'show']);
         Route::post('', [PromotionController::class, 'store']);
@@ -78,18 +76,19 @@ use Illuminate\Support\Facades\Route;
     });
 
     Route::prefix('orders')->group(function () {
-        Route::get('', [OrderController::class, 'index']);
-        Route::get('{id}', [OrderController::class, 'show']);
+        Route::get('', [OrderController::class, 'index'])->middleware('verify.establishment.user');
+        Route::get('{id}', [OrderController::class, 'show'])->middleware('verify.establishment.user');
         Route::post('', [OrderController::class, 'store']);
-        Route::put('{id}', [OrderController::class, 'update']);
+        Route::put('{id}', [OrderController::class, 'update'])->middleware('verify.establishment.user');
     });
 
-//});
+});
 
 // Access system
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout']);
+    Route::get('user', [AuthController::class, 'user']);
 });
 
 Route::prefix('establishments')->group(function () {

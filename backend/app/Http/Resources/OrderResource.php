@@ -19,6 +19,7 @@ class OrderResource extends JsonResource
             'observation' => $this->observation,
             'total_value' => $this->total_value,
             'paid' => $this->paid,
+            'client' => $this->whenLoaded('client', fn () => new ClientResource($this->client)),
             'products' => $this->whenLoaded('orderProduct', fn () => OrderProductResource::collection($this->orderProduct)),
         ];
     }

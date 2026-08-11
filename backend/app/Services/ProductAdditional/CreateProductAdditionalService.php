@@ -11,7 +11,7 @@ class CreateProductAdditionalService
         $productAdditional = ProductAdditional::create([
             'product_id' => $attributes['product_id'],
             'additional_id' => $attributes['additional_id'],
-            'value' => $attributes['additional_value'],
+            'additional_value' => $attributes['additional_value'],
         ]);
 
         return $productAdditional;
