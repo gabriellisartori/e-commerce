@@ -26,6 +26,9 @@ app.component('base-button-group', BaseButtonGroup);
 import BaseCard from './components/generics/BaseCard.vue';
 app.component('base-card', BaseCard);
 
+import BaseDropzone from './components/generics/BaseDropzone.vue';
+app.component('base-dropzone', BaseDropzone);
+
 import BaseModal from './components/generics/BaseModal.vue';
 app.component('base-modal', BaseModal);
 
@@ -47,15 +50,30 @@ app.component('base-select', BaseSelect);
 import BaseMessage from './components/generics/BaseMessage.vue';
 app.component('base-message', BaseMessage);
 
+import BaseSpecialeCard from './components/generics/BaseSpecialeCard.vue';
+app.component('base-speciale', BaseSpecialeCard);
+
+import BasePizzaCardClient from './components/generics/BasePizzaCardClient.vue';
+app.component('base-pizza-card-client', BasePizzaCardClient);
+
+import BasePassword from './components/generics/BasePassword.vue';
+app.component('base-password', BasePassword);
+
+import BaseTextarea from './components/generics/BaseTextarea.vue';
+app.component('base-textarea', BaseTextarea);
+
 // Font Awesome
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
-import { faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
+
+import { faUserSecret, faXmark, faChevronUp, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation, faBagShopping, faPhone, faEnvelope, faMapLocation, faMagnifyingGlass, faFileExcel, faRotate } from '@fortawesome/free-solid-svg-icons'
+
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 /* add icons to the library */
-library.add(faUserSecret, faXmark, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation)
+library.add(faUserSecret, faXmark, faChevronUp, faPenToSquare, faTrash, faUser, faArrowRightFromBracket, faPlus, faClock, faPizzaSlice, faTag, faDollarSign, faMitten, faTriangleExclamation, faBagShopping, faPhone, faEnvelope, faMapLocation, faMagnifyingGlass, faFileExcel, faRotate, faWhatsapp)
 app.component('font-awesome-icon', FontAwesomeIcon);
 
 // Vue3 Toastify
@@ -77,6 +95,11 @@ const options = {
 };
 app.use(VueSweetalert2, options);
 
+// Vue Collapsible
+/* import 'vue-collapsible-component/lib/vue-collapsible.css';
+import Collapsible from 'vue-collapsible-component';
+app.use(Collapsible) */
+
 
 // add axios
 import axios from "axios";
@@ -90,6 +113,10 @@ const axiosInstance = axios.create({
 });
 
 app.config.globalProperties.$http = axiosInstance;
+
+// add vue mask
+import VueTheMask from 'vue-the-mask'
+app.use(VueTheMask)
 
 /**
  * Vue Auth
@@ -111,13 +138,13 @@ var auth = createAuth({
   },
   options: {
     loginData: { url: 'auth/login', method: 'POST', fetchUser: true, staySignedIn: false },
-    logoutData: { url: 'auth/logout', method: 'POST', redirect: { name: 'login' }, makeRequest: true },
+    logoutData: { url: 'auth/logout', method: 'POST', redirect: { name: 'homePage' }, makeRequest: true },
     refreshData: { enabled: false },
     tokenDefaultKey: 'token',
     forbiddenRedirect: { path: '/403' },
     notFoundRedirect: { path: '/404' },
     stores: ['storage'],
-    parseUserData ({ user }) {
+    parseUserData({ user }) {
       try {
         app.config.globalProperties.$user = user;
       } catch (error) {

@@ -24,17 +24,17 @@ class CreateProductRequest extends FormRequest
         return [
             'name' => 'required|string',
             'image' => 'required',
-            'value' => 'required|numeric',
+            'value' => 'required',
             'active' => 'required|boolean',
             'category_id' => 'required|exists:categories,id',
             'promotion' => 'nullable|array',
             'promotion*.id' => 'nullable|exists:promotions,id',
-            'promotion*.value' => 'nullable|numeric',
+            'promotion*.value' => 'nullable',
             'ingredients' => 'required|array',
             'ingredients*.id' => 'required|exists:ingredients,id',
             'additional' => 'nullable|array',
             'additional*.id' => 'required|exists:additionals,id',
-            'additional*.value' => 'nullable|numeric'
+            'additional*.value' => 'nullable'
         ];
     }
 }

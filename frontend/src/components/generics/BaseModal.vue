@@ -12,6 +12,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    saveLabel: {
+      type: String,
+      default: 'Salvar',
+    },
   },
   data() {
     return {
@@ -61,7 +65,7 @@ export default {
             Cancelar
           </base-button>
           <base-button class="button" color="dark-green" @onClick="saveModal">
-            Salvar
+            {{ saveLabel }}
           </base-button>
         </div>
       </div>
@@ -97,15 +101,6 @@ export default {
   max-height: 550px;
   overflow-y: auto;
 
-  ::-webkit-scrollbar-thumb {
-    background-color: #888;
-    /* Cor do "thumb" (o indicador da posição atual) */
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: #eee;
-    /* Cor do "track" (a área da barra de rolagem que não está sendo percorrida) */
-  }
 
   &.is-large {
     max-width: 1000px;
@@ -117,6 +112,11 @@ export default {
     opacity: 0.7;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
+
+    @media screen and (max-width: 645px){
+      margin-top: 5px;
+    }
 
     .icon {
       cursor: pointer;
@@ -125,16 +125,15 @@ export default {
     }
   }
 
-  .title {
-    margin-bottom: 20px;
-  }
-
   .content-modal {
     padding: 0px 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
 
+    @media screen and (max-width: 645px){
+      margin-bottom: 30px;
+    }
   }
 }
 </style>

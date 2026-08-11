@@ -25,7 +25,7 @@ class UpdateIngredientRequest extends FormRequest
             'id' => 'required|exists:ingredients,id',
             'name' => 'required|string',
             'hasAdditional' => 'required|boolean',
-            'value' => 'required_if:hasAdditional,true|numeric',
+            'value' => 'required_if:hasAdditional,true',
         ];
     }
 }

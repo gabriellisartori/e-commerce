@@ -112,7 +112,7 @@ export default {
         width: -webkit-fill-available;
         margin-top: 10px;
         font-size: 14px;
-        text-align: center;
+        text-align: left;
 
         &:focus{
             outline-color: var(--cor-primaria);

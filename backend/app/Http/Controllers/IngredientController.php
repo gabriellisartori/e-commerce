@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\IngredientExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ingredient\CreateIngredientRequest;
 use App\Http\Requests\Ingredient\UpdateIngredientRequest;
@@ -13,8 +14,10 @@ use App\Services\Additional\CreateAdditionalService;
 use App\Services\Additional\UpdateAdditionalService;
 use App\Services\Ingredient\CreateIngredientService;
 use App\Services\Ingredient\UpdateIngredientService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 
 class IngredientController extends Controller
 {
@@ -26,13 +29,18 @@ class IngredientController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $inputs = $request->input();
         try {
             //get all ingredients
-            $ingredients = Ingredient::all();
+            $ingredients = Ingredient::query()->orderBy('name', 'asc')->with(['ingredientAdditional']);
 
-            $ingredients->load(['ingredientAdditional']);
+            if (isset($inputs['name'])) {
+                $ingredients->where('name', 'ilike', '%' . $inputs['name'] . '%');
+            }
+
+            $ingredients = $ingredients->get();
 
             return response()->json(IngredientResource::collection($ingredients), 200);
         } catch (ValidationException $e) {
@@ -136,4 +144,26 @@ class IngredientController extends Controller
             ], 401);
         }
     }
+
+    public function exportFile (Request $request) 
+    {
+        $ingredients = $this->index($request);
+
+        $ingredientsFile = [];
+
+        foreach($ingredients->original->resource as $item) {
+            array_push($ingredientsFile,
+                [
+                    'name' => $item->name,
+                    'hasAdditional' => $item->ingredientAdditional !== null ? 'Sim' : 'Não',
+                    'value' => $item->ingredientAdditional !== null ? $item->ingredientAdditional->value : '',
+                ]
+            );
+        }
+
+        $data = new IngredientExport(collect($ingredientsFile));
+
+        return Excel::download($data, 'ingredients.csv');
+    }
+
 }

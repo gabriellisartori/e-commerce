@@ -8,6 +8,7 @@ export default {
   data() {
     return {
       showSidebar: false,
+      hasItemsInCart: false,
     };
   },
   computed: {
@@ -21,23 +22,48 @@ export default {
           this.$auth.user().establishment_id !== null)
       );
     },
+    currentRoute() {
+      return this.$route.name;
+    },
   },
   methods: {
     toggleSideBar() {
       this.showSidebar = true;
     },
-    closeSidebar () {
+    closeSidebar() {
       this.showSidebar = false;
-    }
-  }
+    },
+    checkCartItems() {
+      const cartItems = JSON.parse(localStorage.getItem('selectedPizzas')) || [];
+      this.hasItemsInCart = cartItems.length > 0;
+      console.log('tem itens??', this.hasItemsInCart)
+    },
+    goToCarrinho() {
+      if (this.$auth.check()) {
+        this.$router.push({ name: 'ShoppingPage' });
+      } else {
+        this.$router.push({ name: 'login' });
+      }
+
+      this.checkCartItems();
+    },
+  },
+  mounted() {
+    this.checkCartItems();
+  },
 };
 </script>
 
 <template>
-  <header class="page-header">
+  <header class="page-header" :class="{ 'is-home': $route.name === 'homePage' }">
     <nav class="menu">
       <ul>
         <div class="menu-icon" @click="toggleSideBar" v-if="isLoged">
+          <div class="menu-bar"></div>
+          <div class="menu-bar"></div>
+          <div class="menu-bar"></div>
+        </div>
+        <div class="menu-icon" v-else @click="$router.push({ name: 'login' })">
           <div class="menu-bar"></div>
           <div class="menu-bar"></div>
           <div class="menu-bar"></div>
@@ -47,35 +73,41 @@ export default {
             Home
           </button>
         </li>
-        <li>
+        <li v-if="hasPermission">
           <button @click="$router.push({ name: 'MenuPage' })" class="text-uppercase">
             Cardápio
           </button>
         </li>
-        <li v-if="! hasPermission">
-          <button @click="$router.push({ name: 'MenuPage' })" class="text-uppercase">
+        <li v-if="!hasPermission">
+          <button @click="$router.push({ name: 'MenuPageClient' })" class="text-uppercase">
+            Cardápio
+          </button>
+        </li>
+        <li v-if="!hasPermission">
+          <button @click="$router.push({ name: 'AboutPage' })" class="text-uppercase">
             Sobre nós
           </button>
         </li>
-        <li v-if="! hasPermission">
-          <button @click="$router.push({ name: 'MenuPage' })" class="text-uppercase">
+        <li v-if="!hasPermission">
+          <button @click="$router.push({ name: 'ContactPage' })" class="text-uppercase">
             Contato
           </button>
         </li>
         <li v-if="hasPermission">
-          <button class="text-uppercase">Pedidos</button>
+          <button @click="$router.push({ name: 'OrdersPage' })" class="text-uppercase">Pedidos</button>
         </li>
         <li class="logo">
           <img @click="$router.push({ name: 'homePage' })" src="@/assets/logo-pizza.png" alt="Pizzaria Basileus" />
+        </li>
+        <li v-if="$route.name !== 'homePage'" class="carrinho">
+          <img @click="goToCarrinho" class="icon-carrinho" src="@/assets/icons/carrinho-icon.png" alt="Carrinho" />
+          <div class="bolinha-verde" v-if="hasItemsInCart"></div>
         </li>
       </ul>
     </nav>
   </header>
 
-  <SideBar 
-    v-if="showSidebar"
-    @close="closeSidebar"
-  />
+  <SideBar v-if="showSidebar" @close="closeSidebar" />
 </template>
 
 
@@ -84,7 +116,16 @@ export default {
 .page-header {
   padding: 10px 70px;
   color: #000000;
-  width: 50%;
+  margin-top: 20px;
+
+  @media screen and (max-width: 560px) {
+    margin-bottom: 35px;
+    padding: 10px 23px;
+  }
+
+  &.is-home {
+    width: 50%;
+  }
 
   .menu {
     .menu-icon {
@@ -92,6 +133,7 @@ export default {
       display: flex;
       flex-direction: column;
       margin-right: 20px;
+
     }
 
     .menu-bar {
@@ -130,15 +172,73 @@ export default {
 
       ul,
       li:last-child {
-        width: -webkit-fill-available;
+        width: 100%;
         text-align: end;
+      }
+    }
+
+    @media screen and (max-width: 425px) {
+      ul {
+        li {
+          margin-right: 10px;
+
+          button {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+
+    @media screen and (max-width: 375px) {
+      ul {
+        li {
+          margin-right: 7px;
+        }
       }
     }
   }
 
   .logo {
+    cursor: pointer;
     img {
       width: 150px;
+
+      @media screen and (max-width: 425px) {
+        width: 72px;
+      }
+    }
+  }
+
+  .carrinho {
+    position: relative;
+    top: 0px;
+    margin-top: 14px;
+    cursor: pointer;
+    z-index: 1;
+
+    .icon-carrinho {
+      width: 50px;
+      height: 50px;
+      transition: all 0.3s;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    .bolinha-verde {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      top: 2px;
+      right: -7px;
+      background-color: var(--cor-primaria);
+    }
+
+
+    @media screen and (max-width: 425px) {
+      display: none;
     }
   }
 }

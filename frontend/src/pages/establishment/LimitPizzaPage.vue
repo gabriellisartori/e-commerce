@@ -2,16 +2,23 @@
 import { toast } from "vue3-toastify";
 import LimitPizzaModal from "../../components/limitPizza/LimitPizzaModal.vue";
 import moment from "moment";
+import FiltersModal from '@/components/FiltersModal.vue';
 
 export default {
   components: {
     LimitPizzaModal,
+    FiltersModal
   },
   data() {
     return {
       limits: [],
       showModal: false,
       id: null,
+      search: {
+        start_date: null,
+        end_date: null
+      },
+      showFilters: false
     };
   },
   methods: {
@@ -25,7 +32,9 @@ export default {
     },
     async fetchLimits() {
       try {
-        const { data } = await this.$http.get("/daily-pizza-sale-limits");
+        const { data } = await this.$http.get("/daily-pizza-sale-limits", {
+          params: this.search
+        });
         this.limits = data;
 
         this.limits.map((limit) => {
@@ -63,6 +72,16 @@ export default {
           );
         }
       }
+    },
+    searchFilter (event) {
+      this.search.start_date = event.start_date;
+      this.search.end_date = event.end_date;
+      this.fetchLimits();
+    },
+    getAll () {
+      this.search.start_date = null;
+      this.search.end_date = null;
+      this.fetchLimits();
     }
   },
   mounted() {
@@ -74,10 +93,16 @@ export default {
 <template>
   <div>
     <div class="page-header-options">
-      <h2 class="title">Limite de pizzas</h2>
-      <base-button isTransparent color="dark-green" @onClick="showModal = true">
+      <div>
+        <h2 class="title">Limite de pizzas</h2>
+      </div>
+      <div>
+        <base-button isTransparent color="dark-green" @onClick="showModal = true">
         Adicionar
-      </base-button>
+        </base-button>
+        <base-button class="icon" isTransparent isIcon icon="fa-solid fa-magnifying-glass" color="dark-green" @onClick="showFilters = true"/>
+        <base-button class="icon" isTransparent isIcon icon="fa-solid fa-rotate" color="dark-green" @onClick="getAll"/>
+      </div>
     </div>
 
     <div class="content-ingredient">
@@ -97,5 +122,12 @@ export default {
     :id="id"
     @close="closeModal"
     @limitSave="fetchLimits"
+  />
+
+  <FiltersModal 
+    v-if="showFilters"
+    isPeriod
+    @close="showFilters = false"
+    @getValues="searchFilter($event)"
   />
 </template>

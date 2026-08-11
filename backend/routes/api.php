@@ -27,7 +27,13 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => ['auth:sanctum']], function () {
     
     //update establishment data and relations (user e address)
-    Route::put('establishments/{id}', [EstablishmentController::class, 'update'])->middleware('verify.establishment.user');
+    Route::prefix('establishments')->middleware('verify.establishment.user')->group(function () {
+        Route::post('', [EstablishmentController::class, 'store']);
+        Route::put('/basic-data/{id}', [EstablishmentController::class, 'update']);
+        Route::put('/address/{id}', [EstablishmentController::class, 'updateAddress']);
+        Route::put('/about/{id}', [EstablishmentController::class, 'updateAbout']);
+
+    });
     
     Route::prefix('clients')->group(function () {
         Route::get('{id}', [ClientController::class, 'show']);
@@ -55,6 +61,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::prefix('ingredients')->middleware('verify.establishment.user')->group(function () {
+        Route::get('/exportFile', [IngredientController::class, 'exportFile']);
         Route::get('', [IngredientController::class, 'index']);
         Route::get('{id}', [IngredientController::class, 'show']);
         Route::post('', [IngredientController::class, 'store']);
@@ -65,9 +72,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('products')->middleware('verify.establishment.user')->group(function () {
         Route::post('', [ProductController::class, 'store']);
         Route::put('{id}', [ProductController::class, 'update']);
+        Route::get('exportFile', [ProductController::class, 'exportFile']);
     });
 
     Route::prefix('promotions')->middleware('verify.establishment.user')->group(function () {
+        Route::get('/exportFile', [PromotionController::class, 'exportFile']);
         Route::get('', [PromotionController::class, 'index']);
         Route::get('{id}', [PromotionController::class, 'show']);
         Route::post('', [PromotionController::class, 'store']);
@@ -76,13 +85,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::prefix('orders')->group(function () {
+        Route::get('/exportFile', [OrderController::class, 'exportFile'])->middleware('verify.establishment.user');
         Route::get('', [OrderController::class, 'index'])->middleware('verify.establishment.user');
         Route::get('{id}', [OrderController::class, 'show'])->middleware('verify.establishment.user');
         Route::post('', [OrderController::class, 'store']);
         Route::put('{id}', [OrderController::class, 'update'])->middleware('verify.establishment.user');
     });
 
+    Route::get('getMyOrders', [OrderController::class, 'getMyOrders']);
+
 });
+
+Route::get('promotionPizza', [ProductController::class, 'getPromotionPizza']);
 
 // Access system
 Route::prefix('auth')->group(function () {
@@ -92,8 +106,8 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('establishments')->group(function () {
-    Route::post('', [EstablishmentController::class, 'store']);
     Route::get('', [EstablishmentController::class, 'index']);
+    Route::get('contact', [EstablishmentController::class, 'getContact']);
 });
 
 Route::get('daily-pizza-sale-limits/{id}', [DailyPizzaSaleLimitController::class, 'show']);

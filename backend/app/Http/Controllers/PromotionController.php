@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PromotionExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Promotion\CreatePromotionRequest;
 use App\Http\Requests\Promotion\PromotionRequest;
@@ -12,8 +13,11 @@ use App\Models\ProductPromotion;
 use App\Models\Promotion;
 use App\Services\Promotion\CreatePromotionService;
 use App\Services\Promotion\UpdatePromotionService;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PromotionController extends Controller
 {
@@ -23,11 +27,18 @@ class PromotionController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $inputs = $request->input();
         try {
             //get all promotion
-            $promotions = Promotion::all();
+            $promotions = Promotion::query()->orderBy('name', 'asc');
+
+            if (isset($inputs['name'])) {
+                $promotions->where('name', 'ilike', '%' . $inputs['name'] . '%');
+            }
+
+            $promotions = $promotions->get();
             
             return response()->json(PromotionResource::collection($promotions), 200);
         } catch (ValidationException $e) {
@@ -106,5 +117,28 @@ class PromotionController extends Controller
                 'message' => 'Erro ao deletar promoção',
             ], 401);
         }
+    }
+
+    public function exportFile (Request $request) 
+    {
+        $promotions = $this->index($request);
+
+        $promotionsFile = [];
+
+        foreach($promotions->original->resource as $item) {
+            array_push($promotionsFile,
+                [
+                    'name' => $item->name,
+                    'start_date' => Carbon::parse($item->start_date)->format('d/m/Y'),
+                    'start_time' => $item->start_time,
+                    'end_date' => Carbon::parse($item->end_date)->format('d/m/Y'),
+                    'end_time' => $item->end_time,
+                ]
+            );
+        }
+
+        $data = new PromotionExport(collect($promotionsFile));
+
+        return Excel::download($data, 'promotion.csv');
     }
 }

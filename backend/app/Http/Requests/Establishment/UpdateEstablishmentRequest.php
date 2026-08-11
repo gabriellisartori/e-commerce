@@ -27,13 +27,6 @@ class UpdateEstablishmentRequest extends FormRequest
             'cnpj' => 'required|string|size:18',
             'phone_number' => 'required|string|size:15',
             'description' => 'nullable|string',
-            'address_id' => 'required|exists:addresses,id',
-            'zip_code' => 'required|string|size:9',
-            'city' => 'required|string',
-            'street' => 'required|string',
-            'neighborhood' => 'required|string',
-            'number' => 'required|integer',
-            'complement' => 'nullable|string',
             'user_id' => 'required|exists:users,id',
             'email' => 'required',
             'password' => 'nullable'

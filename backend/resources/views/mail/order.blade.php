@@ -91,7 +91,7 @@
     </div>
     <div>
         <p class="info-details">
-            <span class="info-details green ml">Nome do cliente: </span>Gabi
+            <span class="info-details green ml">Nome do cliente: </span> {{ $order['name'] }}
         </p>
         <p class="info-details green ml">Detalhes do pedido:</p>
         <div>
@@ -108,11 +108,13 @@
                 </div>
             </div>
             <div class="card-details">
+                @if ($orderProduct['order_product_additional'])
                 <p class="info-details green">Adicionais:</p>
                 <div>
                     <p class="mt"><span class="info-details green">Nome:</span> {{ $orderProduct['order_product_additional']['name'] }}</p>
                     <p class="mt"><span class="info-details green">Valor:</span> R$ {{ $orderProduct['order_product_additional']['additional_value'] }}</p>
                 </div>
+                @endif
                 @endforeach
             </div>
         </div>

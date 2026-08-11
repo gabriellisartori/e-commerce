@@ -24,7 +24,7 @@ class CreateIngredientRequest extends FormRequest
         return [
             'name' => 'required|string',
             'hasAdditional' => 'required|boolean',
-            'value' => 'required_if:hasAdditional,true|numeric',
+            'value' => 'required_if:hasAdditional,true',
         ];
     }
 }

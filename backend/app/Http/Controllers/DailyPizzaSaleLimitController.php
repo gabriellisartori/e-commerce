@@ -9,6 +9,8 @@ use App\Http\Resources\DailyPizzaSaleLimitResource;
 use App\Models\DailyPizzaSaleLimit;
 use App\Services\DailyPizzaSaleLimit\CreateDailyPizzaSaleLimitService;
 use App\Services\DailyPizzaSaleLimit\UpdateDailyPizzaSaleLimitService;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -20,11 +22,22 @@ class DailyPizzaSaleLimitController extends Controller
     ) {
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $inputs = $request->input();
         try {
             //get all daily limit
-            $dailyPizzaSaleLimit = DailyPizzaSaleLimit::all();
+            $dailyPizzaSaleLimit = DailyPizzaSaleLimit::query()->orderBy('date', 'desc');
+
+            if (isset($inputs['start_date']) && isset($inputs['end_date'])) {
+                $dailyPizzaSaleLimit = $dailyPizzaSaleLimit->whereBetween('date', [$inputs['start_date'], $inputs['end_date'] ]);
+            } else if (isset($inputs['start_date'])) {
+                $dailyPizzaSaleLimit = $dailyPizzaSaleLimit->where('date', '>=', $inputs['start_date']);
+            } else if (isset($inputs['end_date'])) {
+                $dailyPizzaSaleLimit = $dailyPizzaSaleLimit->where('date', '<=', $inputs['end_date']);
+            }
+
+            $dailyPizzaSaleLimit = $dailyPizzaSaleLimit->get();
             
             return response()->json(DailyPizzaSaleLimitResource::collection($dailyPizzaSaleLimit), 200);
         } catch (ValidationException $e) {

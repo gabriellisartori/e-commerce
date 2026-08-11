@@ -2,11 +2,11 @@
 export default {
   data() {
     return {
-      options: [
+      establishmentOptions: [
         {
           name: "Meu perfil",
           icon: "fa-solid fa-user",
-          route: "",
+          route: "ProfilePage",
         },
         {
           name: "Horário de funcionamento",
@@ -34,12 +34,27 @@ export default {
           route: "LimitPizzaPage",
         },
       ],
+      clientOptions: [
+        {
+          name: "Meu perfil",
+          icon: "fa-solid fa-user",
+          route: "ProfilePage",
+        },
+        {
+          name: "Meus pedidos",
+          icon: "fa-solid fa-bag-shopping",
+          route: "MyOrdersPage",
+        }
+      ]
     };
   },
   computed: {
     hasPermission() {
       return this.$auth.user() && this.$auth.user().is_admin;
     },
+    isEstablishment () {
+      return this.$auth.user() && (this.$auth.user().establishment_id || this.$auth.user().is_admin);
+    }
   }
 }
 </script>
@@ -51,8 +66,17 @@ export default {
         <font-awesome-icon class="closebtn" icon="fa-solid fa-xmark" />
       </div>
       <div class="sidebar-items" @click="$emit('close')">
-        <ul>
-          <li v-for="(option, index) in options" :key="index">
+        <ul v-if="isEstablishment">
+          <li v-for="(option, index) in establishmentOptions" :key="index">
+            <button @click="$router.push({ name: option.route })">
+              <font-awesome-icon class="icon" :icon="option.icon" />
+              {{ option.name }}
+            </button>
+          </li>
+        </ul>
+
+        <ul v-else>
+          <li v-for="(option, index) in clientOptions" :key="index">
             <button @click="$router.push({ name: option.route })">
               <font-awesome-icon class="icon" :icon="option.icon" />
               {{ option.name }}

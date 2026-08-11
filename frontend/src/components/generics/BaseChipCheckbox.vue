@@ -28,7 +28,7 @@ export default {
       validator: (value) => ["small", "medium", "large"].includes(value),
     },
   },
-  data() {
+/*   data() {
     return {
       isChecked: false,
     };
@@ -38,7 +38,7 @@ export default {
       this.isChecked = !this.modelValue;
       this.$emit("input", this.isChecked);
     },
-  },
+  }, */
   computed: {
     classes() {
       return [`is-${this.color}`, `is-${this.size}`];
@@ -53,7 +53,8 @@ export default {
       class="chip-checkbox-input"
       type="checkbox"
       :id="myCheckbox"
-      :value="modelValue"
+      :checked="modelValue"
+      @input="$emit('input', !modelValue)"
     />
     <label class="chip-checkbox-label" :for="myCheckbox">{{ label }}</label>
   </div>

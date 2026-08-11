@@ -82,6 +82,7 @@ export default {
                 <BaseInput 
                     v-model="email"
                     label="E-mail" 
+                    type="text"
                     class="input" 
                     :placeholder="'Digite seu email'"
                     @update:modelValue="email = $event"

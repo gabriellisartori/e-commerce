@@ -24,7 +24,7 @@ class OrderProductResource extends JsonResource
             'half_pizza' => $this->half_pizza,
             'half_pizza_product' => $this->when($this->half_pizza, fn () => new ProductResource($halfPizzaProduct)),
             'product' => new ProductResource($this->product),
-            'additional' => $this->whenLoaded('orderProductAdditional', fn () => OrderProductAdditionalResource::collection($this->orderProductAdditional)),
+            'additional' => $this->whenLoaded('orderProductAdditional', fn () => new OrderProductAdditionalResource($this->orderProductAdditional)),
         ];
     }
 }

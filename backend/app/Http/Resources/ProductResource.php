@@ -23,7 +23,7 @@ class ProductResource extends JsonResource
             'category' => $this->whenLoaded('category', fn () => new CategoryResource($this->category)),
             'ingredients' => $this->whenLoaded('productIngredient', fn () => ProductIngredientResource::collection($this->productIngredient)),
             'promotion' => $this->whenLoaded('productPromotion', fn () => new ProductPromotionResource($this->productPromotion)),
-            'additional' => $this->whenLoaded('productAdditional', fn () => ProductAdditionalResource::collection($this->productAdditional)),
+            'additional' => $this->whenLoaded('productAdditional', fn () => new ProductAdditionalResource($this->productAdditional)),
         ];
     }
 }
